@@ -10,7 +10,7 @@ destring nper,replace
 save "/home/amarroig/iecon/datos/ech/personas/intermedias/p92_v",replace
 
 *** CORRER project
-u "/home/amarroig/iecon/datos/ech/personas/bases compatibilizadas/p92",clear //es la base que se armo luego revisión
+u "/home/amarroig/iecon/datos/ech/personas/bases compatibilizadas/p92",clear //es la base que se armo luego revisiÃ³n
 
 rename bc_correlat correlat
 rename bc_nper nper
@@ -44,14 +44,14 @@ tab  nivel_v bc_nivel if control==3,m
 tab  edu_v bc_edu,m
 tab  edu_v bc_edu if control==3,m //1669
 
-/*HAY DIFERENCIAS EN EDUCACIÓN 
+/*HAY DIFERENCIAS EN EDUCACIÃ“N 
 br pe3 pe11 pe12 nivel nivel2 pe142 anios edu edu_v if (edu_v>edu)&edu_v!=.
 
-	*- si tienen 6 5 4 o 3 años de diferencias en edu_v puede haber error porque 
-	son de nivel2==2 con 17 16 15 y 14 años de educación y máximo debería ser 12
-	*- si tienen 2 años de diferencias hay distintos casos. Algunos pocos superan
-	los 12 años en el nivel2==2 lo que no debería ocurrir y se trunca. 
-	Luego, algunos tienen muchos años en pe142 (5 pej) entonces creo que edu es 
+	*- si tienen 6 5 4 o 3 aÃ±os de diferencias en edu_v puede haber error porque 
+	son de nivel2==2 con 17 16 15 y 14 aÃ±os de educaciÃ³n y mÃ¡ximo deberÃ­a ser 12
+	*- si tienen 2 aÃ±os de diferencias hay distintos casos. Algunos pocos superan
+	los 12 aÃ±os en el nivel2==2 lo que no deberÃ­a ocurrir y se trunca. 
+	Luego, algunos tienen muchos aÃ±os en pe142 (5 pej) entonces creo que edu es 
 	correcta.
 */
 
@@ -64,7 +64,7 @@ tab  cat2_v bc_cat2,m
 tab  cat2_v cat2 if control==3,m
 
 /*HAY DIFERENCIAS EN CAT2 
-	*- los missing de la variable _v están con cero
+	*- los missing de la variable _v estÃ¡n con cero
 	*- hay algunos que valen cero y que tienen pf41a con valor
 */
 
@@ -75,7 +75,7 @@ tab  pf082a_v bc_pf082,m
 tab  pf082a_v bc_pf082 if control==3,m
 
 /*HAY DIFERENCIAS EN PF082A 
-	*- los missing de la variable _v están con cero
+	*- los missing de la variable _v estÃ¡n con cero
 	*- algunos que valen cero y que tienen valor en pf082 pero pueden tener 
 	missing en pf081 (parece que fueron recodificados a cero los valores de 
 	pf082 con missing en pf081)

@@ -32,7 +32,7 @@ rename pe1c dpto
 rename persona nper
 
 *-------------------------------------------------------------------------------
-* Recodificación de datos
+* RecodificaciÃ³n de datos
 
 *-------------------------------------------------------------------------------
 * Cambios de variables

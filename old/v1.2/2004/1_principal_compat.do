@@ -1,9 +1,9 @@
-*1_ compatibilizaci髇 2004 -----------------------------------------------------
+*1_ compatibilizaci贸n 2004 -----------------------------------------------------
 
 clear all
 set more off
-/*Estas rutas ser醤 las definitvas por ahora est醤 en Documentos
-gl rutaprogramas "S:/empleo/datos/encuestas/ech/programas/Compatibilizaci髇 ECH/2004"
+/*Estas rutas ser谩n las definitvas por ahora est谩n en Documentos
+gl rutaprogramas "S:/empleo/datos/encuestas/ech/programas/Compatibilizaci贸n ECH/2004"
 gl rutaoriginales "S:/empleo/datos/encuestas/ech/ech originales/2004"
 gl rutabases "S:/empleo/datos/encuestas/ech/personas/bases compatibilizadas"
 gl rutainterm "S:/empleo/datos/encuestas/ech/personas/intermedias"
@@ -32,10 +32,10 @@ run "$rutaprogramas/2_correc_datos.do"
 
 /*------------------------------------------------------------------------------
 3_compatibilizacion_mod_1_4
-	*- Hace compatibles variables de los m骴ulos 1 a 4:
-		1- Caracter韘ticas generales y de las personas
-		2- Atenci髇 de la salud
-		3- Educaci髇
+	*- Hace compatibles variables de los m贸dulos 1 a 4:
+		1- Caracter铆sticas generales y de las personas
+		2- Atenci贸n de la salud
+		3- Educaci贸n
 		4- Mercado de trabajo
 */
 run "$rutaprogramas/3_compatibilizacion_mod_1_4.do"
@@ -46,7 +46,7 @@ run "$rutaprogramas/3_compatibilizacion_mod_1_4.do"
 	declaran en la encuesta, sin descomponer por fuentes, que incluye seguro 
 	de salud (si corresponde).
 	*- Genera variables intermedias como cuotas militares, ingresos por alimentos
-	transferidos a menores, etc. que luego se utilizan para la descomposici髇 
+	transferidos a menores, etc. que luego se utilizan para la descomposici贸n 
 	por fuentes.
 */
 run "$rutaprogramas/4_ingreso_ht11_iecon.do"
@@ -66,7 +66,7 @@ run "$rutaprogramas/5_descomp_fuentes.do"
 	de ingresos.
 	*- Imputa seguro de salud para el hogar y se genera ht11_css para comparar 
 	con el ht11_iecon.
-	*- Genera ingresos per c醦ita incluyendo seguro y sin incluir
+	*- Genera ingresos per c谩pita incluyendo seguro y sin incluir
 */
 run "$rutaprogramas/6_ingreso_ht11_sss.do"
 

@@ -8,7 +8,7 @@ gen bc_pa32 = 0
 gen bc_pa33 = 0
 
 * pasamos seguro de desempleo (encubierto)
-* son gente que est· en el seguro de paro y la ech los identifica como ocupados. suponemos que los ingresos que declaran en su ocupaciÛn principal son 
+* son gente que est√° en el seguro de paro y la ech los identifica como ocupados. suponemos que los ingresos que declaran en su ocupaci√≥n principal son 
 * en realidad ingresos por seguro de paro
 
 cap drop bc_seguro
@@ -21,14 +21,14 @@ recode bc_seguro .=0
 
 *Asalariados
 
-*Asalariados privados ocupaciÛn principal
+*Asalariados privados ocupaci√≥n principal
 cap drop bc_as_privados
 g bc_as_privados=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p)*bc_ipc
 replace bc_as_privados=(bc_as_privados-bc_seguro) if bc_as_privados>0 & bc_pf41==1
 cap drop as_privadosh
 egen as_privadosh=sum(bc_as_privados) if bc_pe4!=7 , by(bc_correlat)
 
-*Asalariados p˙blicos ocupaciÛn principal
+*Asalariados p√∫blicos ocupaci√≥n principal
 cap drop bc_as_publicos
 gen bc_as_publicos=(bc_pg21p+bc_pg22p+bc_pg24p+bc_pg25p+bc_pg26p+bc_pg27p)*bc_ipc
 cap drop as_publicosh
@@ -129,7 +129,7 @@ egen otros_lab2h=sum(bc_otros_lab2) if bc_pe4!=7, by(bc_correlat)
 mvencode bc_as_privados  bc_as_publicos  bc_cpropiasl bc_cpropiacl bc_patrones  bc_cooperat bc_otros_lab bc_otros_lab2 bc_as_otros bc_ot_agropec /*
 */bc_as_agropec bc_cp_agropec bc_pat_agropec, mv(0) override
 
-** Total ingresos laborales ocupaciÛn principal
+** Total ingresos laborales ocupaci√≥n principal
 cap drop bc_principal
 g bc_principal=bc_as_privados+bc_as_publicos
 replace bc_principal=bc_patrones+bc_cpropiasl+bc_cpropiacl+bc_cooperat if bc_pf41>2 & bc_pf41<7 
@@ -214,7 +214,7 @@ cap g bc_tarjeta=monto_tus_iecon
 
 cap g bc_pg13o=0
 
-* esto no estaba en el programa original. ////este benef_ocup_secund, el bc_anio>1990 le pasa por arriba a la lÌnea anterior (AM)
+* esto no estaba en el programa original. ////este benef_ocup_secund, el bc_anio>1990 le pasa por arriba a la l√≠nea anterior (AM)
 cap g bc_pg23o=0
 cap drop benef_ocup_secund
 g benef_ocup_secund=0
@@ -223,13 +223,13 @@ replace benef_ocup_secund=bc_pg13o+bc_pg23o+bc_pg32o+bc_pg42o+bc_pg72o if bc_ani
 
 
 mvencode bc_pg32p bc_pg42p bc_pg72p bc_pg13p bc_pg23p bc_pg101 bc_pg102 bc_jub_pen bc_jub_pene bc_otros_benef bc_pg111 bc_pg112 bc_pg14, mv(0) override
-* le agregamos los beneficios de la ocupaciÛn secundaria
+* le agregamos los beneficios de la ocupaci√≥n secundaria
 cap drop bc_bs_sociales
 gen bc_bs_sociales=(bc_pg13p+bc_pg23p+bc_pg32p+bc_pg42p+bc_pg72p+bc_otros_benef+ bc_pg101+ bc_pg102+benef_ocup_secund+bc_seguro+bc_tarjeta)
 cap drop bs_socialesh
 egen bs_socialesh=sum(bc_bs_sociales) if bc_pe4!=7, by(bc_correlat)
 
-*variables de beneficios sociales que no figuran todos los aÒos
+*variables de beneficios sociales que no figuran todos los a√±os
 capture gen bc_ing_ciud=0
 cap drop ingre_ciud
 gen ingre_ciud=(bc_ing_ciud)
@@ -243,7 +243,7 @@ replace bc_transf_hog=(bc_pg111+bc_pg112) // transferencias entre hogares
 cap drop transf_hogh
 egen transf_hogh=sum(bc_transf_hog) if bc_pe4!=7, by(bc_correlat)
 
-** ac· hicismos cambios. eliminamos la variable otros beneficios. 
+** ac√° hicismos cambios. eliminamos la variable otros beneficios. 
 cap drop bc_beneficios
 gen bc_beneficios=ingre_ciud+bc_bs_sociales
 cap drop beneficiosh
@@ -274,7 +274,7 @@ cap drop otrosh
 gen otrosh=otrh
 
 mvencode ing_labh ing_caph bs_socialesh jub_penh jub_peneh beneficiosh ht11  val_loch  otrosh bc_transf_hog transf_hogh, mv(0) override
-* Las variables ing_labh, ing_caph est·n en tÈrminos reales
+* Las variables ing_labh, ing_caph est√°n en t√©rminos reales
 gen bc_ht11_sss_corr=0
 
 *replace bc_ht11_sss_corr=((ing_labh+ing_caph)/bc_ipc +beneficiosh+jub_penh+jub_peneh+ val_loch+otrosh+transf_hogh) if bc_pe4==1

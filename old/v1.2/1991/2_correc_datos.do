@@ -21,12 +21,12 @@ save "$rutainterm/p1991.dta", replace
 
 merge m:1 correlat using "$rutainterm/h1991.dta"
 /*
-Hay 3 hogares que est·n en personas pero no en la base hogares:
+Hay 3 hogares que est√°n en personas pero no en la base hogares:
 correlat==103269 | correlat==107683 | correlat==200716
 Son 13 personas en total.
 
-En la base del 1991 compatibilizada el 107683 est· en ambas bases, 
-pero los otros dos solamente est·n en hogares.
+En la base del 1991 compatibilizada el 107683 est√° en ambas bases, 
+pero los otros dos solamente est√°n en hogares.
 */
 
 *-------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ rename pe1c dpto
 rename persona nper
 
 *-------------------------------------------------------------------------------
-* RecodificaciÛn de datos
+* Recodificaci√≥n de datos
 
 
 *-------------------------------------------------------------------------------

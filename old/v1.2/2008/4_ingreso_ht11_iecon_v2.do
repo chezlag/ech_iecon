@@ -10,7 +10,7 @@
 
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
-* Se toma a quienes tienen derecho en sanidad militar a través de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
+* Se toma a quienes tienen derecho en sanidad militar a travÃ©s de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
 gen at_milit=1 if e46_1==1
 recode  at_milit .=0
 egen cuotmilit= sum(at_milit) if e46_2>0, by(bc_correlat e46_2)
@@ -35,7 +35,7 @@ gen ytinde = g147 + (g148/12) + g149_2 + g149_3 + g149_4 + g149_5 + g149_6 + g14
 gen menor18=0
 replace menor18=1 if e28<18
 
-* por el diseño del formulario quienes contestan e45_1==3 es porque tienen derechos de salud en mutualista o seguro privado)
+* por el diseÃ±o del formulario quienes contestan e45_1==3 es porque tienen derechos de salud en mutualista o seguro privado)
 generate fonasa = mto_cuot if e45_1==3 & ((pobpcoac==2 & (f85==1 |f99==1)) | pobpcoac==5) 
 recode fonasa  .=0
 
@@ -62,7 +62,7 @@ gen  YTRANSF_1 = g153_1 + g153_2 + g153_3 + g153_4 + g153_5 + g153_6 + g153_7 + 
 */+ g153_12 + g153_13 + g153_14 + g153_15 + g153_16 + g153_17 + g153_18 + g153_19 + g153_20 + g153_21 + g153_22 + g153_23/*
 */+ g153_24 + g153_25 + g153_26
 
-generate YTRANSF_2= g155_4 if (g155_1==1 & g155_3==2) // cobra asignaciones y no las declaró en el sueldo
+generate YTRANSF_2= g155_4 if (g155_1==1 & g155_3==2) // cobra asignaciones y no las declarÃ³ en el sueldo
 recode YTRANSF_2 .=0
 
 recode mto_hogc .=0
@@ -86,7 +86,7 @@ replace COMESCOL = (mto_alm+mto_des)*5*4.3 if e59_2_7==9
 replace COMESCOL = (mto_alm+mto_des)*5*4.3 if e59_2_7==10
 replace COMESCOL = (mto_alm+mto_des+mto_des)*5*4.3 if e59_2_7==11
 
-/*Se considera más verdadera la información semanal, por lo que se considera la información mensual si responde solo mensual y semanal si responde solo semanal
+/*Se considera mÃ¡s verdadera la informaciÃ³n semanal, por lo que se considera la informaciÃ³n mensual si responde solo mensual y semanal si responde solo semanal
 o los dos*/
 g COMEHOG = e60_3*mto_alm if (e60_1==1 & e60_3!=0)
 replace COMEHOG = e60_2*mto_alm*4.3 if (e60_1==1 & e60_2!=0) 
@@ -108,7 +108,7 @@ recode YALIMENT (.=0)
 
 generate YTRANSF_4 = YALIMENT 
 
-*cambio aquí solo va cuota militar si la genera una persona dentro del hogar que no es funcionaria publica
+*cambio aquÃ­ solo va cuota militar si la genera una persona dentro del hogar que no es funcionaria publica
 
 generate YTRANSF_5= cuotmilit if (f75!=2 & f95!=2)
 

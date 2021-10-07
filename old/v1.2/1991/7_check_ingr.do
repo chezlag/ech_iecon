@@ -33,7 +33,7 @@ jointly defined               228     -1041.667    -13.82821        5223
                        ----------
 total                         228
 
-********* Le saqué los pg61p/o pg62p/o pg81p/o pg82p/o y generé las variables =0
+********* Le saquÃ© los pg61p/o pg62p/o pg81p/o pg82p/o y generÃ© las variables =0
 
 . compare ht11 ht11_css_sindef      if (abs(dif_cine)>2) & bc_nper==1 
 

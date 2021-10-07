@@ -9,10 +9,10 @@ replace area=2 if region_4==3 // Interior menores de 5000
 replace area=3 if region_4==4 // rurales - rural dispersa
 
 cap drop filtloc
-g filtloc=(region_4<3) // localidades de más de 5000 
+g filtloc=(region_4<3) // localidades de mÃ¡s de 5000 
 
 *-------------------------------------------------------------------------------
-* Características generales y de las personas
+* CaracterÃ­sticas generales y de las personas
 
 * sexo
 cap drop pe2
@@ -41,7 +41,7 @@ replace pe5=4 if e39==0 & (e40==3)
 replace pe5=5 if e39==0 & (e40==4)
 
 *-------------------------------------------------------------------------------
-* Atención de la Salud
+* AtenciÃ³n de la Salud
 
 g pe6a=0
 replace pe6a=2 if e43_7==1 & e45_1!=3
@@ -61,19 +61,19 @@ replace pe6b=1 if e43_1!=1&e43_2!=1&e43_3!=1&e43_4!=1&e43_5!=1 ///
 &e43_6!=1&e43_7!=1&e43_8!=1&e43_9!=1&e43_10!=1&e47!=1
 
 *-------------------------------------------------------------------------------
-* Educación
+* EducaciÃ³n
 
 cap drop pe11
 gen pe11=(e50==1) //asiste
 
 cap drop pe12
-gen pe12=(e53==1) //asistió
+gen pe12=(e53==1) //asistiÃ³
 
 * nivel 
 cap drop nivel2
 g nivel2=.
 
-replace nivel2=0 if pe11==0 & pe12==0 // nunca asistió
+replace nivel2=0 if pe11==0 & pe12==0 // nunca asistiÃ³
 replace nivel2=0 if (e52_1>0)  
 
 replace nivel2=1 if (e50==1&(e52_1!=0|e52_2!=0|e52_3!=0))| ///
@@ -97,7 +97,7 @@ replace nivel2=5 if (e50==1&(e52_10!=0|e52_12!=0))|(e50==2&e53==1& ///
 
 replace nivel2=0 if nivel2==. 
 
-* años de educación
+* aÃ±os de educaciÃ³n
 cap drop edu
 g edu=.
 
@@ -152,11 +152,11 @@ drop e52_12a e52_10a e52_11a e52_5_1a e52_7_1a
 *-------------------------------------------------------------------------------
 * Mercado de trabajo
 
-* Condición de actividad
+* CondiciÃ³n de actividad
 g pobp = pobpcoac
 recode pobp (10=9)
 
-* Categoría de ocupación
+* CategorÃ­a de ocupaciÃ³n
 g pf41a=f75
 replace pf41a=7 if f75==8
 
@@ -167,7 +167,7 @@ g cat2=.
 	replace cat2=4 if f75==5|f75==6
 	replace cat2=5 if f75==3|f75==7|f75==8
 
-* Tamaño del establecimiento
+* TamaÃ±o del establecimiento
 cap drop pf081
 gen pf081=0
 replace pf081=1 if f80>=1 & f80<=3
@@ -203,7 +203,7 @@ replace rama=8 if ram_aux>74 & ram_aux!=. & pobp==2
 replace rama=. if rama==0
 drop ram_aux f74_2a
 
-* Tipo de ocupación
+* Tipo de ocupaciÃ³n
 cap drop pf39
 g f73_2a=f73_2
 destring f73_2a, replace
@@ -230,15 +230,15 @@ g pf04a=f71
 recode pf04a (3=4) (4=3)
 
 * Busqueda de trabajo
-g pf21=(f110==1) // buscó trabajo la semana pasada
+g pf21=(f110==1) // buscÃ³ trabajo la semana pasada
 
-g pf22a=f111 // causa por la que no buscó trabajo
+g pf22a=f111 // causa por la que no buscÃ³ trabajo
 recode pf22a (1=4) (2=1) (3=2) (4=3)
 
-* Duración desempleo (semanas)
+* DuraciÃ³n desempleo (semanas)
 g pf26=f116
 
-g pf34a=f125 // causas por las que dejó último trabajo
+g pf34a=f125 // causas por las que dejÃ³ Ãºltimo trabajo
 recode pf34a (1=2) (2=1) (4/9=3)
 
 * Trabajo registrado

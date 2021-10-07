@@ -6,7 +6,7 @@ g ine_ht112=ine_ht11
 compare ht11_iecon ht11_css_sindef if pe4!=7 & (abs(dif)>2) & nper==1
 
 *-------------------------------------------------------------------------------
-* CÛmo se fue modificando 
+* C√≥mo se fue modificando 
 /* diferencias en personas
                                         ---------- difference ----------
                             count       minimum      average     maximum
@@ -19,8 +19,8 @@ jointly defined             10705        -13644    -2447.005       805.5
 total                       10705
 
 
-cambio la forma de generar la salud del hogar, porque en ytransf_5 est·n las 
-cuotas militares de los que no son funcionrio p˙blicos y se duplicaban
+cambio la forma de generar la salud del hogar, porque en ytransf_5 est√°n las 
+cuotas militares de los que no son funcionrio p√∫blicos y se duplicaban
 
 
                                         ---------- difference ----------
@@ -34,7 +34,7 @@ jointly defined              1096         -7959    -1933.334        2274
 total                        1096
 
 
-para la cuota_p y cuota_o no saco la condiciÛn de cuotmilit==0 porque queda mal
+para la cuota_p y cuota_o no saco la condici√≥n de cuotmilit==0 porque queda mal
 
                                         ---------- difference ----------
                             count       minimum      average     maximum
@@ -60,7 +60,7 @@ jointly defined               405     -1342.508     702.8131        2274
 total                         405
 
 genero disse_p, disse_s, disse en el paso cero a ver si soluciona 
-los de disse son los que declaran tener disse y est·n en el seguro de paro
+los de disse son los que declaran tener disse y est√°n en el seguro de paro
 
 
 ahora son diferencias a nivel de hogar

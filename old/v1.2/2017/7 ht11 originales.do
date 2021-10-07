@@ -1,5 +1,5 @@
 *-------------------------------------------------------------------------------
-*- Este es un chequeo de que la variable ht11d esté bien construida
+*- Este es un chequeo de que la variable ht11d estÃ© bien construida
 *-------------------------------------------------------------------------------
 
 clear all

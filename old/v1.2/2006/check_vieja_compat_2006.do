@@ -38,7 +38,7 @@ compare cat2_v cat2
 compare cat2_v cat2 if _merge==3
 
 /*HAY DIFERENCIAS EN CAT2 
-	*- los missing de la variable _v est·n con cero
+	*- los missing de la variable _v est√°n con cero
 	*- hay algunos que valen cero y que tienen pf41a con valor
 */
 
@@ -46,7 +46,7 @@ compare pf082a_v pf082a
 compare pf082a_v pf082a if _merge==3
 
 /*HAY DIFERENCIAS EN PF082A 
-	*- los missing de la variable _v est·n con cero
+	*- los missing de la variable _v est√°n con cero
 	*- algunos que valen cero y que tienen valor en pf082 pero pueden tener 
 	missing en pf081 (parece que fueron recodificados a cero los valores de 
 	pf082 con missing en pf081)

@@ -1,9 +1,9 @@
-* compatibilización 2007 - luego de revisión
+* compatibilizaciÃ³n 2007 - luego de revisiÃ³n
 
 clear all
 set more off
-/*Estas rutas serán las definitvas por ahora están en Documentos
-gl rutaprogramas "S:/empleo/datos/encuestas/ech/programas/Compatibilización ECH"
+/*Estas rutas serÃ¡n las definitvas por ahora estÃ¡n en Documentos
+gl rutaprogramas "S:/empleo/datos/encuestas/ech/programas/CompatibilizaciÃ³n ECH"
 gl rutaoriginales "S:/empleo/datos/encuestas/ech/ech originales"
 gl rutabases "S:/empleo/datos/encuestas/ech/personas/bases compatibilizadas"
 gl rutainterm "S:/empleo/datos/encuestas/ech/personas/intermedias"

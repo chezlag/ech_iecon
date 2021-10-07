@@ -19,7 +19,7 @@ merge m:1 correlat using "$rutainterm/h2004.dta"
 * Arreglos de nombres de variables 
 
 *-------------------------------------------------------------------------------
-* Recodificación de datos
+* RecodificaciÃ³n de datos
 
 *-------------------------------------------------------------------------------
 * Cambios de variables

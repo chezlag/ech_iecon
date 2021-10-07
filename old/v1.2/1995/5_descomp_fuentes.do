@@ -60,8 +60,8 @@ g bc_pg31p=pg31p if bc_pf41==5 //cp s/l
 g bc_pg33p=pg33p if bc_pf41==5 //cp s/l
 g bc_pg41p=pg41p if bc_pf41==6 //cp c/l
 g bc_pg43p=pg43p if bc_pf41==6 //cp c/l
-g bc_pg51p=pg51p if bc_pf41==4 //patrón
-g bc_pg52p=pg52p if bc_pf41==4 //patrón
+g bc_pg51p=pg51p if bc_pf41==4 //patrÃ³n
+g bc_pg52p=pg52p if bc_pf41==4 //patrÃ³n
 g bc_pg71p=pg71p if bc_pf41==3 //coop
 g bc_pg73p=pg73p if bc_pf41==3 //coop
 
@@ -77,8 +77,8 @@ g bc_pg31o=pg31o //cp s/l
 g bc_pg33o=pg33o //cp s/l
 g bc_pg41o=pg41o //cp c/l
 g bc_pg43o=pg43o //cp c/l
-g bc_pg51o=pg51o //patrón
-g bc_pg52o=pg52o //patrón
+g bc_pg51o=pg51o //patrÃ³n
+g bc_pg52o=pg52o //patrÃ³n
 g bc_pg71o=pg71o //coop
 g bc_pg73o=pg73o //coop
 
@@ -91,9 +91,9 @@ g bc_pg72o=pg72o //coop
 *-------------------------------------------------------------------------------
 * Ingresos del capital
 
-*Pruebo generarlas con 0 a ver si no da diferencias... ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*Pruebo generarlas con 0 a ver si no da diferencias... Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡
 
-g bc_pg60p=0 if bc_pf41==4 //patrón
+g bc_pg60p=0 if bc_pf41==4 //patrÃ³n
 g bc_pg60p_cpsl=0 if bc_pf41==5 //cp s/l
 g bc_pg60p_cpcl=0 if bc_pf41==6 //cp c/l
 
@@ -107,7 +107,7 @@ g bc_pg80o=0
 
 
 /*
-g bc_pg60p=(pg61p+pg62p)/12 if bc_pf41==4 //patrón
+g bc_pg60p=(pg61p+pg62p)/12 if bc_pf41==4 //patrÃ³n
 g bc_pg60p_cpsl=(pg61p+pg62p)/12 if bc_pf41==5 //cp s/l
 g bc_pg60p_cpcl=(pg61p+pg62p)/12 if bc_pf41==6 //cp c/l
 
@@ -139,7 +139,7 @@ g bc_otros_benef=0
 g bc_pag_at=0
 
 *-------------------------------------------------------------------------------
-* Otros suma pagos atrasados a indemnización por despido
+* Otros suma pagos atrasados a indemnizaciÃ³n por despido
 g bc_otros=bc_pag_at
 
 *-------------------------------------------------------------------------------

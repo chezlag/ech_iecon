@@ -16,7 +16,7 @@ destring nper,replace
 save "/home/amarroig/iecon/datos/ech/personas/intermedias/p0_v",replace
 
 *** CORRER project
-*u "/home/amarroig/iecon/datos/ech/personas/bases compatibilizadas/p0",clear //es la base que se armo luego revisión
+*u "/home/amarroig/iecon/datos/ech/personas/bases compatibilizadas/p0",clear //es la base que se armo luego revisiÃ³n
 
 rename bc_correlat correlat
 rename bc_nper nper

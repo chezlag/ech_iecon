@@ -60,20 +60,20 @@ lab  var bc_pg14o "Aguinaldo privados otras ocupaciones"
 lab  var bc_pg15o "Salario vacacional privados otras ocupaciones"
 lab  var bc_pg16o "Propina/gratificaciones privados otras ocupaciones"
 lab  var bc_pg17o "En especie privados otras ocupaciones"
-lab  var bc_pg21p "Sueldos público principal"
-lab  var bc_pg22p "Comisiones público principal"
-lab  var bc_pg23p "Beneficios Sociales público principal"
-lab  var bc_pg24p "Aguinaldo público principal"
-lab  var bc_pg25p "Salario vacacional público principal"
-lab  var bc_pg26p "Propina/gratificaciones público principal"
-lab  var bc_pg27p "En especie público principal"
-lab  var bc_pg21o "Sueldos público otras ocupaciones"
-lab  var bc_pg22o "Comisiones público otras ocupaciones"
-lab  var bc_pg23o "Beneficios Sociales público otras ocupaciones"
-lab  var bc_pg24o "Aguinaldo público otras ocupaciones"
-lab  var bc_pg25o "Salario vacacional público otras ocupaciones"
-lab  var bc_pg26o "Propina/gratificaciones público otras ocupaciones"
-lab  var bc_pg27o "En especie público otras ocupaciones"
+lab  var bc_pg21p "Sueldos pÃºblico principal"
+lab  var bc_pg22p "Comisiones pÃºblico principal"
+lab  var bc_pg23p "Beneficios Sociales pÃºblico principal"
+lab  var bc_pg24p "Aguinaldo pÃºblico principal"
+lab  var bc_pg25p "Salario vacacional pÃºblico principal"
+lab  var bc_pg26p "Propina/gratificaciones pÃºblico principal"
+lab  var bc_pg27p "En especie pÃºblico principal"
+lab  var bc_pg21o "Sueldos pÃºblico otras ocupaciones"
+lab  var bc_pg22o "Comisiones pÃºblico otras ocupaciones"
+lab  var bc_pg23o "Beneficios Sociales pÃºblico otras ocupaciones"
+lab  var bc_pg24o "Aguinaldo pÃºblico otras ocupaciones"
+lab  var bc_pg25o "Salario vacacional pÃºblico otras ocupaciones"
+lab  var bc_pg26o "Propina/gratificaciones pÃºblico otras ocupaciones"
+lab  var bc_pg27o "En especie pÃºblico otras ocupaciones"
 lab  var bc_pg11t "Sueldos otras ocupaciones"
 lab  var bc_pg12t "Comisiones otras ocupaciones"
 lab  var bc_pg13t "Beneficios Sociales otras ocupaciones"
@@ -93,10 +93,10 @@ lab  var bc_pg43p "Especie cp cl principal"
 lab  var bc_pg41o "Dinero cp cl otras ocupaciones"
 lab  var bc_pg42o "Asignaciones cp cl otras ocupaciones"
 lab  var bc_pg43o "Especie cp cl otras ocupaciones"
-lab  var bc_pg51p "Dinero patrón principal"
-lab  var bc_pg52p "Especie patrón principal"
-lab  var bc_pg51o "Dinero patrón otras ocupaciones"
-lab  var bc_pg52o "Especie patrón otras ocupaciones"
+lab  var bc_pg51p "Dinero patrÃ³n principal"
+lab  var bc_pg52p "Especie patrÃ³n principal"
+lab  var bc_pg51o "Dinero patrÃ³n otras ocupaciones"
+lab  var bc_pg52o "Especie patrÃ³n otras ocupaciones"
 lab  var bc_pg71p "Dinero coop principal"
 lab  var bc_pg72p "Asignaciones coop principal"
 lab  var bc_pg73p "Especie coop principal"
@@ -117,7 +117,7 @@ lab  var bc_pg131 "Intereses"
 lab  var bc_pg132 "Intereses (exterior)"
 lab  var bc_otras_utilidades "Otras utilidades imputables al hogar"
 lab  var bc_ot_utilidades "Otras utilidades imputables al hogar"
-lab  var bc_otras_capital "Medianería, pastoreo y ganado a capitalizar"
+lab  var bc_otras_capital "MedianerÃ­a, pastoreo y ganado a capitalizar"
 lab  var bc_otros_lab "Otros ingresos laborales"
 lab  var bc_otros_benef "Beneficios sociales "
 lab  var bc_pag_at "Pagos atrasados"
@@ -142,21 +142,21 @@ lab  var bc_pa33 "Ingreso agropecuario 33"
 lab  var bc_pg191 "Otros ingresos 191"
 lab  var bc_pg192 "Otros ingresos 192"
 lab  var bc_ing_ciud "Ingreso ciudadano"
-lab  var bc_ytdop "Ingreso trabajador dependiente ocupación principal"
-lab  var bc_ytdos "Ingreso trabajador dependiente ocupación secundaria"
+lab  var bc_ytdop "Ingreso trabajador dependiente ocupaciÃ³n principal"
+lab  var bc_ytdos "Ingreso trabajador dependiente ocupaciÃ³n secundaria"
 lab  var bc_ytinde "Ingreso trabajador independiente"
 lab  var bc_ytransf "Ingreso por transferencia"
 lab  var bc_pt1 "Ingresos por todos los conceptos"
-lab  var bc_pt2 "Ingreso total de la persona por ocupación principal"
+lab  var bc_pt2 "Ingreso total de la persona por ocupaciÃ³n principal"
 lab  var bc_pt4 "Ingreso total de la persona por concepto de trabajo"
 lab  var bc_afam "Asignaciones familiares"
 lab  var bc_yciudada "Ingreso ciudadano"
 lab  var bc_yalimpan "Tarjeta alimentaria"
 lab  var bc_yhog "Ingreso del hogar"
 lab  var bc_pg14 "Valor locativo"
-lab  var bc_as_privados "Ingresos de la ocupación principal de asalariados privados"
-lab  var bc_as_publicos "Ingresos de la ocupación principal de asalariados públicos"
-lab  var bc_as_otros "Ingresos totales privados y públicos de otras ocupaciones"
+lab  var bc_as_privados "Ingresos de la ocupaciÃ³n principal de asalariados privados"
+lab  var bc_as_publicos "Ingresos de la ocupaciÃ³n principal de asalariados pÃºblicos"
+lab  var bc_as_otros "Ingresos totales privados y pÃºblicos de otras ocupaciones"
 lab  var bc_asalariados "Ingresos totales asalariados todas ocupaciones"
 lab  var bc_as_agropec "Ingresos totales asalariados agropecuarios"
 lab  var bc_patrones "Ingresos de todas las ocupaciones de los patrones"
@@ -166,7 +166,7 @@ lab  var bc_cpropiacl "Ingresos de todas las ocupaciones de los cpropia con loca
 lab  var bc_cp_agropec "Ingresos totales cuenta propia agropecuarios"
 lab  var bc_cooperat "Ingresos de todas las ocupaciones de los cooperativas"
 lab  var bc_ot_agropec "Ingresos totales otros agropecuarios"
-lab  var bc_principal "Ingresos laborales de la ocupación principal (solo asalariados)."
+lab  var bc_principal "Ingresos laborales de la ocupaciÃ³n principal (solo asalariados)."
 lab  var bc_ing_lab "Todos los ingresos laborales de todas las ocupaciones para todos los ocupados"
 lab  var bc_utilidades "Ingresos totales por utilidades"
 lab  var bc_alq "Ingresos totales por alquileres"
@@ -181,10 +181,10 @@ lab  var bc_transf_hog "Ingresos totales por transferencias al hogar"
 lab  var bc_beneficios "Ingresos por beneficios y transferencias sociales"
 lab  var bc_ipc "IPC para montevideo a diciembre 2006"
 lab  var bc_ipc_nuevo "IPC para montevideo y el interior a diciembre 2010"
-lab  var bc_ipc_tot "IPC total país"
+lab  var bc_ipc_tot "IPC total paÃ­s"
 lab  var bc_cuotmilit "Cuotas militares"
 lab  var bc_cuotabps "Cuota pagada por DISSE, BPS o similar jubilado o pensionista"
-lab  var bc_disse_p "Cuota pagada por DISSE, BPS o similar en ocupación principal"
+lab  var bc_disse_p "Cuota pagada por DISSE, BPS o similar en ocupaciÃ³n principal"
 lab  var bc_disse_o "Cuota pagada por DISSE, BPS o similar en otras ocupaciones"
 lab  var bc_disse "Cuota pagada por DISSE, BPS o similar en seguro de paro"
 lab  var bc_ht11 "Ingreso del hogar por todo concepto del INE (con val loc)"
@@ -193,8 +193,8 @@ lab  var bc_ht11_iecon "Ingreso del hogar por todo concepto replicado INE"
 lab  var bc_ht11_sss "Ingreso del hogar por todo concepto (con val loc) sin seguro de salud"
 lab  var bc_salud "Ingresos por seguro de salud imputados al hogar"
 lab  var bc_ht11_css "Ingreso del hogar por todo concepto (con val loc) con seguro de salud"
-lab  var bc_percap_iecon "Ingreso per cápita del hogar con bc_ht11_sss"
-lab  var bc_percap_ine "Ingreso per cápita del hogar con bc_ht11d"
+lab  var bc_percap_iecon "Ingreso per cÃ¡pita del hogar con bc_ht11_sss"
+lab  var bc_percap_ine "Ingreso per cÃ¡pita del hogar con bc_ht11d"
 
 cap lab drop 	bc_filtloc
 cap lab drop 	bc_mes
@@ -220,7 +220,7 @@ cap lab drop 	bc_pf22
 cap lab drop 	bc_pf34
 cap lab drop 	sino
 
-lab def bc_filtloc 1 "Localidades de más de 5mil habitantes" ///
+lab def bc_filtloc 1 "Localidades de mÃ¡s de 5mil habitantes" ///
   2 "Localidades de 5mil habitantes o menos" 
 lab def bc_mes 1 "Enero" ///
   2 "Febrero" ///
@@ -244,14 +244,14 @@ lab def bc_dpto 1 "Montevideo" ///
   8 "Florida" ///
   9 "Lavalleja" ///
   10 "Maldonado" ///
-  11 "Paysandú" ///
-  12 "Río Negro" ///
+  11 "PaysandÃº" ///
+  12 "RÃ­o Negro" ///
   13 "Rivera" ///
   14 "Rocha" ///
   15 "Salto " ///
-  16 "San José " ///
+  16 "San JosÃ© " ///
   17 "Soriano" ///
-  18 "Tacuarembó " ///
+  18 "TacuarembÃ³ " ///
   19 "Treinta y Tres" 
 lab def bc_ccz 1 "CCZ 1" ///
   2 "CCZ 2" ///
@@ -275,91 +275,91 @@ lab def bc_area 1 "Montevideo" ///
   2 "Interior >5000" ///
   3 "Interior <5000" ///
   4 "Rural disperso" 
-lab def bc_pe2 1 "Varón" ///
+lab def bc_pe2 1 "VarÃ³n" ///
   2 "Mujer" 
 lab def bc_pe4 1 "Jefe" ///
-  2 "Cónyugue" ///
+  2 "CÃ³nyugue" ///
   3 "Hijo" ///
   4 "Padres o suegros " ///
   5 "Otro pariente" ///
   6 "Otro no pariente" ///
-  7 "Servicio doméstico" 
-lab def bc_pe5 1 "Unión libre" ///
+  7 "Servicio domÃ©stico" 
+lab def bc_pe5 1 "UniÃ³n libre" ///
   2 "Casado" ///
   3 "Divorciado o separado" ///
   4 "Viudo" ///
   5 "Soltero" 
-lab def bc_pe6a 1 "Sin atención" ///
+lab def bc_pe6a 1 "Sin atenciÃ³n" ///
   2 "Mutualista" ///
   3 "Disse" ///
-  4 "Salud pública" ///
+  4 "Salud pÃºblica" ///
   5 "Otros privados" 
-lab def bc_pe6b 1 "Sin atención" ///
+lab def bc_pe6b 1 "Sin atenciÃ³n" ///
   2 "Mutualista" ///
-  3 "Salud pública" ///
+  3 "Salud pÃºblica" ///
   4 "Otros privados" 
-lab def bc_pe13 1 "Público" ///
+lab def bc_pe13 1 "PÃºblico" ///
   2 "Privado" 
-lab def bc_nivel 0 "Sin instrucción" ///
+lab def bc_nivel 0 "Sin instrucciÃ³n" ///
   1 "Primaria" ///
   2 "Secundaria" ///
-  3 "Enseñanza técnica o UTU" ///
+  3 "EnseÃ±anza tÃ©cnica o UTU" ///
   4 "Magisterio o Profesorado" ///
   5 "Universidad o similar" 
-lab def bc_pobp 1 "Menor de 14 años" ///
+lab def bc_pobp 1 "Menor de 14 aÃ±os" ///
   2 "Ocupados" ///
   3 "Desocupados, busca trabajo por primera vez" ///
   4 "Desocupados" ///
   5 "Desocupados , seguro de desempleo" ///
-  6 "Inactivo – tareas del hogar" ///
-  7 "Inactivo – Estudiante" ///
-  8 "Inactivo – Rentista" ///
-  9 "Inactivo – Pensionista y Jubilado" ///
-  11 "Inactivo – Otros" 
+  6 "Inactivo â€“ tareas del hogar" ///
+  7 "Inactivo â€“ Estudiante" ///
+  8 "Inactivo â€“ Rentista" ///
+  9 "Inactivo â€“ Pensionista y Jubilado" ///
+  11 "Inactivo â€“ Otros" 
 lab def bc_pf41 1 "Asalariado privado" ///
-  2 "Asalariado público" ///
+  2 "Asalariado pÃºblico" ///
   3 "Cooperativista" ///
-  4 "Patrón" ///
+  4 "PatrÃ³n" ///
   5 "Cuenta propia s/l" ///
   6 "Cuenta propia c/l" ///
   7 "Otras actividades" 
 lab def bc_cat2 1 "Asalariado privado" ///
-  2 "Asalariado público" ///
-  3 "Patrón" ///
+  2 "Asalariado pÃºblico" ///
+  3 "PatrÃ³n" ///
   4 "Cuenta propia" ///
   5 "Otras actividades" 
 lab def bc_pf081 1 "Menos de 10 personas" ///
-  2 "10 personas o más" 
+  2 "10 personas o mÃ¡s" 
 lab def bc_pf082 1 "Una persona" ///
   2 "Dos a cuatro personas" ///
   3 "Cinco a nueve personas" 
-lab def bc_rama 1 "Agropecuaria y Minería" ///
+lab def bc_rama 1 "Agropecuaria y MinerÃ­a" ///
   2 "Industria Manufactureras" ///
   3 "Electricidad, Gas y Agua" ///
-  4 "Construcción" ///
+  4 "ConstrucciÃ³n" ///
   5 "Comercio, Restaurantes y Hoteles" ///
   6 "Transportes y Comunicaciones" ///
   7 "Servicios a empresas" ///
   8 "Servicios comunales, sociales y personales" 
 lab def bc_tipo_ocup 0 "Fuerzas Armadas" ///
-  1 "Miembro de poder ejecutivo y cuerpos legislativos y personal directivo de la administración pública y de las empresas" ///
-  2 "Profesionales científicos e intelectuales" ///
-  3 "Técnicos y profesionales de nivel medio" ///
+  1 "Miembro de poder ejecutivo y cuerpos legislativos y personal directivo de la administraciÃ³n pÃºblica y de las empresas" ///
+  2 "Profesionales cientÃ­ficos e intelectuales" ///
+  3 "TÃ©cnicos y profesionales de nivel medio" ///
   4 "Empleados de oficina" ///
   5 "Trabajadores de los servicios y vendedores de comercios y mercados" ///
   6 "Agricultores y trabajadores calificados agropecuarios y pesqueros" ///
-  7 "Oficiales, operarios y artesanos de artes mecánicas y de otros oficios" ///
-  8 "Operadores y montadores de instalaciones y máquinas" ///
+  7 "Oficiales, operarios y artesanos de artes mecÃ¡nicas y de otros oficios" ///
+  8 "Operadores y montadores de instalaciones y mÃ¡quinas" ///
   9 "Trabajadores no calificados" 
 lab def bc_pf04 1 "Licencia" ///
   2 "Poco trabajo o mal tiempo" ///
   3 "Huelga o estar suspendido" ///
   4 "Otro motivo" 
-lab def bc_pf22 1 "Volverá a trabajar en 30 días" ///
+lab def bc_pf22 1 "VolverÃ¡ a trabajar en 30 dÃ­as" ///
   2 "Espera resultados de gestiones" ///
-  3 "Buscó antes y dejo de buscar" ///
+  3 "BuscÃ³ antes y dejo de buscar" ///
   4 "Otros motivos" 
-lab def bc_pf34 1 "Cerró el establecimiento" ///
+lab def bc_pf34 1 "CerrÃ³ el establecimiento" ///
   2 "Lo despidieron" ///
   3 "Otro motivo" 
 lab def sino 1 "Si" ///

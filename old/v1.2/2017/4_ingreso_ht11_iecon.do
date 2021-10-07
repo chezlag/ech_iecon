@@ -10,13 +10,13 @@
 
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
-* Se toma a quienes tienen derecho en sanidad militar a través de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
+* Se toma a quienes tienen derecho en sanidad militar a travÃ©s de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
 
 
 gen at_milit = 1 if e45_4_1 == 1 & ((e45_1_1 != 1 & e45_1_1 !=4 & e45_1_1 != 5 & e45_1_1 !=6) & (e45_2_1 != 1 & e45_2_1!=6 & e45_2_1 !=3 & e45_2_1 !=5) & (e45_3_1 != 1& e45_3_1 !=6 & e45_3_1 !=3 & e45_3_1!=5 ))
 recode at_milit .=0
 
-*Tomo a todos quienes tienen derecho a atención militar y no tienen FONASA ya sea por miembro del hogar o por otro hogar . 
+*Tomo a todos quienes tienen derecho a atenciÃ³n militar y no tienen FONASA ya sea por miembro del hogar o por otro hogar . 
 
 gen at_milit2 = 1 if e45_4 == 1 & ((e45_1_1 != 1 & e45_1_1 !=4 & e45_1_1 != 5 & e45_1_1 !=6) & (e45_2_1 != 1 & e45_2_1!=6 & e45_2_1 !=3 & e45_2_1 !=5) & (e45_3_1 != 1& e45_3_1 !=6 & e45_3_1 !=3 & e45_3_1!=5 ))
 recode at_milit2 .=0
@@ -33,7 +33,7 @@ replace cuotmilit_op=0 if (ramamilit_op==0|e45_4_2!=bc_nper)
 gen valorcuota_op = cuotmilit_op*mto_cuot
 gen ytdop_2 = valorcuota_op
 
-***Cuota militar ocupación secundaria.
+***Cuota militar ocupaciÃ³n secundaria.
 
 gen ramamilit_os =1 if f91_2  == 5222 | f91_2  == 5223 | f91_2  == 8030 |  f91_2  == 8411 | f91_2  == 8421 | f91_2 == 8422 | f91_2  == 8423 | f91_2  == 8430 | f91_2  == 8521 | f91_2  == 8530 | f91_2  == 8610     
 recode ramamilit_os .=0
@@ -64,11 +64,11 @@ replace cuotmilit_hogar=0 if bc_nper != 1
 **************************************
 
 
-*FONASA trabajador ocupación principal.
+*FONASA trabajador ocupaciÃ³n principal.
 
 gen ytdop_3 = 0
 replace ytdop_3 = mto_cuot if (((e27>= 14) & (f73 < 3 | f73==8 | f73 == 7) & f82==1) & (e45_1_1 == 1| e45_2_1== 1 | e45_3_1== 1)) 
-*FONASA trabajador ocupación secundaria.
+*FONASA trabajador ocupaciÃ³n secundaria.
 
 gen ytdos_3 = 0
 replace ytdos_3 = mto_cuot if (((e27>= 14 & (f92 < 3 | f92 == 7) & ytdop_2==0 & ytdop_3==0) & f96==1) & (e45_1_1 == 1| e45_2_1== 1 | e45_3_1== 1))
@@ -164,7 +164,7 @@ drop aux1-aux14_max
 
 gen CUOT_EMP_TOT = CUOT_EMP_PRIV_TOT + CUOT_EMP_IAMC_TOT
 
-*CUOTAS PAGADAS POR ASSE A TRAVÉS DE UN MIEMBRO DEL HOGAR.
+*CUOTAS PAGADAS POR ASSE A TRAVÃ‰S DE UN MIEMBRO DEL HOGAR.
 
 gen CUOT_EMP_ASSE1 =0
 replace CUOT_EMP_ASSE1=1 if ((e45_1_1 ==5) & (e45_2 ==2  | e45_2_1 ==2) & ( e45_3 ==2 | e45_3_1 == 2))
@@ -258,21 +258,21 @@ gen EMER_OTRO_TOT = EMER_OTRO2*mto_emer
 **************************************
 **************************************
 
-*Ingresos por trabajo-Ocupación Principal dependiente
+*Ingresos por trabajo-OcupaciÃ³n Principal dependiente
 
 g ytdop_1=g126_1+g126_2+g126_3+g126_4+g126_5+g126_6+g126_7+g126_8+(g127_1*mto_desa)+(g127_2*mto_almu)+g127_3+g128_1+g129_2+g130_1+/*
 */g131_1+(g132_1*mto_vaca)+(g132_2*mto_ovej)+(g132_3*mto_caba)+g133_1+(g133_2/12)
 	recode ytdop_1 .=0
 g  YTDOP =  ytdop_1 + ytdop_2 + ytdop_3 + CUOT_EMP_TOT + EMER_EMP_TOT + CUOT_EMP_ASSE_TOT
 
-*Ingresos por trabajo. Ocupación Secundaria dependiente
+*Ingresos por trabajo. OcupaciÃ³n Secundaria dependiente
 
 g ytdos_1 = g134_1+g134_2+g134_3+g134_4+g134_5+g134_6+g134_7+g134_8+(g135_1*mto_desa)+(g135_2*mto_almu)+g135_3+g136_1 + g137_2+/*
 */g138_1+g139_1+(g140_1*mto_vaca)+(g140_2*mto_ovej)+(g140_3*mto_caba)+g141_1+(g141_2/12)
 
 g  YTDOS =  ytdos_1 + ytdos_2 + ytdos_3
 
-*Ingresos por trabajo-Ocupación independiente
+*Ingresos por trabajo-OcupaciÃ³n independiente
 
 g YTINDE_1 = g142 + (g143/12) + g144_1 + g144_2_1 + g144_2_2  + g144_2_3 + g144_2_4 + g144_2_5 + (g145/12) + (g146/12) + (g147/12)
 g YTINDE = YTINDE_1 + YTINDE_2	
@@ -302,7 +302,7 @@ g YTRANSF_3=mto_hogc if (g149 ==1& g149_1==2)
 **************************************
 **************************************
 
-*Políticas sociales, ingresos por alimentación
+*PolÃ­ticas sociales, ingresos por alimentaciÃ³n
 
 g DESAYMER = 0
 	replace DESAYMER = (e559_1 + e196_1 + e196_3 + e200_1 +e200_3 + e211_1 + e211_3)*4.3*mto_desa
@@ -334,7 +334,7 @@ recode e561 (2=0), gen(lecheenp)
 g leche = e561_1*lecheenp*lecheenpol   // Cambio 09/04/19
 	replace leche=0 if ((e246 == 1| e246 == 7) & e560 == 2 )
 
-*Se genera una variable de alimentos para todos sin importar si son mayores de 14 años o no
+*Se genera una variable de alimentos para todos sin importar si son mayores de 14 aÃ±os o no
 
 g YALIMENT=DESAYMER + ALMYCEN + tus + CANASTA + leche
 
@@ -367,7 +367,7 @@ g CUOT_OTROHOG=mto_cuot if ((e45_1_1 == 6) & (e45_2 == 2 | e45_2_1 == 2) & (e45_
 	replace CUOT_OTROHOG=mto_cuot if ((e45_3_1 = =3) & (e45_1 == 2 | e45_1_1 == 2 | e45_1_1 == 3) & (e45_2 == 2 | e45_2_1 == 2))
 	recode CUOT_OTROHOG .=0
 	
-*Se suman a los ingresos del hogar, sea mayor de 14 años o no.
+*Se suman a los ingresos del hogar, sea mayor de 14 aÃ±os o no.
 egen CUOT_OTROHOG2 = sum(CUOT_OTROHOG), by(bc_correlat)
 	replace CUOT_OTROHOG2=0 if bc_nper!=1
 
@@ -390,7 +390,7 @@ g pt1_iecon=0
 by bc_correlat: egen HPT1=sum(pt1_iecon) 
 	recode HPT1 .=0
 	replace HPT1 =0 if bc_nper!=1
-**PT2 INGRESOS DE LA OCUPACIÓN PRINCIPAL.
+**PT2 INGRESOS DE LA OCUPACIÃ“N PRINCIPAL.
 
 
 *PRIVADOS.
@@ -398,7 +398,7 @@ by bc_correlat: egen HPT1=sum(pt1_iecon)
 g PT2PRIV = 0
 	replace PT2PRIV=YTDOP if f73==1
 
-*PÚBLICOS.
+*PÃšBLICOS.
 
 g PT2PUB = 0
 	replace PT2PUB=YTDOP if (f73==2 | f73==8)
@@ -448,22 +448,22 @@ drop YHOG_MAX aux
 g ht11_iecon= HPT1+ine_ht13+yhog_iecon
 	replace ht11_iecon=0 if bc_nper!=1
 compare ine_pt1 pt1_iecon if abs( ine_pt1- pt1_iecon)>1 //Son 34 casos con diferencias mayores a la unidad.
-														//en próxima versión se intentará llevar a cero la diferencia
+														//en prÃ³xima versiÃ³n se intentarÃ¡ llevar a cero la diferencia
 compare ine_pt2 pt2_iecon if abs( ine_pt2- pt2_iecon)>1
 compare ine_pt4 pt4_iecon if abs( ine_pt4- pt4_iecon)>1	
-compare ht11 ht11_iecon if abs( ht11- ht11_iecon)>3 & bc_nper==1	//Son 48 casos con diferencias mayores a 3. En próxima 
-														//versión se intentará llevar a cero la diferencia
-/* Hasta aquí se replican los resultados de INE*/
+compare ht11 ht11_iecon if abs( ht11- ht11_iecon)>3 & bc_nper==1	//Son 48 casos con diferencias mayores a 3. En prÃ³xima 
+														//versiÃ³n se intentarÃ¡ llevar a cero la diferencia
+/* Hasta aquÃ­ se replican los resultados de INE*/
 
 *-------------------------------------------------------------------------------
 * ASIGNACIONES
 * Sintaxis del Mides
 *AFAM-PE
 g afam_pe=0
-	replace afam_pe=1 if g256==2 & g152==1 // Cobra asignación por separado del sueldo en local de cobranza todos los meses 
+	replace afam_pe=1 if g256==2 & g152==1 // Cobra asignaciÃ³n por separado del sueldo en local de cobranza todos los meses 
 	replace afam_pe=1 if g150==1 & (pobpcoac== 1 | pobpcoac== 3 | pobpcoac== 4 | pobpcoac== 6 | pobpcoac== 7 | /* // Cobra asignaciones familiares, son inactivos 
-	*/ pobpcoac== 8 | pobpcoac== 11 | (pobpcoac== 2 & f82!= 1 & f96!= 1)) // (a excepción de jubilados y pensionistas)  , desempleaods que no están en seguro de paro o menores de 14 años.
-	replace afam_pe=1 if (g255==1)	// Declaran recibir asignación familiar-plan de equidad								  
+	*/ pobpcoac== 8 | pobpcoac== 11 | (pobpcoac== 2 & f82!= 1 & f96!= 1)) // (a excepciÃ³n de jubilados y pensionistas)  , desempleaods que no estÃ¡n en seguro de paro o menores de 14 aÃ±os.
+	replace afam_pe=1 if (g255==1)	// Declaran recibir asignaciÃ³n familiar-plan de equidad								  
 
 *Otras AFAM
 
@@ -492,7 +492,7 @@ g monto_afam_pe=0
 	replace monto_afam_pe=(1298.95*((g151_5+g151_1+g151_2+g151_3)^0.6)+556.69*(g151_3_1^0.6))+g151_4*(1298.95+556.69) if bc_mes==1 &afam_pe==1
 	replace monto_afam_pe=(1404.16*((g151_5+g151_1+g151_2+g151_3)^0.6)+601.79*(g151_3_1^0.6))+g151_4*(1404.16+601.79) if afam_pe==1&bc_mes>1
 *-------------------------------------------------------------------------------
-* AFAM_CON - Código Iecon
+* AFAM_CON - CÃ³digo Iecon
 
 gen nucleo = bc_nper
 replace nucleo = min(bc_nper,e34) if e34!=0
@@ -543,7 +543,7 @@ by bc_correlat: replace monto_tus_iecon = 2383 if n_menores>3 & bc_mes==1  & tus
 replace monto_tus_iecon = 0 if bc_nper!=1
 */
 *-------------------------------------------------------------------------------
-* Vector salud. Código Iecon
+* Vector salud. CÃ³digo Iecon
 
 *Cuota otro hogar
 gen     cuota_otrohog =mto_cuot if ((e45_1_1==6)&(e45_2==2|e45_2_1==2)&(e45_3==2|e45_3_1==2))

@@ -11,7 +11,7 @@ compare ht11 ht11_css_sindef  	  if (abs(dif_cine)>2) & bc_nper==1
 compare ht11 ht11_css_sindef  if (abs(dif_cine)>2) & bc_nper==1 ///
 & bc_correlat!=23043 /// tiene mal sumado g121_1
 & bc_correlat!=36600 & bc_correlat!=37235 & bc_correlat!=50236 & bc_correlat!=42500 & bc_correlat!=77416 /// mal g124_3
-& bc_correlat!=40613 /// mal ingr x 10640 cuotmilit que debería incluir, además hay algo de ytransf_4
+& bc_correlat!=40613 /// mal ingr x 10640 cuotmilit que deberÃ­a incluir, ademÃ¡s hay algo de ytransf_4
 & bc_correlat!=31094 // mal ingr x 8512 cuota_p es la g125_2
 
 
@@ -33,7 +33,7 @@ AHORA
 Notas: 
 bc_correlat!=23043, ine mal ingreso
 bc_correlat!=50236&bc_correlat!=42500&bc_correlat!=77416, ine mal ingreso, g124_3 lo sumo
-bc_correlat!=40613, está mal el ingreso por lo menos hay 10640 de cuotmilit que debería incluir, además hay algo de ytransf_4
+bc_correlat!=40613, estÃ¡ mal el ingreso por lo menos hay 10640 de cuotmilit que deberÃ­a incluir, ademÃ¡s hay algo de ytransf_4
 
 
 
@@ -70,7 +70,7 @@ total                        8600
 > & bc_correlat!=23043 /// tiene mal sumado g121_1
 > & bc_correlat!=36600 & bc_correlat!=37235 & bc_correlat!=50236 & bc_correlat!=42500 & bc_correlat!=77416 /// mal g1
 > 24_3
-> & bc_correlat!=40613 /// mal ingr x 10640 cuotmilit que debería incluir, además hay algo de ytransf_4
+> & bc_correlat!=40613 /// mal ingr x 10640 cuotmilit que deberÃ­a incluir, ademÃ¡s hay algo de ytransf_4
 > & bc_correlat!=31094 // mal ingr x 8512 cuota_p es la g125_2
 
                                         ---------- difference ----------

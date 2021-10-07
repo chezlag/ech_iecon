@@ -10,7 +10,7 @@
 
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
-* Se toma a quienes tienen derecho en sanidad militar a travÈs de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
+* Se toma a quienes tienen derecho en sanidad militar a trav√©s de un miembro de este hogar y a su vez no generan derecho por FONASA ya sea por miembro del hogar o por otro hogar.
 gen at_milit=1 if e46_1==1
 recode  at_milit .=0
 egen cuotmilit= sum(at_milit) if e46_2>0, by(bc_correlat e46_2)
@@ -54,7 +54,7 @@ gen YTINDE = g147 + (g148/12) + g149_2 + g149_3 + g149_4 + g149_5 + g149_6 + g14
 gen menor18=0
 replace menor18=1 if e28<18
 
-* por el diseÒo del formulario quienes contestan e45_1==3 es porque tienen derechos de salud en mutualista o seguro privado)
+* por el dise√±o del formulario quienes contestan e45_1==3 es porque tienen derechos de salud en mutualista o seguro privado)
 generate fonasa = mto_cuot if e45_1==3 & (((pobpcoac==2 & (f85==1 |f99==1)) | pobpcoac==5))  & at_milit!=1 
 recode fonasa  .=0
 
@@ -78,7 +78,7 @@ replace cuota_fon_msp_men1=msp_menor_fon*mto_cuot if msp_menor_fon>0
 replace cuota_fon_msp_men1=0 // AGREGO ESTO PARA PROBAR
 
 *-------------------------------------------------------------------------------
-*- 26/10 CÛdigo para captar seguro de salud pago por empleador
+*- 26/10 C√≥digo para captar seguro de salud pago por empleador
 
 gen aux_emp=0
 replace aux_emp=1 if e45_1==1
@@ -137,7 +137,7 @@ recode  asig_otro .=0
 generate YTRANSF_2  = asig_jefe + asig_con + asig_otro  if (g155_1==1 & g155_3==2)
 
 gen bc_afam= 0
-replace bc_afam= asig_jefe + asig_con + asig_otro  if g155_1==1 // Se imputa asignaciÛn, estÈ o no incluida en el sueldo
+replace bc_afam= asig_jefe + asig_con + asig_otro  if g155_1==1 // Se imputa asignaci√≥n, est√© o no incluida en el sueldo
 
 
 recode mto_hogc .=0
@@ -161,7 +161,7 @@ replace COMESCOL = (mto_alm+mto_des)*5*4.3 if e59_2_7==9
 replace COMESCOL = (mto_alm+mto_des)*5*4.3 if e59_2_7==10
 replace COMESCOL = (mto_alm+mto_des+mto_des)*5*4.3 if e59_2_7==11
 
-/*Se considera m·s verdadera la informaciÛn semanal, por lo que se considera la informaciÛn mensual si responde solo mensual y semanal si responde solo semanal
+/*Se considera m√°s verdadera la informaci√≥n semanal, por lo que se considera la informaci√≥n mensual si responde solo mensual y semanal si responde solo semanal
 o los dos*/
 g COMEHOG = e60_3*mto_alm if (e60_1==1 & e60_3!=0)
 replace COMEHOG = e60_2*mto_alm*4.3 if (e60_1==1 & e60_2!=0) 
@@ -183,7 +183,7 @@ recode YALIMENT (.=0)
 
 generate YTRANSF_4 = YALIMENT 
 
-*cambio aquÌ solo va cuota militar si la genera una persona dentro del hogar que no es funcionaria publica
+*cambio aqu√≠ solo va cuota militar si la genera una persona dentro del hogar que no es funcionaria publica
 
 generate YTRANSF_5= cuotmilit if (f75!=2 & f95!=2)
 
@@ -293,7 +293,7 @@ egen HPT1=sum(pt1_iecon), by(bc_correlat)
 g ht11_iecon= HPT1+ine_ht13+yhog_iecon
 
 *-------------------------------------------------------------------------------
-* Vector salud. CÛdigo Iecon
+* Vector salud. C√≥digo Iecon
 
 gen salud = fonasa + cuota_fonasa_msp+ cuotmilit+cuotabps+cuota_fon_msp_men1 // A fonasa, se le suman cuotas mutuales militares y bps ($)
 

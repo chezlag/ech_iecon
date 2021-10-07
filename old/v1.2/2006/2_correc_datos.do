@@ -43,12 +43,12 @@ cap rename e58_2__w e58_2_6_3
 cap rename e58_2__x e58_2_6_4
 
 *-------------------------------------------------------------------------------
-* RecodificaciÛn de datos
+* Recodificaci√≥n de datos
 *Esta persona parece tener mal este ingreso 
 *ver el valor locativo hogar y coincidencia de monto con lo declarado en g121_1
 	replace g124_3=-3 if numero==23043&nper==2
 
-*Este recode est· hecho porque son demasiadas
+*Este recode est√° hecho porque son demasiadas
 recode g125_2 (22 50=-3) //cantidad de cuotas mutuales recibidas no declaradas en sueldo
 recode g125_2 (-3=0), g(g125_2_ing)
 

@@ -4,7 +4,7 @@ mvencode pg11* pg12* pg13* pg14* pg15* pg17* pg18* pg21* pg22* pg23* pg24* pg25*
 pg28* pg31* pg33* pg41* pg43* pg51* pg61* pg71* pg73* pg91* pg92* pg10* , mv(0) override
 
 *-------------------------------------------------------------------------------
-* Genero algunas variables =0 que no aparecen este año
+* Genero algunas variables =0 que no aparecen este aÃ±o
 g pg16p=0
 g pg26p=0
 g pg160=0
@@ -87,8 +87,8 @@ g bc_pg31p=pg31p if bc_pf41==5 //cp s/l
 g bc_pg33p=pg33p if bc_pf41==5 //cp s/l
 g bc_pg41p=pg41p if bc_pf41==6 //cp c/l
 g bc_pg43p=pg43p if bc_pf41==6 //cp c/l
-g bc_pg51p=pg51p if bc_pf41==4 //patrón
-g bc_pg52p=pg52p if bc_pf41==4 //patrón
+g bc_pg51p=pg51p if bc_pf41==4 //patrÃ³n
+g bc_pg52p=pg52p if bc_pf41==4 //patrÃ³n
 g bc_pg71p=pg71p if bc_pf41==3 //coop
 g bc_pg73p=pg73p if bc_pf41==3 //coop
 
@@ -104,8 +104,8 @@ g bc_pg31o=pg310 //cp s/l
 g bc_pg33o=pg330 //cp s/l
 g bc_pg41o=pg410 //cp c/l
 g bc_pg43o=pg430 //cp c/l
-g bc_pg51o=pg510 //patrón
-g bc_pg52o=pg520 //patrón
+g bc_pg51o=pg510 //patrÃ³n
+g bc_pg52o=pg520 //patrÃ³n
 g bc_pg71o=pg710 //coop
 g bc_pg73o=pg730 //coop
 
@@ -118,9 +118,9 @@ g bc_pg72o=pg720 //coop
 *-------------------------------------------------------------------------------
 * Ingresos del capital
 
-*Pruebo generarlas con 0 a ver si no da diferencias... ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+*Pruebo generarlas con 0 a ver si no da diferencias... Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡
 
-g bc_pg60p=0 if bc_pf41==4 //patrón
+g bc_pg60p=0 if bc_pf41==4 //patrÃ³n
 g bc_pg60p_cpsl=0 if bc_pf41==5 //cp s/l
 g bc_pg60p_cpcl=0 if bc_pf41==6 //cp c/l
 
@@ -132,8 +132,8 @@ g bc_pg60o_cpcl=0
 
 g bc_pg80o=0
 
-/* pg62p, pg81p y pg82p no están
-g bc_pg60p=(pg61p+pg62p)/12 if bc_pf41==4 //patrón
+/* pg62p, pg81p y pg82p no estÃ¡n
+g bc_pg60p=(pg61p+pg62p)/12 if bc_pf41==4 //patrÃ³n
 g bc_pg60p_cpsl=(pg61p+pg62p)/12 if bc_pf41==5 //cp s/l
 g bc_pg60p_cpcl=(pg61p+pg62p)/12 if bc_pf41==6 //cp c/l
 
@@ -165,7 +165,7 @@ g bc_otros_benef=0
 g bc_pag_at=0
 
 *-------------------------------------------------------------------------------
-* Otros suma pagos atrasados a indemnización por despido
+* Otros suma pagos atrasados a indemnizaciÃ³n por despido
 g bc_otros=bc_pag_at
 
 *-------------------------------------------------------------------------------

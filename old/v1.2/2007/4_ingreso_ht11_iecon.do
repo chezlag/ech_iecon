@@ -2,7 +2,7 @@
 *-------------------------------------------------------------------------------
 * CUOTA MILITAR GENERADA POR MIEMBRO DEL HOGAR
 g cuotmilit=(e46_1==1)
-*Cuota militar generada por integrante otro hogar, m·s abajo (e46_1==2)
+*Cuota militar generada por integrante otro hogar, m√°s abajo (e46_1==2)
 preserve
 collapse (sum) cuotmilit if e46_2>0, by (bc_correlat e46_2)
 rename e46_2 nper
@@ -19,15 +19,15 @@ rename cuotmilit cuotmilit1
 g cuotmilit = cuotmilit1*mto_cuot
 recode cuotmilit .=0
 
-* ytransf_5 - cuota militar o policial no funcionario p˙blico
-*aquÌ solo va cuota militar si la genera un miembro del hogar no func p˙blico
+* ytransf_5 - cuota militar o policial no funcionario p√∫blico
+*aqu√≠ solo va cuota militar si la genera un miembro del hogar no func p√∫blico
 *luego reemplazo cero en cuotmilit porque sino se duplica el ingreso
-*por eso hago ac· esto y no junto a las otras transf
+*por eso hago ac√° esto y no junto a las otras transf
 g ytransf_5=cuotmilit if (f75!=2&f95!=2)
 	replace cuotmilit=0 if (f75!=2&f95!=2)
 
 *-------------------------------------------------------------------------------
-* CUOTA PAGADA POR BPS, DISSE O INSTITUCI”N SIMILAR
+* CUOTA PAGADA POR BPS, DISSE O INSTITUCI√ìN SIMILAR
 g cuotabps=mto_cuot if (e45_1==3&(pobpcoac==9|pobpcoac==10)) 
 recode cuotabps (.=0)
 
@@ -50,9 +50,9 @@ capture drop ytdop_iecon ytdos_iecon ytinde_iecon
 g ytdop_iecon=g129_1+g129_2+g129_3+g129_4+g129_5+g129_6+g129_7+g129_8+(g130_2*mto_desa)+(g130_3*mto_alm)+g130_4+g131_2+g132_3+(g133_2*mto_cuot)+g134_2+g135_2+(g136_2*mto_vac)+(g136_3*mto_ovej)+(g136_4*mto_cab)+g137_2+(g137_3/12)+emer_emp_tot 
 	replace ytdop_iecon=g129_1+g129_2+g129_3+g129_4+g129_5+g129_6+g129_7+g129_8+(g130_2*mto_desa)+(g130_3*mto_alm)+g130_4+g131_2+g132_3+cuotmilit+g134_2+g135_2+(g136_2*mto_vac)+(g136_3*mto_ovej)+(g136_4*mto_cab)+g137_2+(g137_3/12)+emer_emp_tot if cuotmilit>0&bc_pf41==2
 *La cuota por emergencia pagada por el empleador la sumo en ytdop_iecon (como el ine en 2014)
-*El ine no suma en ytdop_iecon (g133_2*mto_cuot) (no corresponderÌa cuotmilit del replace), tampoco suma en ytdos_iecon (g142_2*mto_cuot), est· el siguiente comentario en la sintaxis 2007:
-/*De la sintaxis INE 2007 - fecha modificaciÛn: 08/12/2011
-***********El ytdos_iecon de arriba estaba considerando las cuotas mutuales pagadas por el empleador, lo cual estaba duplicando el ingreso por este rubro ya que habÌa sido registrado en ytdop_4*********   
+*El ine no suma en ytdop_iecon (g133_2*mto_cuot) (no corresponder√≠a cuotmilit del replace), tampoco suma en ytdos_iecon (g142_2*mto_cuot), est√° el siguiente comentario en la sintaxis 2007:
+/*De la sintaxis INE 2007 - fecha modificaci√≥n: 08/12/2011
+***********El ytdos_iecon de arriba estaba considerando las cuotas mutuales pagadas por el empleador, lo cual estaba duplicando el ingreso por este rubro ya que hab√≠a sido registrado en ytdop_4*********   
 ***********Se modifica el ytdos_iecon el 7/12/11************
 */
 
@@ -64,8 +64,8 @@ gen ytinde_iecon = g147 + (g148/12) + g149_2 + g149_3 + g149_4 + g149_5 + g149_6
 
 *-------------------------------------------------------------------------------
 * disse_p, disse_s y disse
-* el ine genera la variable disse sin distinguir entre ocupaciÛn ppal y sec
-*esto hacÌa el ine y da mal
+* el ine genera la variable disse sin distinguir entre ocupaci√≥n ppal y sec
+*esto hac√≠a el ine y da mal
 *g disse=mto_cuot if e45_1==3&((pobpcoac==2&(f78==1|f91==1))|pobpcoac==5)
 g disse  =mto_cuot if e45_1==3&pobpcoac==5 //seguro de paro
 g disse_p=mto_cuot if e45_1==3&pobpcoac==2&f78==1
@@ -123,7 +123,7 @@ recode  asig_otro .=0
 generate ytransf_2  = asig_jefe + asig_con + asig_otro  if (g155_1==1 & g155_3==2)
 
 gen bc_afam=0
-replace bc_afam= asig_jefe + asig_con + asig_otro  if g155_1==1 // Se imputa asignaciÛn, estÈ o no incluida en el sueldo
+replace bc_afam= asig_jefe + asig_con + asig_otro  if g155_1==1 // Se imputa asignaci√≥n, est√© o no incluida en el sueldo
 
 * ytransf_3 - hogc
 g ytransf_3=mto_hogc if g146_1==1&g146_2==2
@@ -160,7 +160,7 @@ recode yaliment (.=0)
 
 g ytransf_4=yaliment
 
-* ytransf_6 - pensiÛn alimenticia, separaciÛn, etc
+* ytransf_6 - pensi√≥n alimenticia, separaci√≥n, etc
 g ytransf_6=g156_2+g156_3 
 recode ytransf_6 .=0
 
@@ -246,7 +246,7 @@ recode bc_yalimpan .=0
 bc_yalimpan estaba generada de forma qeu el primer tramo lo cobraran aquellos 
 hogares con h170==1 & men18s==1. Sin embargo, los que no tienen menores a cargo
 igualemente cobraban el beneficio como si hubiera un menor. Por tanto, cambio 
-la condiciÛn. Ahora la variable del ine es idÈntica a esta.
+la condici√≥n. Ahora la variable del ine es id√©ntica a esta.
 */
 *-------------------------------------------------------------------------------
 *- Se re-define bc_yalimpan 14/11/2018
@@ -294,7 +294,7 @@ egen yaliment_men=sum(yaliment_men1), by(bc_correlat)
 recode yciudada (.=0), gen(bc_yciudada)
 	replace bc_yciudada=0 if bc_nper!=1
 *-------------------------------------------------------------------------------
-* bc_yhog - borro mto_cuot, mto_emer etc y pongo las nuevas que generÈ
+* bc_yhog - borro mto_cuot, mto_emer etc y pongo las nuevas que gener√©
 gen bc_yhog= h158_2+h159_2+(h162_2/12)+(h162_3/12)+(h165_1/12)+(h165_2/12)+(h166/12)+(h167/12)+(h168/12)/*
 */+(h170_1/12)+(h170_2/12)+(h172_1/12)+(h172_2/12)+(h173_2/12)+(h174_2/12)+bc_yciudada+bc_yalimpan+mto_cuot/*
 */+cuotmilit+mto_emer+yaliment_men
