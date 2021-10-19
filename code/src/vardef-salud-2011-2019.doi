@@ -1,0 +1,13 @@
+g bc_pe6a=-15
+	replace bc_pe6a=4 if (e45_1==1 & (e45_1_1!=1 | e45_1_1!=4)) | e45_4==1 | e45_5==1 | e45_6==1
+	replace bc_pe6a=2 if e45_2==1 & e45_2_1!=1 & e45_2_1!=6
+	replace bc_pe6a=3 if (e45_1==1 & (e45_1_1==1 | e45_1_1==4)) | (e45_2==1 & (e45_2_1==1 |e45_2_1==6)) | (e45_3==1 & (e45_3_1==1 | e45_3_1 ==6))
+	replace bc_pe6a=5 if ((e45_3==1 & (e45_3_1!=1 | e45_3_1!=6)) | e46==1) & bc_pe6a!=3
+	replace bc_pe6a=1 if e45_1==2 & e45_2==2 & e45_3==2 & e45_4==2 & e45_5==2 & e45_6==2 & e46==2
+
+g bc_pe6a1=-15
+	replace bc_pe6a1=1 if bc_pe6a==3 & ((pobpcoac==2 & (f82==1|f96==1)) | pobpcoac==5)
+	replace bc_pe6a1=2 if bc_pe6a==3 & bc_pe6a1!=1
+	replace bc_pe6a1=-9 if bc_pe6a!=3
+
+recode bc_pe6a (2=2) (3=-9) (4=3) (5=4), gen(bc_pe6b)
