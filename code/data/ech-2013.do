@@ -21,14 +21,14 @@ global echine "~/data/ine/ech"
 use "$echine/ech-2013.dta", clear
 
 
-//  #1
-//  correcciones de datos
+//  #1 -------------------------------------------------------------------------
+//  correcciones de datos ------------------------------------------------------
 
 include "code/src/vardef-ajustes-2001-2019.doi"
 
 
-//  #2
-//  demografía
+//  #2 -------------------------------------------------------------------------
+//  demografía -----------------------------------------------------------------
 
 /* si falta algún módulo (pe4/pe5) sustituir el local por "0" */
 
@@ -50,25 +50,12 @@ loc pe5_soltero     "(e35==0 & (e36==5))"
 include "code/src/vardef-demog-2011-2019.doi"
 
 
-//  #3
-//  mercado laboral
+//  #3 -------------------------------------------------------------------------
+//  salud y trabajo ------------------------------------------------------------
 
-* formalidad en ocupación ppal, otras, conjunto
-gen formalp = f82==1                  if ocu==1
-gen formalo = f96==1                  if ocu==1
-gen formal  = formalp==1 | formalo==1 if ocu==1
+* van juntos porque se utilizan mutuamente para crear variables
 
-include "code/src/vardef-ml-2011-2019.doi"
-
-
-//  #4
-//  educación
-
-include "code/src/vardef-educ-2011-2019.doi"
-
-
-//  #5
-//  salud
+// salud -------------------------------------------------------------
 
 * derecho de atención en cada servicio
 gen ss_asse = e45_1==1
@@ -102,12 +89,61 @@ foreach inst in asse iamc priv mili emer {
 gen ss_o_fonasa = inlist(ss_asse_o, 1, 4) | ///
 				  inlist(ss_iamc_o, 1, 6) | ///
 				  inlist(ss_priv_o, 1, 6)
+* fonasa dentro del hogar
+gen ss_o_fonasa_h = ss_asse_o==1 | ss_iamc_o==1 | ss_priv_o==1
+
+//  trabajo ----------------------------------------------------------
+
+* condición de actividad
+clonevar bc_pobp = pobpcoac
+recode   bc_pobp (10=9)
+
+* pea, empleados, desempleados
+gen pea    = inrange(bc_pobp, 2, 5) if bc_pe3>=14
+gen emp    = bc_pobp==2             if bc_pe3>=14
+gen desemp = inrange(bc_pobp, 3, 5) if pea==1
+
+* formalidad en ocupación ppal, otras, conjunto
+gen formal_op = f82==1                      if ocu==1
+gen formal_os = f96==1                      if ocu==1
+gen formal    = formal_op==1 | formal_os==1 if ocu==1
+
+* trabajo dependiente
+gen dependiente_op = inlist(f73, 1, 2, 7, 8)
+gen dependiente_os = inlist(f92, 1, 2, 7)    // excluye part. en prog. empleo social
+
+* trabajo independiente (coop, patrón, cprop)
+gen independiente_op = inrange(f73, 3, 6)   
+gen independiente_os = inrange(f92, 3, 6)   
+
+* ciiu ocupacion principal y ocupacion secundaria
+clonevar ciiu_op = f72_2
+clonevar ciiu_os = f91_2
+
+* aslariados en ocupación principal o secundaria
+gen asal_op = inlist(f73, 1, 2, 8)
+gen asal_os = inlist(f92, 1, 2)
+
+* dependiente público o privado en ocupación principal
+gen deppri_op = f73==1
+gen deppri_os = f92==1
+gen deppub_op = inlist(f73, 2, 8)
+gen deppub_os = f92==2
+
+// creamos variables de los módulos
 
 include "code/src/vardef-salud-2011-2019.doi"
+include "code/src/vardef-ml-2011-2019.doi"
 
 
-//  #5
-//  ingresos 
+//  #4 -------------------------------------------------------------------------
+//  educación ------------------------------------------------------------------
+
+include "code/src/vardef-educ-2011-2019.doi"
+
+
+//  #5 -------------------------------------------------------------------------
+//  ingresos -------------------------------------------------------------------
 
 include "code/src/vardef-cuotas-mutuales.doi"
 include "code/src/vardef-transferencias.doi"
@@ -115,20 +151,20 @@ include "code/src/vardef-ypt.doi"
 include "code/src/vardef-yhog.doi"
 
 
-//  #6
-//  descomposición por fuentes
+//  #6 -------------------------------------------------------------------------
+//  descomposición por fuentes -------------------------------------------------
 
 include "code/src/vardef-descomp-fuentes.doi"
 
 
-//  #7
-//  labels
+//  #7 -------------------------------------------------------------------------
+//  labels ---------------------------------------------------------------------
 
 include "code/src/varlab.doi"
 
 
-//  #8
-//  save
+//  #8 -------------------------------------------------------------------------
+//  save -----------------------------------------------------------------------
 
 quietly compress		
 notes: ech-2013.dta \ compatibilización IECON v.2 \ `tag'

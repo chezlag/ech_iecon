@@ -1,66 +1,48 @@
 * vardef-ml-2011-2019.doi
 
-*-------------------------------------------------------------------------------
-* 4- Mercado de trabajo
+* categoría de ocupación
+recode f73 (8 = 7) (0 = .c) ///
+	, gen(bc_pf41)
 
-* Condición de actividad
-g bc_pobp = pobpcoac
-recode bc_pobp (10=9)
-
-* Categoría de ocupación
-g bc_pf41=f73
-	replace bc_pf41=7 if f73==8
-	replace bc_pf41=-9 if f73==0
-
-g bc_cat2=-9
-	replace bc_cat2=1 if f73==1
-	replace bc_cat2=2 if f73==2
-	replace bc_cat2=3 if f73==4
-	replace bc_cat2=4 if f73==5|f73==6
-	replace bc_cat2=5 if f73==3|f73==7|f73==8
+recode bc_pf41 (4 = 3) (5 6 = 4) (3 7 = 5) ///
+	, gen(bc_cat2)
 	
 * Tamaño del establecimiento
-g bc_pf081=-9
-	replace bc_pf081=1 if (f77==1 | f77==2 | f77==3) //tamaño chico
-	replace bc_pf081=2 if (f77==5 | f77==6 | f77==7) //tamaño grande
+recode f77 (1/3 = 1) (5/7 = 2) (0 = .c) ///
+	, gen(bc_pf081)
 
-g bc_pf082=-9
-	replace bc_pf082=1 if f77==1
-	replace bc_pf082=2 if f77==2
-	replace bc_pf082=3 if f77==3
+recode f77 (0 4/7 = .c) ///
+	, gen(bc_pf082)
 
 * Rama del establecimiento
 destring f72_2, replace
-g bc_pf40=f72_2
+clonevar bc_pf40 = f72_2
 
-g bc_rama=-9
-	replace bc_rama=1 if f72_2>0000 & f72_2<1000
-	replace bc_rama=2 if f72_2>1000 & f72_2<3500
-	replace bc_rama=3 if f72_2>3500 & f72_2<3700
-	replace bc_rama=4 if f72_2>4000 & f72_2<4500
-	replace bc_rama=5 if (f72_2>=4500&f72_2<4900)|(f72_2>=5500&f72_2<5700)
-	replace bc_rama=6 if (f72_2>=4900&f72_2<5500)|(f72_2>=5800&f72_2<6400)
-	replace bc_rama=7 if f72_2>=6400&f72_2<8300
-	replace bc_rama=8 if f72_2>=8300&f72_2<9910 | (f72_2>= 3700 & f72_2<=3900)
+g bc_rama=.c
+	replace bc_rama=1 if inrange(bc_pf40, 0000, 999)
+	replace bc_rama=2 if inrange(bc_pf40, 1000, 3499)
+	replace bc_rama=3 if inrange(bc_pf40, 3500, 3699)
+	replace bc_rama=4 if inrange(bc_pf40, 4000, 4499)
+	replace bc_rama=5 if inrange(bc_pf40, 4500, 4899) | inrange(bc_pf40, 5500, 5699)
+	replace bc_rama=6 if inrange(bc_pf40, 4900, 5499) | inrange(bc_pf40, 5800, 6399)
+	replace bc_rama=7 if inrange(bc_pf40, 6400, 8299)
+	replace bc_rama=8 if inrange(bc_pf40, 8300, 9909) | inrange(bc_pf40, 3700, 3900)
 
 * Tipo de ocupación 
 destring f71_2, replace
-g bc_pf39=f71_2
-	replace bc_pf39=-9 if bc_pf39==.&bc_pobp!=2
-	replace bc_pf39=-15 if bc_pf39==.&bc_pobp==2
+clonevar bc_pf39 = f71_2
+recode   bc_pf39 (. = .c) if bc_pobp!=2
+recode   bc_pf39 (. = .q) if bc_pobp==2
 	
-cap drop pf39aux
-g pf39aux=bc_pf39
-	replace pf39aux=0 if bc_pf39>0 & bc_pf39<130
-
-cap drop bc_tipo_ocup
-g bc_tipo_ocup=trunc(pf39aux/1000)
-	replace bc_tipo_ocup=-9 if bc_tipo_ocup==0&bc_pobp!=2
-drop pf39aux
+* tipo de ocupación, alt?
+clonevar X1 = bc_pf39
+replace  X1 = 0 if inrange(bc_pf39,1,129)
+gen     bc_tipo_ocup = trunc(X1/1000)
+replace bc_tipo_ocup = .c if bc_tipo_ocup==0&bc_pobp!=2
+drop X1
 
 * Cantidad de empleos
-g bc_pf07=f70
-recode bc_pf07 (0=-9)
+recode f70 (0 = .c), gen(bc_pf07)
 
 * Horas trabajadas
 g bc_horas_hab=f85+f98 // horas semanales trabajadas habitualmente en total
@@ -72,41 +54,49 @@ g bc_horas_sp=-13 // horas semanales trabajadas semana pasada en total
 g bc_horas_sp_1=-13 // horas semanales trabajadas semana pasada en trabajo principal
 
 * Motivo por el que no trabaja
-g bc_pf04=f69
-recode bc_pf04 (3=4) (4=3) (5/6=4) (0=-9)
+recode f69 (3 5/6 = 4) (4 = 3) (0 = .c) ///
+	, gen(bc_pf04)
 
-* Busqueda de trabajo
-g bc_pf21= f107 // buscó trabajo la semana pasada
-recode bc_pf21 (0=-9)
+// preguntas a desempleados
 
-g bc_pf22=f108 // causa por la que no buscó trabajo
-recode bc_pf22 (1=4) (2=1) (3=2) (4=3) (5/6=4) (0=-9)
+* buscó la semana pasada?
+recode f107 (0 = .c), gen(bc_pf21)
+
+* causa por la que no buscó trabajo
+recode f108 (1=4) (2=1) (3=2) (4=3) (5/6=4) (0=.c) ///
+	gen(bc_pf22)
 
 * Duración desempleo (semanas)
-g bc_pf26=f113
-replace bc_pf26=-9 if bc_pobp<3|bc_pobp>5
+clonevar bc_pf26 = f113
+replace  bc_pf26 = .c   if !inrange(bc_pobp, 3, 5)
 
-g bc_pf34=f122 // causas por las que dejó último trabajo
-recode bc_pf34 (1=2) (2=1) (4/9=3) (0=-9)
+* causas por las que dejó último trabajo
+recode f122 (1=2) (2=1) (4/9=3) (0=.c) ///
+	, gen(bc_pf34)
+
+// calidad de empleo
 
 * Trabajo registrado
-g bc_reg_disse=-9 // esta variable estaba generada en el do 'calidad de empleo' (que iba hasta 2010)
+g bc_reg_disse=.c // esta variable estaba generada en el do 'calidad de empleo' (que iba hasta 2010)
 	replace bc_reg_disse=2 if bc_pobp==2
-	replace bc_reg_disse=1 if (e45_1_1==1 | e45_2_1==1 | e45_3_1==1 | bc_pf41==2) & bc_pobp==2
+	replace bc_reg_disse=1 if & bc_pobp==2
 
-g bc_register=-9
+gen    bc_reg_disse = (ss_o_fonasa_h==1 | deppub_op==1) if bc_pobp==2
+recode bc_reg_disse (. = .c)
+
+g bc_register=.c
 	replace bc_register=2 if bc_pobp==2
-	replace bc_register=1 if bc_pobp==2&f82==1
+	replace bc_register=1 if bc_pobp==2 & formal_op==1
 
-g bc_register2=-9
+g bc_register2=.c
 	replace bc_register2=2 if bc_pobp==2
-	replace bc_register2=1 if bc_pobp==2&(f82==1|f96==1)
+	replace bc_register2=1 if bc_pobp==2 & formal==1
 
 * Subocupado
-g bc_subocupado=-9
+g bc_subocupado=.c
 	replace bc_subocupado=2 if bc_pobp==2
-	replace bc_subocupado=1 if f102==1&f104==5&bc_horas_hab>0&bc_horas_hab<40&bc_horas_hab!=.
+	replace bc_subocupado=1 if f102==1 & f104==5 & inrange(bc_horas_hab,1,39) & bc_horas_hab<.
 
-g bc_subocupado1=-9
+g bc_subocupado1=.c
 	replace bc_subocupado1=2 if bc_pobp==2
-	replace bc_subocupado1=1 if (f101==1|f102==1)&f103==1&f104==5&f105!=7&bc_horas_hab>0&bc_horas_hab<40&bc_horas_hab!=.
+	replace bc_subocupado1=1 if (f101==1|f102==1) & f103==1 & f104==5 & f105!=7 & inrange(bc_horas_hab,1,39) & bc_horas_hab<.
