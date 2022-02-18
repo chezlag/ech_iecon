@@ -19,23 +19,25 @@ cap rename g148_2_c g148_2_12
 // Renombro variables del ine 
 * (para variables de ingreso se deshace el rename en paso 8.)
 
-cap rename ytdop ine_ytdop
-cap rename ytdos ine_ytdos
-cap rename ytinde ine_ytinde
-cap rename ytransf ine_ytransf
-cap rename pt1 ine_pt1
-cap rename pt2 ine_pt2
-cap rename pt4 ine_pt4
-cap rename ht13 ine_ht13
-cap rename yhog ine_yhog
-cap rename ysvl ine_ysvl
-cap rename mes bc_mes
-cap rename anio bc_anio
-cap rename dpto bc_dpto
-cap rename ccz bc_ccz
+* variables de identificación
+cap rename mes      bc_mes
+cap rename anio     bc_anio
+cap rename dpto     bc_dpto
+cap rename ccz      bc_ccz
+* variables de ingreso
+cap rename ytdop    ine_ytdop
+cap rename ytdos    ine_ytdos
+cap rename ytinde   ine_ytinde
+cap rename ytransf  ine_ytransf
+cap rename pt1      ine_pt1
+cap rename pt2      ine_pt2
+cap rename pt4      ine_pt4
+cap rename ht13     ine_ht13
+cap rename yhog     ine_yhog
+cap rename ysvl     ine_ysvl
 
-*-------------------------------------------------------------------------------
-* Recodificación de datos
+
+// Recodificación de datos -----------------------------------------------------
 
 recode mto_cuot (. = 0)  
 recode mto_emer (. = 0)

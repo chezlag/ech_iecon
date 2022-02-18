@@ -1,4 +1,4 @@
 {
 	"SRC_LIB": "src/ech_iecon/lib",
-	"ECH_INE": "src/ech_iecon/data"
+	"SRC_DATA": "src/ech_iecon/data"
 }

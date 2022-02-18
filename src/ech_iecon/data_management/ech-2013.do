@@ -13,12 +13,12 @@ local date:  di %tdCY-N-D daily("$S_DATE", "DMY")
 local tag    "2013.do gsl `date'"
 local fullnm "ech-2013"
 
-* ruta a las ech originales
+* rutas globales
 include "out/lib/global_paths.do"
 
 // use
 
-use "$ECH_INE/ech-2013.dta", clear
+use "$SRC_DATA/ech-2013.dta", clear
 
 
 //  #1 -------------------------------------------------------------------------
@@ -135,7 +135,6 @@ gen deppub_os = f92==2
 include "$SRC_LIB/vardef-salud-2011-2019.doi"
 include "$SRC_LIB/vardef-ml-2011-2019.doi"
 
-
 //  #4 -------------------------------------------------------------------------
 //  educación ------------------------------------------------------------------
 
@@ -144,6 +143,34 @@ include "$SRC_LIB/vardef-educ-2011-2019.doi"
 
 //  #5 -------------------------------------------------------------------------
 //  ingresos -------------------------------------------------------------------
+
+// merge con ipc y bpc
+
+* creo fecha mensualizada
+gen mdate = monthly(string(bc_anio) + "m" + string(bc_mes), "YM")
+format %tm mdate
+lab var mdate "Fecha de referencia de ingresos"
+* resto un mes porque ech pregunta ingresos del mes anterior
+replace mdate = mdate - 1
+
+* mergeo con ipc
+merge m:1 mdate using "$OUT_DATA/ipc_2006m12.dta", keep(1 3)
+rename defl bc_deflactor
+
+* mergeo con bpc
+*merge m:1 mdate using "$OUT_DATA/bpc.dta", keep(1 3)
+*rename bpc bc_bpc
+
+// dropeamos servicio doméstico para sección de ingresos
+*	(lo mergeamos de nuevo más adelante)
+
+preserve
+	keep if e30==14
+	save "out/data/tmp/servdom.dta", replace
+restore
+drop if e30==14
+
+// creamos variables de ingreso compatibilizadas
 
 include "$SRC_LIB/vardef-cuotas-mutuales.doi"
 include "$SRC_LIB/vardef-transferencias.doi"
@@ -170,6 +197,6 @@ quietly compress
 notes: ech-2013.dta \ compatibilización IECON v.2 \ `tag'
 label data "ECH IECON 2013 \ `date'"
 datasignature set, reset
-save  "data/ech-2013.dta", replace
+save  "out/data/ech-2013.dta", replace
 
 exit

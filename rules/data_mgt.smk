@@ -3,26 +3,27 @@
 # Contributors: @lachlandeer, @julianlanger, @bergmul
 
 # --- Dictionaries --- #
-ECH_IECON = glob_wildcards(config["src_data"] + "ech_iecon/{fname}.dta").fname
-BPS = ["bpc", "bfc"]
+
+AUX_DATA = ["ipc_2006m12"]
 
 # --- Target Rules --- #
 
-## bps_tgt:             arma la base de bfc y bpc
-rule bps_tgt:
+## auxdata_tgt:             arma la base de bfc y bpc
+rule auxdata_tgt:
     input:
-        expand(config["out_data"] + "{iBPS}.dta", iBPS = BPS)
+        expand(config["out_data"] + "{iAuxData}.dta", iAuxData = AUX_DATA)
 
 # --- Build Rules --- #
 
-rule vars_bps:
+rule aux_data:
     input:
-        script = config["src_data_mgt"] + "{iBPS}.do"
+        script = config["src_data_mgt"] + "{iAuxData}.do",
+        paths = config["out_lib"] + "global_paths.do"
     output:
-        data_dta = config["out_data"] + "{iBPS}.dta"
+        data_dta = config["out_data"] + "{iAuxData}.dta"
     log:
-        default = "{iBPS}.log",
-        move = config["log"] + "data_mgt/{iBPS}.log"
+        default = "{iAuxData}.log",
+        move = config["log"] + "data_mgt/{iAuxData}.log"
     shell:
         "{runStata} {input.script} && cp {log.default} {log.move} && rm {log.default}"
         
