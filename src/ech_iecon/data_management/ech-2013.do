@@ -14,17 +14,17 @@ local tag    "2013.do gsl `date'"
 local fullnm "ech-2013"
 
 * ruta a las ech originales
-global echine "~/data/ine/ech"
+include "out/lib/global_paths.do"
 
 // use
 
-use "$echine/ech-2013.dta", clear
+use "$ECH_INE/ech-2013.dta", clear
 
 
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
-include "code/src/vardef-ajustes-2001-2019.doi"
+include "$SRC_LIB/vardef-ajustes-2001-2019.doi"
 
 
 //  #2 -------------------------------------------------------------------------
@@ -47,7 +47,7 @@ loc pe5_divsep      "(e35==0 & (e36==1 | e36==2 | e36==3))"
 loc pe5_viudo       "(e35==0 & (e36==4 | e36==6))"
 loc pe5_soltero     "(e35==0 & (e36==5))"
 
-include "code/src/vardef-demog-2011-2019.doi"
+include "$SRC_LIB/vardef-demog-2011-2019.doi"
 
 
 //  #3 -------------------------------------------------------------------------
@@ -132,35 +132,35 @@ gen deppub_os = f92==2
 
 // creamos variables de los módulos
 
-include "code/src/vardef-salud-2011-2019.doi"
-include "code/src/vardef-ml-2011-2019.doi"
+include "$SRC_LIB/vardef-salud-2011-2019.doi"
+include "$SRC_LIB/vardef-ml-2011-2019.doi"
 
 
 //  #4 -------------------------------------------------------------------------
 //  educación ------------------------------------------------------------------
 
-include "code/src/vardef-educ-2011-2019.doi"
+include "$SRC_LIB/vardef-educ-2011-2019.doi"
 
 
 //  #5 -------------------------------------------------------------------------
 //  ingresos -------------------------------------------------------------------
 
-include "code/src/vardef-cuotas-mutuales.doi"
-include "code/src/vardef-transferencias.doi"
-include "code/src/vardef-ypt.doi"
-include "code/src/vardef-yhog.doi"
+include "$SRC_LIB/vardef-cuotas-mutuales.doi"
+include "$SRC_LIB/vardef-transferencias.doi"
+include "$SRC_LIB/vardef-ypt.doi"
+include "$SRC_LIB/vardef-yhog.doi"
 
 
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------
 
-include "code/src/vardef-descomp-fuentes.doi"
+include "$SRC_LIB/vardef-descomp-fuentes.doi"
 
 
 //  #7 -------------------------------------------------------------------------
 //  labels ---------------------------------------------------------------------
 
-include "code/src/varlab.doi"
+include "$SRC_LIB/varlab.doi"
 
 
 //  #8 -------------------------------------------------------------------------

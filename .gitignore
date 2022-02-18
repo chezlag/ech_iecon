@@ -1,6 +1,15 @@
 logs/
+out/
 
 **/bak.stunicode/
 
 *.dta
 *.sublime-*
+
+.Rproj.user
+.Rhistory
+Rplots*
+packrat/lib*/
+packrat/src/*
+
+.snakemake/
