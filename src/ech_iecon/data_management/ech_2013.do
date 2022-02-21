@@ -201,27 +201,30 @@ include "$SRC_LIB/vardef_y_ht11_sss.do"
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
+* reordeno
 sort bc_correlat bc_nper
 
-g bc_pf051 = -13
-g bc_pf052 = -13
-g bc_pf053 = -13
-g bc_pf06  = -13
-
+* renombro estas variables
 rename saludh bc_salud
-g bc_afam = monto_afam_pe + monto_afam_cont
+rename yhog_iecon bc_yhog
+rename n_milit bc_cuotmilit
 
+* ingreso ciudadano
 bysort bc_correlat: egen bc_yciudada= sum(bc_ing_ciud)
 replace bc_yciudada=0 if bc_nper!=1
 
-g bc_yalimpan=0
-
-rename yhog_iecon bc_yhog
-rename n_milit bc_cuotmilit
-g bc_cuotabps	= -13
-g bc_disse_p	= -13
-g bc_disse_o	= -13
-g bc_disse		= -13
+* afam 
+gen bc_afam = monto_afam_pe + monto_afam_cont
+gen bc_yalimpan = 0
+* variables que no están disponibles este año
+gen bc_cuotabps = -13
+gen bc_disse_p	= -13
+gen bc_disse_o	= -13
+gen bc_disse	= -13
+gen bc_pf051 = -13
+gen bc_pf052 = -13
+gen bc_pf053 = -13
+gen bc_pf06  = -13
 
 * ht11 con y sin seguro de salud en términos reales
 gen bc_ht11_sss = bc_ht11_sss_corr*bc_ipc
@@ -240,6 +243,10 @@ foreach var in bc_pg14 bc_ht11_sss bc_ht11_css bc_percap_iecon bc_ht11_sss_corr 
 
 append using `servdom', nol
 sort bc_correlat bc_nper
+
+// rename and order
+
+include "$SRC_LIB/rename_order.do"
 
 //  #8 -------------------------------------------------------------------------
 //  labels ---------------------------------------------------------------------
