@@ -1,4 +1,4 @@
-// variable labels
+// variable labels 2001–2019
 
 lab var bc_correlat "Identificador del hogar"
 lab var bc_nper "Identificador de la persona"

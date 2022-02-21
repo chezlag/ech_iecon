@@ -182,7 +182,7 @@ preserve
 restore
 drop if e30==14
 
-// creamos variables de ingreso compatibilizadas
+// creamos variables de ingreso compatibilizadas según criterio INE
 
 include "$SRC_LIB/vardef_y_cuotas_mutuales.do"
 include "$SRC_LIB/vardef_y_trabajo.do"
@@ -192,18 +192,63 @@ include "$SRC_LIB/vardef_y_extra_iecon.do"
 
 
 //  #6 -------------------------------------------------------------------------
-//  descomposición por fuentes -------------------------------------------------
+//  Ingresos: retoques IECON ---------------------------------------------------
 
 include "$SRC_LIB/vardef_y_descomp_fuentes.do"
+include "$SRC_LIB/vardef_y_ht11_sss.do"
 
 
 //  #7 -------------------------------------------------------------------------
-//  labels ---------------------------------------------------------------------
+//  Últimos retoques -----------------------------------------------------------
 
-include "$SRC_LIB/varlab.doi"
+sort bc_correlat bc_nper
 
+g bc_pf051 = -13
+g bc_pf052 = -13
+g bc_pf053 = -13
+g bc_pf06  = -13
+
+rename saludh bc_salud
+g bc_afam = monto_afam_pe + monto_afam_cont
+
+bysort bc_correlat: egen bc_yciudada= sum(bc_ing_ciud)
+replace bc_yciudada=0 if bc_nper!=1
+
+g bc_yalimpan=0
+
+rename yhog_iecon bc_yhog
+rename n_milit bc_cuotmilit
+g bc_cuotabps	= -13
+g bc_disse_p	= -13
+g bc_disse_o	= -13
+g bc_disse		= -13
+
+* ht11 con y sin seguro de salud en términos reales
+gen bc_ht11_sss = bc_ht11_sss_corr*bc_ipc
+gen bc_ht11_css = (bc_ht11_sss_corr + bc_salud)*bc_ipc
+* ingreso per cápita
+bysort bc_correlat: gen bc_percap_iecon = bc_ht11_sss/_N
+
+* fix: imputamos variables a nivel de hogar el valor que toma para el jefe
+foreach var in bc_pg14 bc_ht11_sss bc_ht11_css bc_percap_iecon bc_ht11_sss_corr bc_salud { 	
+	bysort bc_correlat: egen `var'_aux = max(`var')
+	replace `var' = `var'_aux
+	drop `var'_aux
+}
+
+// recuperamos servicio doméstico
+
+append using `servdom', nol
+sort bc_correlat bc_nper
 
 //  #8 -------------------------------------------------------------------------
+//  labels ---------------------------------------------------------------------
+
+include "$SRC_LIB/label_variables.do"
+include "$SRC_LIB/label_values.do"
+
+
+//  #9 -------------------------------------------------------------------------
 //  save -----------------------------------------------------------------------
 
 quietly compress		
