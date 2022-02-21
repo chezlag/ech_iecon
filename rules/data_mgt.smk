@@ -5,7 +5,7 @@
 # --- Dictionaries --- #
 
 AUX_DATA = ["ipc_2006m12", "bpc"]
-ECH_IECON = glob_wildcards(config["src_data_mgt"] + "ech_{fyear}.do").fyear
+ECH_YEARLIST = glob_wildcards(config["src_data_specs"] + "ech_{fyear}_specs.do").fyear
 
 # --- Target Rules --- #
 
@@ -17,7 +17,7 @@ rule auxdata_tgt:
 ## ech_tgt:                 arma las ech compatibilizadas
 rule ech_tgt:
     input:
-        expand(config["out_data"] + "ech_{iECHyear}.dta", iECHyear = ECH_IECON)
+        expand(config["out_data"] + "ech_{iECHyear}.dta", iECHyear = ECH_YEARLIST)
 
 # --- Build Rules --- #
 
@@ -34,9 +34,13 @@ rule aux_data:
         
 rule ech_iecon:
     input:
-        script = config["src_data_mgt"] + "ech_{iECHyear}.do"
+        script = config["src_data_mgt"] + "ech_main.do",
+        specs = config["src_data_specs"] + "ech_{iECHyear}_specs.do"
     output:
         data = config["out_data"] + "ech_{iECHyear}.dta"
     log:
         default = "ech_{iECHyear}.log",
         move = config["log"] + "data_mgt/{iAuxData}.log"
+    shell:
+        # Script takes one parameter: year of survey to compatibilize
+        "{runStata} {input.script} {iECHyear} && cp {log.default} {log.move} && rm {log.default}"
