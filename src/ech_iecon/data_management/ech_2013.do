@@ -169,8 +169,8 @@ merge m:1 mdate using "$OUT_DATA/ipc_2006m12.dta", keep(1 3)
 rename defl bc_deflactor
 
 * mergeo con bpc
-*merge m:1 mdate using "$OUT_DATA/bpc.dta", keep(1 3)
-*rename bpc bc_bpc
+merge m:1 mdate using "$OUT_DATA/bpc.dta", keep(1 3)
+rename bpc bc_bpc
 
 // dropeamos servicio doméstico para sección de ingresos
 *	(lo mergeamos de nuevo más adelante)
