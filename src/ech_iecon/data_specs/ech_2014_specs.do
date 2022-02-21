@@ -1,6 +1,6 @@
 /*
-	ech_2013_specs.do
-	Parámetros específicos de la ECH 2013.
+	ech_2014_specs.do
+	Parámetros específicos de la ECH 2014.
 */
 
 //  #1 -------------------------------------------------------------------------
@@ -98,28 +98,27 @@ loc deppri_os "f92==1"
 loc deppub_op "inlist(f73, 2, 8)"
 loc deppub_os "f92==2"
 
-//  #5 -------------------------------------------------------------------------
-//  ingresos -------------------------------------------------------------------
+//  #6 -------------------------------------------------------------------------
+//  descomposición por fuentes -------------------------------------------------
 
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h252_1"
+loc y_pg121     "h160_1 h163_1 h269_1"
 loc y_pg122     "h160_2 h163_2"
-gen h252_1 = 0 // está de 2014 en adelante
 * ingreso por intereses (del pais/del extranjero)
-loc y_pg131     "h168_1"
-loc y_pg132     "h168_2"
+loc y_pg131     "h167_1_1 h167_2_1 h167_3_1 h167_4_1"
+loc y_pg132     "h167_1_2 h167_2_2 h167_3_2 h167_4_2"
 * utilidades
 loc y_util_per  "g143"
-loc y_util_hog  "h170_1 h170_2"
+loc y_util_hog  "h170_1 h170_2 h271_1"
 * otras fuentes de capital
 loc y_otrok_hog "h164 h165 h166"
 
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
-* variables que no están disponibles este año
+* variables que ya no están disponibles este año
 loc bc_yalimpan "0"
 loc bc_cuotabps "-13"
 loc bc_disse_p  "-13"

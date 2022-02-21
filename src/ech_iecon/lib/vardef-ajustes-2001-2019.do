@@ -53,3 +53,10 @@ destring bc_anio , replace
 destring bc_ccz  , replace
 destring f72_2   , replace
 destring f91_2   , replace
+
+// extiendo ht11 para todos los integrantes del hogar
+*	- en algunos años ya está, pero en otros no
+
+egen ht11_max = max(ht11), by(bc_correlat)
+replace ht11 = ht11_max if !`pe4_servdom'
+drop ht11_max

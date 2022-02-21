@@ -327,38 +327,54 @@ replace bc_pg111 = bc_pg111 + emerg_otrohog_h + h155_1 + h156_1 if esjefe
 gen     bc_pg112 = g153_2
 replace bc_pg112 = bc_pg112 + h172_1/12                         if esjefe
 
-gen bc_pg121 = h160_1/12  + h163_1/12   + h252_1 + h269_1/12
-gen bc_pg122 = h163_2/12  + h160_2/12
-gen bc_pg131 = h167_1_1/12+ h167_2_1/12 + h167_3_1/12 + h167_4_1/12
-gen bc_pg132 = h167_1_2/12+ h167_2_2/12 + h167_3_2/12 + h167_4_2/12
-
 //  #6 -------------------------------------------------------------------------
 // 	Ingresos de capital --------------------------------------------------------
 
-local varl "h170_2 h170_1 h164 h166 h171_1" 
-recode `varl' (. = 0)
+* desarmo los locals en variables
+* 	divido entre 12 porque y capital se releva en términos anuales
+foreach varname in y_pg121 y_pg122 y_pg131 y_pg132 y_util_per y_util_hog ///
+	y_otrok_hog {
+	egen `varname' = rowtotal(``varname'')
+	replace `varname' = `varname'/12
+}
 
-gen bc_pg60p      = g143/12 if bc_pf41==4
-gen bc_pg80p      = g143/12 if bc_pf41==3
-gen bc_pg60p_cpsl = g143/12 if bc_pf41==5
-gen bc_pg60p_cpcl = g143/12 if bc_pf41==6
+* ingreso por alquiler/arrendamiento de activos (del país/del extranjero)
+gen bc_pg121 = y_pg121 + h252_1
+gen bc_pg122 = y_pg122
 
-gen bc_pg60o      = g143/12 if inlist(bc_pg60p, 0, .)      & f92==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg80o      = g143/12 if inlist(bc_pg80p, 0, .)      & f92==3 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpsl = g143/12 if inlist(bc_pg60p_cpsl, 0, .) & f92==5 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpcl = g143/12 if inlist(bc_pg60p_cpcl, 0, .) & f92==6 & !inrange(bc_pf41, 3, 6)
+* ingreso por intereses (del país/del extranjero)
+gen bc_pg131 = y_pg131
+gen bc_pg132 = y_pg132
 
-* Utilidades para quienes no son patrón, cooperativista o cuenta propia c/s local
-gen     bc_otras_utilidades = g143/12                               if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6)
-replace bc_otras_utilidades = g143/12+h170_1/12+h170_2/12+h271_1/12 if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6) & esjefe
-recode  bc_otras_utilidades (. = 0)
+* utilidades de independientes por ocupación principal
+gen bc_pg60p      = y_util_per if bc_pf41==4
+gen bc_pg80p      = y_util_per if bc_pf41==3
+gen bc_pg60p_cpsl = y_util_per if bc_pf41==5
+gen bc_pg60p_cpcl = y_util_per if bc_pf41==6
 
-* Utilidades a nivel de hogar de patrón, cooperativista o cuenta propia c/s local
-gen bc_ot_utilidades = h170_1/12+h170_2/12+h271_1/12 if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(f92, 3, 4, 5, 6)) & esjefe
+* utilidades de independientes por ocupación secundaria
+gen bc_pg60o      = y_util_per if inlist(bc_pg60p, 0, .)      & f92==4 & !inrange(bc_pf41, 3, 6)
+gen bc_pg80o      = y_util_per if inlist(bc_pg80p, 0, .)      & f92==3 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpsl = y_util_per if inlist(bc_pg60p_cpsl, 0, .) & f92==5 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpcl = y_util_per if inlist(bc_pg60p_cpcl, 0, .) & f92==6 & !inrange(bc_pf41, 3, 6)
+
+* Utilidades a nivel de hogar independientes
+gen    bc_ot_utilidades = y_util_hog if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(f92, 3, 4, 5, 6)) & esjefe
 recode bc_ot_utilidades (. = 0)
 
+* Utilidades de dependientes
+gen     bc_otras_utilidades = y_util_per            if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6)
+replace bc_otras_utilidades = y_util_per+y_util_hog if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6) & esjefe
+recode  bc_otras_utilidades (. = 0)
+
 * Medianería, pastoreo y ganado a capitalizar a nivel de hogar
-gen    bc_otras_capital = (h164+h165+h166)/12               if esjefe
+gen    bc_otras_capital = y_otrok_hog               if esjefe
 recode bc_otras_capital (. = 0)
 gen     otros = bc_pag_at + g154_1 + g258_1/12 
 replace otros = bc_pag_at + g154_1 + g258_1/12 + h171_1/12  if esjefe
+
+//  #6 -------------------------------------------------------------------------
+// 	Dropeo auxiliares ----------------------------------------------------------
+
+* ingresos de capital
+drop y_pg121 y_pg122 y_pg131 y_pg132 y_util_per y_util_hog y_otrok_hog

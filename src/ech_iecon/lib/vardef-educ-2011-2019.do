@@ -6,7 +6,7 @@ g bc_pe11=2
 
 *asistió
 g bc_pe12=e49
-	replace bc_pe12=-9 if (e193==1|e197==1|e201==1|e212==1|e215==1|e218==1|e221==1|e224==1) 
+	replace bc_pe12=-9 if bc_pe11==1
 	replace bc_pe12=-9 if bc_pe3<3 & bc_pe3!=.
 *asistencia actual pco o privada
 g bc_pe13=-13

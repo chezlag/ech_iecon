@@ -36,9 +36,8 @@ egen pt4_iecon = rowtotal(YTDOP YTDOS YTINDE)
 
 * ingresos relevados con frecuencia anual
 #del ;
-local yhog_anual "h160_1 h160_2 h163_1 h163_2 h164 h165 h166
-	h269_1 h167_1_1 h167_1_2 h167_2_1 h167_2_2 h167_3_1 h167_3_2
-	h167_4_1 h167_4_2 h170_1 h170_2   h271_1   h171_1   h172_1";
+local yhog_anual "`y_pg121' `y_pg122' `y_otrok_hog' `y_pg131' `y_pg132'
+	 `y_util_hog' h171_1   h172_1";
 #del cr
 
 egen yhog_anual = rowtotal(`yhog_anual')
