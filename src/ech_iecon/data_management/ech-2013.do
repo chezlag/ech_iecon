@@ -24,6 +24,9 @@ use "$SRC_DATA/ech-2013.dta", clear
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
+* ¿cómo identificamos al jefx de hogar?
+gen esjefe = e30==1
+
 include "$SRC_LIB/vardef-ajustes-2001-2019.doi"
 
 
@@ -78,6 +81,13 @@ clonevar ss_iamc_o = e45_2_1
 clonevar ss_priv_o = e45_3_1
 clonevar ss_mili_o = e45_4_1
 clonevar ss_emer_o = e47
+
+* nper de personas que generan derechos de salud a otros integrantes del hogar
+clonevar nper_d_asseemp = e45_1_1_1
+clonevar nper_d_iamcemp = e45_2_1_1
+clonevar nper_d_privemp = e45_3_1_1
+clonevar nper_d_mili    = e45_4_1_1
+clonevar nper_d_emeremp = e47_1
 
 * chequeo: solo se repregunta para quienes declaran tener derecho de atención
 foreach inst in asse iamc priv mili emer {
@@ -135,6 +145,7 @@ gen deppub_os = f92==2
 include "$SRC_LIB/vardef-salud-2011-2019.doi"
 include "$SRC_LIB/vardef-ml-2011-2019.doi"
 
+
 //  #4 -------------------------------------------------------------------------
 //  educación ------------------------------------------------------------------
 
@@ -166,16 +177,18 @@ rename defl bc_deflactor
 
 preserve
 	keep if e30==14
-	save "out/data/tmp/servdom.dta", replace
+	tempfile servdom
+	save `servdom', replace
 restore
 drop if e30==14
 
 // creamos variables de ingreso compatibilizadas
 
-include "$SRC_LIB/vardef-cuotas-mutuales.doi"
-include "$SRC_LIB/vardef-transferencias.doi"
-include "$SRC_LIB/vardef-ypt.doi"
-include "$SRC_LIB/vardef-yhog.doi"
+include "$SRC_LIB/vardef_y_cuotas_mutuales.do"
+include "$SRC_LIB/vardef_y_trabajo.do"
+include "$SRC_LIB/vardef_y_transferencias.do"
+include "$SRC_LIB/vardef_ypt_yhog.do"
+include "$SRC_LIB/vardef_y_extra_iecon.do"
 
 
 //  #6 -------------------------------------------------------------------------
@@ -194,9 +207,9 @@ include "$SRC_LIB/varlab.doi"
 //  save -----------------------------------------------------------------------
 
 quietly compress		
-notes: ech-2013.dta \ compatibilización IECON v.2 \ `tag'
+notes: ech_2013.dta \ compatibilización IECON v.2 \ `tag'
 label data "ECH IECON 2013 \ `date'"
 datasignature set, reset
-save  "out/data/ech-2013.dta", replace
+save  "out/data/ech_2013.dta", replace
 
 exit
