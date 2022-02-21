@@ -194,7 +194,7 @@ include "$SRC_LIB/vardef_y_extra_iecon.do"
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------
 
-include "$SRC_LIB/vardef-descomp-fuentes.doi"
+include "$SRC_LIB/vardef_y_descomp_fuentes.do"
 
 
 //  #7 -------------------------------------------------------------------------

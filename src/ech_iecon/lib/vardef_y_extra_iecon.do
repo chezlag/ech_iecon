@@ -105,6 +105,7 @@ clonevar CUOT_EMP_TOT      = yt_ss_emp
 clonevar CUOT_EMP_ASSE_TOT = yt_ss_asseemp      
 clonevar EMER_EMP_TOT      = yt_ss_emeremp      
 clonevar EMER_OTRO_TOT     = yt_ss_emerotr      
+clonevar emerg_otrohog_h   = yt_ss_emerotr      
 clonevar CUOT_OTROHOG2     = yt_ss_otrohog      
 * variable aparece dos veces con distintos nombres
 clonevar cuota_otrohog_h   = yt_ss_otrohog
