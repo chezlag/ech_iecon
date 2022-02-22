@@ -1,7 +1,24 @@
-// vardef_y_cuotas_mutuales.do
-// monetizamos transferencias por cuotas mutuales
+/* 
+	vardef_y_ht11.do
+	Reconstrucción del ingreso ht11 con criterios del INE y ajustes IECON
 
-//  Cuotas militares -------------------------------------------------
+	La diferencia principal que trae el ingreso del IECON es la descomposición 
+	por fuentes y la separación del ingreso por cuotas mutuales del resto.
+
+	Primero reconstruye los ingresos laborales, empezando por el salario en 
+	especie. Se hace una desagregación de las cuotas mutuales y se las asigna
+	a quienes generan el derecho de atención. En el caso de las cuotas 
+	generadas fuera del hogar, estas se asignan al jefe/a de hogar. Luego,
+	se agregan salario monetario y salario en especie.
+
+	Segundo se reconstruyen los ingresos de transferencias. 
+
+*/
+
+//  #1 -------------------------------------------------------------------------
+//  Salario en especie: Cuotas mutuales ----------------------------------------
+
+//  Cuotas militares -----------------------------------------------------------
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
 * 	Se toma a quienes tienen derecho en sanidad militar a través de un miembro 
@@ -50,9 +67,7 @@ gen  yt_ss_militotr = n_militotr * mto_cuot
 * asigna las cuotas al jefx
 replace yt_ss_militotr = 0 if !esjefe
 
-
-//  #3 -------------------------------------------------------------------------
-//  cuotas fonasa --------------------------------------------------------------
+//  Cuotas fonasa --------------------------------------------------------------
 
 // cuotas fonasa adjudicables al trabajador
 
@@ -80,9 +95,7 @@ egen    n_fonasa_nolab = sum(ss_fonasa_nolab), by(bc_correlat)
 replace n_fonasa_nolab = 0 if !esjefe
 gen yt_ss_fonasa_nolab = n_fonasa_nolab * mto_cuot
 
-
-//  #4 -------------------------------------------------------------------------
-//  Salario en especie: cuotas mutuales y emergencia pagas por empleador  ------
+//  Cuotas mutuales y emergencia pagas por empleador  --------------------------
 
 * cuotas pagas por empleador para cada rubro :: yt_ss_asseemp, yt_ss_iamcemp, yt_ss_privemp
 foreach ss in asseemp iamcemp privemp emeremp {
