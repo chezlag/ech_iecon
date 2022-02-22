@@ -1,5 +1,7 @@
 logs/
 out/
+sandbox/
+*.log
 
 **/bak.stunicode/
 

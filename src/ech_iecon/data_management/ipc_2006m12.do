@@ -36,6 +36,10 @@ assert defl[836] == 1
 * conservo fecha mensual y deflactor
 keep mdate defl
 
+* dropeo duplicados y chequeo que mdate identifique de forma única a cada obs.
+drop if mdate==.
+isid mdate
+
 * etiquetas
 lab var mdate "Fecha mensual"
 lab var defl  "Deflactor IPC a 2006m12"

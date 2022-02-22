@@ -30,13 +30,14 @@ expand 12
 * genero variable de mes a mes
 bys vigente_desde: gen mes = _n
 * genero fecha mensual
-gen     mdate = mofd(vigente_desde)
-replace mdate = mdate + mes if mes>1
+gen     mdate = mofd(date(vigente_desde, "YMD"))
+replace mdate = mdate + (mes-1)
 
 // ajusto y exporto
 
 * conservo fecha y bpc
 keep mdate bpc
+isid mdate
 
 * etiquetas
 lab var mdate "Fecha mensual"

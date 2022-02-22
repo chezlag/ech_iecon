@@ -18,26 +18,22 @@ gen     ss_mili_o_h = ss_mili_o==1
 gen ss_iamcemp =  ss_iamc_o==5 & (!ss_asse | ss_asse_o_hpago) & (!ss_priv | ss_priv_o_hpago)
 gen ss_asseemp =  ss_asse_o==5 & (!ss_iamc | ss_iamc_o_hpago) & (!ss_priv | ss_priv_o_hpago)
 gen ss_privemp =  ss_priv_o==5 & (!ss_asse | ss_asse_o_hpago) & (!ss_iamc | ss_iamc_o_hpago)
-gen ss_emeremp = e47_cv==4
+gen ss_emeremp =  ss_emer_o==4
 
 * cuotas para este hogar generadas desde otro hogar 
 gen ss_otrohog = (ss_asse_o==6 & (!ss_iamc | ss_iamc_o_hpago) & (!ss_priv | ss_priv_o_hpago)) ///
 		       | (ss_iamc_o==3 & (!ss_asse | ss_asse_o_hpago) & (!ss_priv | ss_priv_o_hpago)) ///
 		       | (ss_priv_o==3 & (!ss_asse | ss_asse_o_hpago) & (!ss_iamc | ss_iamc_o_hpago))
 * emergencia móvil paga de otro hogar
-gen ss_emerotr = e47_cv==3
+gen ss_emerotr = ss_emer_o==3
 
 * para definir la rama militar en ocupación ppal o secundaria
 local ciiu_militar "5222, 5223, 8030, 8411, 8421, 8422, 8423, 8430, 8521, 8530, 8610"
 
-* derecho fonasa
-gen ss_fonasa   = inlist(ss_asse_o, 1, 4, 5, 6) | /// 
-			  	  inlist(ss_iamc_o, 1, 6, 3, 5) | /// 
-			  	  inlist(ss_priv_o, 1, 6, 3, 5)   // 
-
-gen ss_fonasaV2 = inlist(ss_asse_o, 1, 4) | ///
-				  inlist(ss_iamc_o, 1, 6) | ///
-				  inlist(ss_priv_o, 1, 6)
+* accede a salud sin pago – fonasa o por otras personas dentro o fuera del hogar
+gen ss_sinpago   = inlist(ss_asse_o, 1, 4, 5, 6) | /// 
+			  	   inlist(ss_iamc_o, 1, 6, 3, 5) | /// 
+			  	   inlist(ss_priv_o, 1, 6, 3, 5)   // 
 
 
 //  #2 -------------------------------------------------------------------------
@@ -48,13 +44,13 @@ gen ss_fonasaV2 = inlist(ss_asse_o, 1, 4) | ///
 *	de este hogar y a su vez no generan derecho por FONASA, ya sea por miembro 
 *	del hogar o por otro hogar.
 
-gen at_milit  = ss_mili_o_h & !ss_fonasa
-gen at_milit2 = ss_mili & !ss_fonasa
+gen at_milit  = ss_mili_o_h & !ss_sinpago
+gen at_milit2 = ss_mili & !ss_sinpago
 
 sort bc_correlat bc_nper
 
 * numero de personas con acceso a salud militar en el hogar, por persona que genera el derecho
-egen n_milit = sum(ss_mili_o_h & !ss_fonasa) if nper_d_mili>0, by(bc_correlat nper_d_mili)
+egen n_milit = sum(ss_mili_o_h & !ss_sinpago) if nper_d_mili>0, by(bc_correlat nper_d_mili)
 
 // cuota militar por ocupación principal
 
@@ -79,7 +75,7 @@ egen n_milit_op_hog = sum(n_milit_op)          , by(bc_correlat)
 egen n_milit_os_hog = sum(n_milit_os)          , by(bc_correlat)
 
 * se suma el total de cuotas militares del hogar
-egen n_milit_hog    = sum(ss_mili & !ss_fonasa), by(bc_correlat)
+egen n_milit_hog    = sum(ss_mili & !ss_sinpago), by(bc_correlat)
 
 * a partir de la diferencia, se encuentra las cuotas militares provenientes de otro hogar
 gen  n_militotr     = n_milit_hog - (n_milit_op_hog + n_milit_os_hog)
@@ -110,7 +106,7 @@ recode YTINDE_2 (. = 0)
 // cuotas de fonasa no originadas por el trabajador
 
 * para todos quienes generan derecho por FONASA y no son adjudicables al trabajo.
-gen ss_fonasa_nolab = ss_fonasaV2 & ytdop_3 ==0 & ytdos_3 ==0 & YTINDE_2 ==0
+gen ss_fonasa_nolab = ss_fonasa & ytdop_3 ==0 & ytdos_3 ==0 & YTINDE_2 ==0
 	
 * sumo cuotas no laborales, monetizo, y se las imputo al jefe
 egen    n_fonasa_nolab = sum(ss_fonasa_nolab), by(bc_correlat)

@@ -1,3 +1,8 @@
+/* 
+	vardef_ajustes.do
+	Ajustes generales de las bases 2001–2019
+*/
+
 // arreglos de nombres de variables por .sav
 
 cap rename e45_1__a e45_1_1_1
@@ -20,10 +25,14 @@ cap rename g148_2_c g148_2_12
 * (para variables de ingreso se deshace el rename en paso 8.)
 
 * variables de identificación
-cap rename mes      bc_mes
-cap rename anio     bc_anio
-cap rename dpto     bc_dpto
-cap rename ccz      bc_ccz
+rename numero   bc_correlat
+rename nper     bc_nper
+rename mes      bc_mes
+rename anio     bc_anio
+rename dpto     bc_dpto
+rename ccz      bc_ccz
+* ponderadores
+cap rename pesoano bc_pesoan
 * variables de ingreso
 cap rename ytdop    ine_ytdop
 cap rename ytdos    ine_ytdos
@@ -47,12 +56,12 @@ recode bc_ccz   (0 = -9)
 // Cambios de variables
 
 destring region_4, replace
-destring bc_dpto , replace
-destring bc_mes  , replace
-destring bc_anio , replace
-destring bc_ccz  , replace
-destring f72_2   , replace
-destring f91_2   , replace
+destring bc_dpto,  replace
+destring bc_mes,   replace
+destring bc_anio,  replace
+destring bc_ccz,   replace
+destring f72_2,    replace
+destring f91_2,    replace
 
 // extiendo ht11 para todos los integrantes del hogar
 *	- en algunos años ya está, pero en otros no

@@ -35,7 +35,7 @@ logAll = "2>&1"
 ## clean_all      : delete all output and log files for this project
 rule clean_all:
     shell:
-        "rm -rf out/ logs/ *.pdf *.html"
+        "rm -rf logs/ *.pdf *.html *.log"
 
 # --- Help Rules --- #
 ## help_main      : prints help comments for Snakefile in ROOT directory. 

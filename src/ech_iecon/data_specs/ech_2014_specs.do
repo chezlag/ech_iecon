@@ -63,7 +63,7 @@ loc ss_emer_o "e47"
 loc nper_d_asseemp "e45_1_1_1"
 loc nper_d_iamcemp "e45_2_1_1"
 loc nper_d_privemp "e45_3_1_1"
-loc nper_d_mili    "e45_4_1_1"
+loc nper_d_mili    "e45_4_2"
 loc nper_d_emeremp "e47_1"
 
 //  trabajo ----------------------------------------------------------
@@ -126,6 +126,13 @@ loc y_tusinda  "0"
 * otras transferencias de alimentación
 loc y_ticketsinda  "e254 * 4.3"
 loc y_lecheenpolvo "0"
+
+// AFAM
+
+* numero de beneficiarios de afam por tipo
+loc hh_n_afam_men18       "g151_1 g151_2 g151_3"
+loc hh_n_afam_comp_liceo  "g151_3_1"
+loc hh_n_afam_disca       "g151_4"
 
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------

@@ -1,4 +1,7 @@
-* vardef-ml-2011-2019.doi
+/* 
+	vardef_trabajo.do
+	Genera variables de mercado laboral 2011–2019
+*/
 
 * categoría de ocupación
 recode f73 (8 = 7) (0 = .c) ///
@@ -64,7 +67,7 @@ recode f107 (0 = .c), gen(bc_pf21)
 
 * causa por la que no buscó trabajo
 recode f108 (1=4) (2=1) (3=2) (4=3) (5/6=4) (0=.c) ///
-	gen(bc_pf22)
+	, gen(bc_pf22)
 
 * Duración desempleo (semanas)
 clonevar bc_pf26 = f113
@@ -77,11 +80,11 @@ recode f122 (1=2) (2=1) (4/9=3) (0=.c) ///
 // calidad de empleo
 
 * Trabajo registrado
-g bc_reg_disse=.c // esta variable estaba generada en el do 'calidad de empleo' (que iba hasta 2010)
-	replace bc_reg_disse=2 if bc_pobp==2
-	replace bc_reg_disse=1 if & bc_pobp==2
+* g bc_reg_disse=.c // esta variable estaba generada en el do 'calidad de empleo' (que iba hasta 2010)
+* 	replace bc_reg_disse=2 if bc_pobp==2
+* 	replace bc_reg_disse=1 if bc_pobp==2
 
-gen    bc_reg_disse = (ss_o_fonasa_h==1 | deppub_op==1) if bc_pobp==2
+gen    bc_reg_disse = (ss_fonasa_o_h==1 | deppub_op==1) if bc_pobp==2
 recode bc_reg_disse (. = .c)
 
 g bc_register=.c

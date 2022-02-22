@@ -39,6 +39,6 @@ bc_pg14 bc_as_privados bc_as_publicos bc_as_otros bc_asalariados bc_as_agropec 	
 bc_patrones bc_pat_agropec bc_cpropiasl bc_cpropiacl bc_cp_agropec bc_cooperat 	///
 bc_ot_agropec bc_principal bc_ing_lab bc_utilidades bc_alq bc_intereses 		///
 bc_ut_agropec bc_ing_cap bc_jub_pen bc_jub_pene bc_tarjeta bc_bs_sociales 		///
-bc_transf_hog bc_beneficios bc_ipc bc_ipc_nuevo bc_ipc_tot bc_cuotmilit 		///
-bc_cuotabps bc_disse_p bc_disse_o bc_disse bc_ht11_sss bc_salud bc_ht11_css 	///
-bc_percap_iecon
+bc_transf_hog bc_beneficios bc_deflactor bc_afampe_base bc_afampe_comp          ///
+bc_cuotmilit bc_cuotabps bc_disse_p bc_disse_o bc_disse bc_ht11_sss bc_salud    ///
+bc_ht11_css bc_percap_iecon

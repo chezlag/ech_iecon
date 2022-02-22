@@ -4,40 +4,39 @@
 
 * argumentos del do-file para la consola
 args year
+di `year'
 
 //  preamble
 
 version 15
-clear all
 set more off
 set linesize 100
-macro drop _all
 * macros
 local date:  di %tdCY-N-D daily("$S_DATE", "DMY")
 local tag    "`year'.do gsl `date'"
-local fullnm "ech-`year'"
 
 * rutas globales
 include "out/lib/global_paths.do"
 
-* especificidades de cada año
-include "$SRC_DATA_SPECS/ech_`year'_specs.do"
-
 // use
 
-use "$SRC_DATA/ech_`year'.dta", clear
+use "$SRC_DATA/fusionado_`year'_terceros.dta", clear
+
+// parámetros específicos de cada año
+
+include "$SRC_DATA_SPECS/ech_`year'_specs.do"
 
 
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
-include "$SRC_LIB/vardef-ajustes-2001-2019.doi"
+include "$SRC_LIB/vardef_ajustes.do"
 
 
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
 
-include "$SRC_LIB/vardef-demog-2011-2019.doi"
+include "$SRC_LIB/vardef_demog.do"
 
 
 //  #3 -------------------------------------------------------------------------
@@ -77,17 +76,18 @@ clonevar nper_d_mili    = `nper_d_mili'
 clonevar nper_d_emeremp = `nper_d_emeremp'
 
 * chequeo: solo se repregunta a quienes declaran tener derecho de atención
-foreach inst in asse iamc priv mili emer {
+/* foreach inst in asse iamc priv mili emer {
 	assert inrange(ss_`inst'_o, 1, 6)  if ss_`inst'
 	assert ss_`inst'_o==0 if !ss_`inst'
-}
+} */
 
 * accede a la salud por fonasa (dentro o fuera del hogar)
-gen ss_o_fonasa = inlist(ss_asse_o, 1, 4) | ///
-				  inlist(ss_iamc_o, 1, 6) | ///
-				  inlist(ss_priv_o, 1, 6)
+gen ss_fonasa = inlist(ss_asse_o, 1, 4) | ///
+				inlist(ss_iamc_o, 1, 6) | ///
+				inlist(ss_priv_o, 1, 6)
+
 * fonasa dentro del hogar
-gen ss_o_fonasa_h = ss_asse_o==1 | ss_iamc_o==1 | ss_priv_o==1
+gen ss_fonasa_o_h = ss_asse_o==1 | ss_iamc_o==1 | ss_priv_o==1
 
 //  trabajo ----------------------------------------------------------
 
@@ -97,9 +97,9 @@ gen emp    = bc_pobp==2             if bc_pe3>=14
 gen desemp = inrange(bc_pobp, 3, 5) if pea==1
 
 * formalidad en ocupación ppal, otras, conjunto
-gen formal_op = `formal_op'                 if ocu==1
-gen formal_os = `formal_os'                 if ocu==1
-gen formal    = formal_op==1 | formal_os==1 if ocu==1
+gen formal_op = `formal_op'                 if emp==1
+gen formal_os = `formal_os'                 if emp==1
+gen formal    = formal_op==1 | formal_os==1 if emp==1
 
 * trabajo dependiente
 gen dependiente_op = `dependiente_op'
@@ -125,20 +125,20 @@ gen deppub_os = `deppub_os'
 
 // creamos variables de los módulos
 
-include "$SRC_LIB/vardef-salud-2011-2019.doi"
-include "$SRC_LIB/vardef-ml-2011-2019.doi"
+include "$SRC_LIB/vardef_salud.do"
+include "$SRC_LIB/vardef_trabajo.do"
 
 
 //  #4 -------------------------------------------------------------------------
 //  educación ------------------------------------------------------------------
 
-include "$SRC_LIB/vardef-educ-2011-2019.doi"
+include "$SRC_LIB/vardef_educ.do"
 
 
 //  #5 -------------------------------------------------------------------------
 //  ingresos -------------------------------------------------------------------
 
-// merge con ipc y bpc
+// merge con ipc, bpc y montos de afam-pe
 
 * creo fecha mensualizada
 gen mdate = monthly(string(bc_anio) + "m" + string(bc_mes), "YM")
@@ -148,12 +148,16 @@ lab var mdate "Fecha de referencia de ingresos"
 replace mdate = mdate - 1
 
 * mergeo con ipc
-merge m:1 mdate using "$OUT_DATA/ipc_2006m12.dta", keep(1 3)
+merge m:1 mdate using "out/data/ipc_2006m12.dta", keep(1 3) nogen
 rename defl bc_deflactor
 
 * mergeo con bpc
-merge m:1 mdate using "$OUT_DATA/bpc.dta", keep(1 3)
+merge m:1 mdate using "out/data/bpc.dta", keep(1 3) nogen
 rename bpc bc_bpc
+
+* mergeo montos de afam-pe
+merge m:1 mdate using "out/data/afampe.dta", keep(1 3) nogen
+rename (afampe_base afampe_comp) (bc_afampe_base bc_afampe_comp)
 
 // dropeamos servicio doméstico para sección de ingresos
 *	(lo mergeamos de nuevo más adelante)
@@ -210,8 +214,8 @@ gen bc_pf053 = `bc_pf053'
 gen bc_pf06  = `bc_pf06'
 
 * ht11 con y sin seguro de salud en términos reales
-gen bc_ht11_sss = bc_ht11_sss_corr*bc_ipc
-gen bc_ht11_css = (bc_ht11_sss_corr + bc_salud)*bc_ipc
+gen bc_ht11_sss = bc_ht11_sss_corr/bc_deflactor
+gen bc_ht11_css = (bc_ht11_sss_corr + bc_salud)/bc_deflactor
 * ingreso per cápita
 bysort bc_correlat: gen bc_percap_iecon = bc_ht11_sss/_N
 

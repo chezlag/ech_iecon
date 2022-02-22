@@ -1,3 +1,8 @@
+/* 
+	vardef_educ.do
+	Genera variables de educación 2011–2019
+*/
+
 
 *asiste
 g bc_pe11=2 

@@ -16,7 +16,7 @@
 */
 
 gen afam_pe = (g256==2 & g152==1) ///
-	| (g150==1 & (inlist(pobpcoac, 1, 3, 4, 6, 7, 8, 11) | (pobpcoac==2 & !formal_op & !formal_os))) ///
+	| (g150==1 & (inlist(bc_pobp, 1, 3, 4, 6, 7, 8, 11) | (bc_pobp==2 & !formal_op & !formal_os))) ///
 	| (g255==1)
 
 gen afam_cont      = g150==1 & afam_pe==0
@@ -25,7 +25,7 @@ gen afam_cont_priv = afam_cont==1 & !(deppub_op | deppub_os)
 gen afam_total     = afam_pe==1 | afam_cont==1
 
 *** BENEFICIARIOS ***
-egen cant_af = rowtotal(g151_6 g151_3 g151_4)
+egen cant_af = rowtotal(`hh_n_afam_men18' `hh_n_afam_disca')
 
 *** HOGARES ***
 foreach varn in afam_pe afam_cont afam_cont_pub afam_cont_priv afam_total {
@@ -33,18 +33,15 @@ foreach varn in afam_pe afam_cont afam_cont_pub afam_cont_priv afam_total {
 }
 
 *** MONTO AFAM-PE (con pregunta de complemento) ***
-gen     mto_afampe      = 1496.1 if bc_mes==1
-replace mto_afampe      = 1615.2 if bc_mes>1
-gen     mto_afampe_comp = 641.2  if bc_mes==1
-replace mto_afampe_comp = 692.3  if bc_mes>1
+* –– mergea en ech_main.do
 
-egen hh_n_men18       = rowtotal(g151_6 g151_3)
-egen hh_n_men18_liceo = rowtotal(g151_3)
-egen hh_n_disca       = rowtotal(g151_4)
+egen hh_n_afam_men18      = rowtotal(`hh_n_afam_men18')
+egen hh_n_afam_comp_liceo = rowtotal(`hh_n_afam_comp_liceo')
+egen hh_n_afam_disca      = rowtotal(`hh_n_afam_disca')
 
-gen monto_afam_pe = mto_afampe                     * (hh_n_men18^0.6)       ///
-				  + mto_afampe_comp                * (hh_n_men18_liceo^0.6) ///
-				  + (mto_afampe + mto_afampe_comp) *  hh_n_disca            ///
+gen monto_afam_pe = bc_afampe_base                     * (hh_n_afam_men18^0.6)      ///
+				  + bc_afampe_comp                * (hh_n_afam_comp_liceo^0.6) ///
+				  + (bc_afampe_base + bc_afampe_comp) *  hh_n_afam_disca            ///
 				  if afam_pe==1
 recode monto_afam_pe (. = 0)
 
@@ -69,10 +66,10 @@ egen suma = rowtotal(suma1 suma2 suma3 suma4)
 drop suma1 suma2 suma3 suma4
 egen ing_nucleo = sum(suma)  , by(bc_correlat nucleo)
 
-gen corte_afam_contrib = 6*bpc
+gen corte_afam_contrib = 6*bc_bpc
 
-gen     monto_asig = 0.16*bpc if ing_nucleo<=corte_afam_contrib & afam_cont==1
-replace monto_asig = 0.08*bpc if ing_nucleo> corte_afam_contrib & afam_cont==1
+gen     monto_asig = 0.16*bc_bpc if ing_nucleo<=corte_afam_contrib & afam_cont==1
+replace monto_asig = 0.08*bc_bpc if ing_nucleo> corte_afam_contrib & afam_cont==1
 recode  monto_asig   (. = 0)
 
 gen monto_afam_cont = monto_asig*cant_af

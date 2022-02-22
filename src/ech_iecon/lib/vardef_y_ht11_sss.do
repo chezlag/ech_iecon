@@ -26,7 +26,7 @@ gen bc_pa33 = 0
 cap drop bc_seguro
 cap g pf04=0
 g bc_seguro=0
-replace bc_seguro=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p+bc_pg71p+bc_pg73p+bc_pg71o+bc_pg73o)*bc_ipc if bc_pobp==2 & pf04==7 & (bc_pg101==0 | bc_pg101!=.) // & bc_anio<2001
+replace bc_seguro=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p+bc_pg71p+bc_pg73p+bc_pg71o+bc_pg73o)/bc_deflactor if bc_pobp==2 & pf04==7 & (bc_pg101==0 | bc_pg101!=.) // & bc_anio<2001
 recode bc_seguro .=0
 
 //  #2 -------------------------------------------------------------------------
@@ -36,35 +36,35 @@ recode bc_seguro .=0
 
 *Asalariados privados ocupación principal
 cap drop bc_as_privados
-g bc_as_privados=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p)*bc_ipc
+g bc_as_privados=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p)/bc_deflactor
 replace bc_as_privados=(bc_as_privados-bc_seguro) if bc_as_privados>0 & bc_pf41==1
 cap drop as_privadosh
 egen as_privadosh=sum(bc_as_privados) if bc_pe4!=7 , by(bc_correlat)
 
 * Asalariados públicos ocupación principal
 cap drop bc_as_publicos
-gen bc_as_publicos=(bc_pg21p+bc_pg22p+bc_pg24p+bc_pg25p+bc_pg26p+bc_pg27p)*bc_ipc
+gen bc_as_publicos=(bc_pg21p+bc_pg22p+bc_pg24p+bc_pg25p+bc_pg26p+bc_pg27p)/bc_deflactor
 cap drop as_publicosh
 egen as_publicosh=sum(bc_as_publicos) if bc_pe4!=7 , by(bc_correlat)
 
 * Asalariados en ocupación secundaria
 cap drop bc_as_otros
-gen bc_as_otros=(bc_pg11t+bc_pg12t+bc_pg14t+bc_pg15t+bc_pg16t+bc_pg17t)*bc_ipc
+gen bc_as_otros=(bc_pg11t+bc_pg12t+bc_pg14t+bc_pg15t+bc_pg16t+bc_pg17t)/bc_deflactor
 cap drop as_otrosh
 egen as_otrosh=sum(bc_as_otros) if bc_pe4!=7, by(bc_correlat)
 
 * Total asalariados 
 cap drop bc_asalariados
 gen bc_asalariados=(bc_pg11p+bc_pg12p+bc_pg14p+bc_pg15p+bc_pg16p+bc_pg17p+bc_pg21p+bc_pg22p+bc_pg24p+bc_pg25p+bc_pg26p+bc_pg27p /*
-*/ +bc_pg11t+bc_pg12t+bc_pg14t+bc_pg15t+bc_pg16t+bc_pg17t)*bc_ipc
+*/ +bc_pg11t+bc_pg12t+bc_pg14t+bc_pg15t+bc_pg16t+bc_pg17t)/bc_deflactor
 
 * Asalariados agropecuarios
 * 	--- tampoco tiene sentido xq bc_pa* siempre es 0 / gsl 2022-02-21
 cap drop bc_as_agropec
 gen bc_as_agropec= 0
 cap g cat2=0
-replace bc_as_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)*bc_ipc if bc_anio<1991 & bc_anio>1987 & (cat2==1|cat2==2)
-replace bc_as_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)*bc_ipc if bc_anio<1988 & (cat2==1|cat2==2)
+replace bc_as_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/bc_deflactor if bc_anio<1991 & bc_anio>1987 & (cat2==1|cat2==2)
+replace bc_as_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)/bc_deflactor if bc_anio<1988 & (cat2==1|cat2==2)
 cap drop as_agropech
 egen as_agropech=sum(bc_as_agropec) if bc_pe4!=7, by(bc_correlat)
 
@@ -78,44 +78,44 @@ mvencode bc_pg51o bc_pg52o bc_pg31o bc_pg33o bc_pg41o bc_pg43o bc_pg71o bc_pg73o
 *bc_patrones
 cap drop bc_patrones
 gen bc_patrones=0
-replace bc_patrones=(bc_pg51p+bc_pg52p+bc_pg51o+bc_pg52o)*bc_ipc
+replace bc_patrones=(bc_pg51p+bc_pg52p+bc_pg51o+bc_pg52o)/bc_deflactor
 cap drop patronesh
 egen patronesh=sum(bc_patrones) if bc_pe4!=7, by(bc_correlat)
 
 *patrones agropec
 cap drop bc_pat_agropec
 gen bc_pat_agropec= 0
-replace bc_pat_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)*bc_ipc if bc_anio<1991 & bc_anio>1987 & cat2==4
-replace bc_pat_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)*bc_ipc if bc_anio<1988 & cat2==4
+replace bc_pat_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/bc_deflactor if bc_anio<1991 & bc_anio>1987 & cat2==4
+replace bc_pat_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)/bc_deflactor if bc_anio<1988 & cat2==4
 cap drop pat_agropech
 egen pat_agropech=sum(bc_pat_agropec) if bc_pe4!=7, by(bc_correlat)
 
 *cuenta propistas sin local
 cap drop bc_cpropiasl
 gen bc_cpropiasl=0
-replace bc_cpropiasl=(bc_pg31p+bc_pg33p+bc_pg31o+bc_pg33o)*bc_ipc
+replace bc_cpropiasl=(bc_pg31p+bc_pg33p+bc_pg31o+bc_pg33o)/bc_deflactor
 cap drop cpropiaslh
 egen cpropiaslh=sum(bc_cpropiasl) if bc_pe4!=7, by(bc_correlat)
 
 *cuenta propistas con local
 cap drop bc_cpropiacl
 gen bc_cpropiacl=0
-replace bc_cpropiacl=(bc_pg41p+bc_pg43p+bc_pg41o+bc_pg43o)*bc_ipc
+replace bc_cpropiacl=(bc_pg41p+bc_pg43p+bc_pg41o+bc_pg43o)/bc_deflactor
 cap drop cpropiaclh
 egen cpropiaclh=sum(bc_cpropiacl) if bc_pe4!=7, by(bc_correlat)
 
 *Cuenta propista agropec
 cap drop bc_cp_agropec
 gen bc_cp_agropec= 0
-replace bc_cp_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)*bc_ipc if bc_anio<1991 & bc_anio>1987 & cat2==6
-replace bc_cp_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)*bc_ipc if bc_anio<1988 & cat2==6
+replace bc_cp_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/bc_deflactor if bc_anio<1991 & bc_anio>1987 & cat2==6
+replace bc_cp_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)/bc_deflactor if bc_anio<1988 & cat2==6
 cap drop cp_agropech
 egen cp_agropech=sum(bc_cp_agropec) if bc_pe4!=7, by(bc_correlat)
 
 *cooperativas
 cap drop bc_cooperat
 gen bc_cooperat=0
-replace bc_cooperat=(bc_pg71p+bc_pg73p+bc_pg71o+bc_pg73o)*bc_ipc
+replace bc_cooperat=(bc_pg71p+bc_pg73p+bc_pg71o+bc_pg73o)/bc_deflactor
 replace bc_cooperat=bc_cooperat-bc_seguro if bc_cooperat>0 & bc_pf41==3
 cap drop cooperath
 egen cooperath=sum(bc_cooperat) if bc_pe4!=7, by(bc_correlat)
@@ -123,8 +123,8 @@ egen cooperath=sum(bc_cooperat) if bc_pe4!=7, by(bc_correlat)
 *otros ingresos laborales agropecuarios 
 cap drop bc_ot_agropec
 gen bc_ot_agropec= 0
-replace bc_ot_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)*bc_ipc if bc_anio<1991 & bc_anio>1987 & cat2==9
-replace bc_ot_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)*bc_ipc if bc_anio<1988 & cat2==9
+replace bc_ot_agropec=(bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/bc_deflactor if bc_anio<1991 & bc_anio>1987 & cat2==9
+replace bc_ot_agropec=((bc_pa11 +bc_pa12+ bc_pa13+ bc_pa21+ bc_pa22+ bc_pa31+ bc_pa32)/1000)/bc_deflactor if bc_anio<1988 & cat2==9
 cap drop ot_agropech
 egen ot_agropech=sum(bc_ot_agropec) if bc_pe4!=7, by(bc_correlat)
 
@@ -148,7 +148,7 @@ replace bc_principal = bc_patrones+bc_cpropiasl+bc_cpropiacl+bc_cooperat if bc_p
 * Total de ingresos laborales por todas las ocupaciones
 gen bc_ing_lab = bc_as_privados+ bc_as_publicos+ bc_patrones+ bc_cpropiasl+ bc_cpropiacl ///
 	+ bc_cooperat +bc_as_otros+bc_as_agropec+bc_cp_agropec+ bc_pat_agropec+bc_ot_agropec ///
-	+ (bc_otros_lab+bc_otros_lab2)*bc_ipc
+	+ (bc_otros_lab+bc_otros_lab2)/bc_deflactor
 
 * total de ingresos laborales en el hogar
 egen ing_labh=sum(bc_ing_lab) if bc_pe4!=7, by(bc_correlat)
@@ -161,32 +161,32 @@ egen ing_labh=sum(bc_ing_lab) if bc_pe4!=7, by(bc_correlat)
 // Ingreso de capital
 
 cap drop bc_utilidades
-gen bc_utilidades=(bc_pg60p+bc_pg80p+bc_pg60o+bc_pg80o+bc_pg60p_cpsl+bc_pg60p_cpcl+bc_pg60o_cpsl+bc_pg60o_cpcl)*bc_ipc
+gen bc_utilidades=(bc_pg60p+bc_pg80p+bc_pg60o+bc_pg80o+bc_pg60p_cpsl+bc_pg60p_cpcl+bc_pg60o_cpsl+bc_pg60o_cpcl)/bc_deflactor
 cap drop utilidadesh
 egen utilidadesh=sum(bc_utilidades) if bc_pe4!=7, by(bc_correlat)
 
 cap drop bc_alq /*Es una variable a nivel de hogar*/
-gen bc_alq=(bc_pg121+bc_pg122)*bc_ipc
+gen bc_alq=(bc_pg121+bc_pg122)/bc_deflactor
 cap drop alqh
 gen alqh=bc_alq
 
 cap drop bc_intereses /*Es una variable a nivel de hogar*/
-gen bc_intereses=(bc_pg131+bc_pg132)*bc_ipc
+gen bc_intereses=(bc_pg131+bc_pg132)/bc_deflactor
 cap drop interesesh
 gen interesesh=bc_intereses
 
 * Utilidades de agropecuarios 
 cap drop bc_ut_agropec
 gen bc_ut_agropec= 0
-replace bc_ut_agropec=(bc_pa33)*bc_ipc if bc_anio<1991 & bc_anio>1987 
-replace bc_ut_agropec=((bc_pa33)/1000)*bc_ipc if bc_anio<1988 
+replace bc_ut_agropec=(bc_pa33)/bc_deflactor if bc_anio<1991 & bc_anio>1987 
+replace bc_ut_agropec=((bc_pa33)/1000)/bc_deflactor if bc_anio<1988 
 cap drop ut_agropech
 egen ut_agropech=sum(bc_ut_agropec)if bc_pe4!=7, by(bc_correlat)
 
 * Otros ingresos de capital
-replace bc_otras_utilidades	=bc_otras_utilidades*bc_ipc
-replace bc_ot_utilidades	=bc_ot_utilidades*bc_ipc
-replace bc_otras_capital	=bc_otras_capital*bc_ipc
+replace bc_otras_utilidades	=bc_otras_utilidades/bc_deflactor
+replace bc_ot_utilidades	=bc_ot_utilidades/bc_deflactor
+replace bc_otras_capital	=bc_otras_capital/bc_deflactor
 
 capture gen bc_pg91=0
 capture gen bc_pg91=bc_pg91
@@ -289,7 +289,7 @@ local varl "ing_labh ing_caph bs_socialesh jub_penh jub_peneh beneficiosh ht11  
 recode `varl' (. = 0)
 
 * Ingreso total del hogar sin seguro de salud –– imputo al jefe
-gen bc_ht11_sss_corr = (ing_labh+ing_caph+cuota_otrohog_h)/bc_ipc /// Estas 3 variables están en terminos reales
+gen bc_ht11_sss_corr = (ing_labh+ing_caph+cuota_otrohog_h)*bc_deflactor /// Estas 3 variables están en terminos reales
 					 + beneficiosh + jub_penh + jub_peneh + val_loch + otrosh + transf_hogh ///
 					 if esjefe
 recode bc_ht11_sss_corr (. = 0)

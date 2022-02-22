@@ -1,11 +1,12 @@
-// variables de identificación general
+/* 
+	vardef_demog.do
+	Genera variables demográficas básicas 2011–2019
+*/
 
-rename numero  bc_correlat
-rename nper    bc_nper
-rename pesoano bc_pesoan
+// variables de región
 
-assert inlist(bc_area, 1, 2, 3, 4)
 clonevar bc_area = region_4
+assert inlist(bc_area, 1, 2, 3, 4)
 * localidades de más de 5000 hab.
 gen    bc_filtloc = (region_4<3)
 recode bc_filtloc (0=2)
