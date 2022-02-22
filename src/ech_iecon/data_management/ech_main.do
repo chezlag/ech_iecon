@@ -44,51 +44,6 @@ include "$SRC_LIB/vardef_demog.do"
 
 * van juntos porque se utilizan mutuamente para crear variables
 
-// salud -------------------------------------------------------------
-
-* derecho de atención en cada servicio
-gen ss_asse = `ss_asse'
-gen ss_iamc = `ss_iamc'
-gen ss_priv = `ss_priv'
-gen ss_mili = `ss_mili'
-gen ss_bps  = `ss_bps'
-gen ss_muni = `ss_muni'
-gen ss_otro = `ss_otro'
-gen ss_emer = `ss_emer'
-/* * V2: solo para quienes se repregunta
-gen ss_asseV2 = `ss_asseV2'
-gen ss_iamcV2 = `ss_iamcV2'
-gen ss_privV2 = `ss_privV2'
-gen ss_miliV2 = `ss_miliV2' */
-
-* origen del derecho de atención
-clonevar ss_asse_o = `ss_asse_o'
-clonevar ss_iamc_o = `ss_iamc_o'
-clonevar ss_priv_o = `ss_priv_o'
-clonevar ss_mili_o = `ss_mili_o'
-clonevar ss_emer_o = `ss_emer_o'
-
-* nper de personas que generan derechos de salud a otros integrantes del hogar
-clonevar nper_d_asseemp = `nper_d_asseemp'
-clonevar nper_d_iamcemp = `nper_d_iamcemp'
-clonevar nper_d_privemp = `nper_d_privemp'
-clonevar nper_d_mili    = `nper_d_mili'
-clonevar nper_d_emeremp = `nper_d_emeremp'
-
-* chequeo: solo se repregunta a quienes declaran tener derecho de atención
-/* foreach inst in asse iamc priv mili emer {
-	assert inrange(ss_`inst'_o, 1, 6)  if ss_`inst'
-	assert ss_`inst'_o==0 if !ss_`inst'
-} */
-
-* accede a la salud por fonasa (dentro o fuera del hogar)
-gen ss_fonasa = inlist(ss_asse_o, 1, 4) | ///
-				inlist(ss_iamc_o, 1, 6) | ///
-				inlist(ss_priv_o, 1, 6)
-
-* fonasa dentro del hogar
-gen ss_fonasa_o_h = ss_asse_o==1 | ss_iamc_o==1 | ss_priv_o==1
-
 //  trabajo ----------------------------------------------------------
 
 * pea, empleados, desempleados
@@ -169,13 +124,9 @@ preserve
 restore
 drop if bc_pe4==7
 
-// creamos variables de ingreso compatibilizadas según criterio INE
+// variables de ingreso compatibilizadas INE
 
-include "$SRC_LIB/vardef_y_cuotas_mutuales.do"
-include "$SRC_LIB/vardef_y_trabajo.do"
-include "$SRC_LIB/vardef_y_transferencias.do"
-include "$SRC_LIB/vardef_ypt_yhog.do"
-include "$SRC_LIB/vardef_y_extra_iecon.do"
+include "$SRC_LIB/vardef_y_ht11.do"
 
 
 //  #6 -------------------------------------------------------------------------
