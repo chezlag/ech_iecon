@@ -25,7 +25,7 @@ loc pe4_nopariente  "e30==13"
 loc pe4_servdom     "(e30==14)"
 * estado civil
 loc pe5_unionlibre  "(e35==2 | e35==3)"
-loc pe5_casado      "(e35==4 | e35==5)"
+loc pe5_casado      "(e35==1)"
 loc pe5_divsep      "(e35==0 & (e36==1 | e36==2 | e36==3))"
 loc pe5_viudo       "(e35==0 & (e36==4 | e36==6))"
 loc pe5_soltero     "(e35==0 & (e36==5))"

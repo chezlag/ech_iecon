@@ -1,6 +1,6 @@
 /*
-	ech_2013_specs.do
-	Parámetros específicos de la ECH 2013.
+	ech_2016_specs.do
+	Parámetros específicos de la ECH 2016.
 */
 
 //  #1 -------------------------------------------------------------------------
@@ -25,7 +25,7 @@ loc pe4_nopariente  "e30==13"
 loc pe4_servdom     "(e30==14)"
 * estado civil
 loc pe5_unionlibre  "(e35==2 | e35==3)"
-loc pe5_casado      "(e35==1)"
+loc pe5_casado      "(e35==4 | e35==5)"
 loc pe5_divsep      "(e35==0 & (e36==1 | e36==2 | e36==3))"
 loc pe5_viudo       "(e35==0 & (e36==4 | e36==6))"
 loc pe5_soltero     "(e35==0 & (e36==5))"
@@ -116,16 +116,16 @@ local ytransf_jyp "g148_1_1 g148_1_2  g148_1_3  g148_1_4  g148_1_5  g148_1_6
 #del cr
 
 * numero de desayunos/meriendas y almuerzos/cenas
-local desaymer "e57_4_1 e196_1 e196_3 e200_1 e200_3 e211_1 e211_3"
-local almycen  "e57_4_2 e196_2 e200_2 e211_2"
+local desaymer "e559_1 e196_1 e196_3 e200_1 e200_3 e211_1 e211_3"
+local almycen  "e559_2 e196_2 e200_2 e211_2"
 
-* monto recibido por tus-mides y tus-inda
-loc y_tusmides "0"
-loc y_tusinda  "0"
+* transferencias por tus-mides y tus-inda – en $
+loc y_tusmides "e560_1_1"
+loc y_tusinda  "e560_2_1"
 
-* otras transferencias de alimentación
-loc y_ticketsinda  "e254 * 4.3"
-loc y_lecheenpolvo "0"
+* otras transferencias de alimentación – en $
+loc y_ticketsinda  "0"
+loc y_lecheenpolvo "e561_1 * lecheenpol"
 
 // AFAM
 
@@ -137,24 +137,24 @@ loc hh_n_afam_disca       "g151_4"
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------
 
-// Ingresos de capital
+// Ingresos de capital – anuales
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h252_1"
+loc y_pg121     "h160_1 h163_1 h252_1 h269_1"
 loc y_pg122     "h160_2 h163_2"
 * ingreso por intereses (del pais/del extranjero)
-loc y_pg131     "h168_1"
-loc y_pg132     "h168_2"
+loc y_pg131     "h167_1_1 h167_2_1 h167_3_1 h167_4_1"
+loc y_pg132     "h167_1_2 h167_2_2 h167_3_2 h167_4_2"
 * utilidades
 loc y_util_per  "g143"
-loc y_util_hog  "h170_1 h170_2"
+loc y_util_hog  "h170_1 h170_2 h271_1"
 * otras fuentes de capital
 loc y_otrok_hog "h164 h165 h166"
 
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
-* variables que no están disponibles este año
+* variables que ya no están disponibles este año
 loc bc_yalimpan "0"
 loc bc_cuotabps "-13"
 loc bc_disse_p  "-13"
