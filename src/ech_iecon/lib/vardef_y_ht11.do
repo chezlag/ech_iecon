@@ -2,23 +2,28 @@
 	vardef_y_ht11.do
 	Reconstrucción del ingreso ht11 con criterios del INE y ajustes IECON
 
-	La diferencia principal que trae el ingreso del IECON es la descomposición 
-	por fuentes y la separación del ingreso por cuotas mutuales del resto.
-
 	Primero reconstruye los ingresos laborales, empezando por el salario en 
 	especie. Se hace una desagregación de las cuotas mutuales y se las asigna
 	a quienes generan el derecho de atención. En el caso de las cuotas 
 	generadas fuera del hogar, estas se asignan al jefe/a de hogar. Luego,
-	se agregan salario monetario y salario en especie.
+	se reconstruye el salario monetario y se agregan entre si. 
 
-	Segundo se reconstruyen los ingresos de transferencias. 
+	Segundo se reconstruyen los ingresos de transferencias. Se consideran 
+	jubilaciones y pensiones, transferencias monetarias, y transferencias en
+	especie. 
+
+	Tercero se construyen los agregados de ingreso personal y del hogar 
+	siguiendo los criterios del INE. En este punto, termina la reconstrucción
+	y se pasa a las modificaciones del IECON.
+
+	Las últimas modificaciones en este do-file consisten en 
 
 */
 
 //  #1 -------------------------------------------------------------------------
 //  Salario en especie: Cuotas mutuales ----------------------------------------
 
-//  Cuotas militares -----------------------------------------------------------
+//  Cuotas militares -------------------------------------------------
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
 * 	Se toma a quienes tienen derecho en sanidad militar a través de un miembro 
@@ -67,7 +72,7 @@ gen  yt_ss_militotr = n_militotr * mto_cuot
 * asigna las cuotas al jefx
 replace yt_ss_militotr = 0 if !esjefe
 
-//  Cuotas fonasa --------------------------------------------------------------
+//  Cuotas fonasa ----------------------------------------------------
 
 // cuotas fonasa adjudicables al trabajador
 
@@ -95,7 +100,7 @@ egen    n_fonasa_nolab = sum(ss_fonasa_nolab), by(bc_correlat)
 replace n_fonasa_nolab = 0 if !esjefe
 gen yt_ss_fonasa_nolab = n_fonasa_nolab * mto_cuot
 
-//  Cuotas mutuales y emergencia pagas por empleador  --------------------------
+//  Cuotas mutuales y emergencia pagas por empleador  ----------------
 
 * cuotas pagas por empleador para cada rubro :: yt_ss_asseemp, yt_ss_iamcemp, yt_ss_privemp
 foreach ss in asseemp iamcemp privemp emeremp {
@@ -211,11 +216,11 @@ egen YTINDE   = rowtotal(YTINDE_1 YTINDE_2)
 //  #3 -------------------------------------------------------------------------
 //  Ingresos por transferencias ------------------------------------------------
 
-//  Jubilaciones y pensiones ---------------------------------------------------
+//  Jubilaciones y pensiones -----------------------------------------
 
 egen YTRANSF_1 = rowtotal(`ytransf_jyp')
 
-//  Políticas sociales: transferencias monetarias ------------------------------
+//  Políticas sociales: transferencias monetarias --------------------
 
 // Asignaciones Familiares (no incluídas en el sueldo)
 
@@ -227,7 +232,7 @@ recode YTRANSF_2 (. = 0)
 gen    YTRANSF_3 = mto_hogc if (g149==1 & g149_1==2)
 recode YTRANSF_3 (. = 0)
 
-//  Políticas sociales: transferencias en especie ------------------------------
+//  Políticas sociales: transferencias en especie --------------------
 
 // Transferencias en especie: Alimentos
 
@@ -298,11 +303,59 @@ gen YTRANSF_4 = YALIMENT
 egen    YALIMENT_MEN = sum(YALIMENT_MEN1), by(bc_correlat)
 replace YALIMENT_MEN = 0 if !esjefe
 
-//  total de transferencias ----------------------------------------------------
+//  total de transferencias ------------------------------------------
 * 	–– asumo que para mayores de 14 dado el tratamiento de YTRANSF_4 / gsl 2021-08-31
 
 egen YTRANSF = rowtotal(YTRANSF_1 YTRANSF_2 YTRANSF_3 YTRANSF_4)
 
 
 //  #4 -------------------------------------------------------------------------
-//  
+//  Ingreso personal total e ingresos del hogar –– replicación INE -------------
+
+* otros ingresos 
+gen OTROSY = (g258_1/12) + g154_1 // devolución de fonasa + otros ingresos
+
+// PT1 – ingresos personales
+
+egen    pt1_iecon = rowtotal(YTDOP YTDOS YTINDE YTRANSF OTROSY)
+recode  pt1_iecon   (. = 0)
+
+egen    HPT1 = sum(pt1_iecon), by(bc_correlat)
+replace HPT1 = 0 if !esjefe
+
+// PT2 – INGRESOS DE LA OCUPACIÓN PRINCIPAL.
+
+*PRIVADOS.
+gen  PT2PRIV   = YTDOP if deppri_op
+
+*PÚBLICOS.
+gen  PT2PUB    = YTDOP if deppub_op
+
+*INDEPENDIENTE.
+gen  PT2NODEP  = YTINDE if independiente_op
+
+* PT2 TOTAL.
+egen pt2_iecon = rowtotal(PT2PRIV PT2PUB PT2NODEP)
+
+// PT4 – TOTAL DE INGRESOS POR TRABAJO. OCUPACION PRINCIPAL Y SECUNDARIA
+
+egen pt4_iecon = rowtotal(YTDOP YTDOS YTINDE)
+
+// HT11 – INGRESOS DEL HOGAR
+
+* ingresos relevados con frecuencia anual
+#del ;
+local yhog_anual "`y_pg121' `y_pg122' `y_otrok_hog' `y_pg131' `y_pg132'
+	 `y_util_hog' h171_1   h172_1";
+#del cr
+
+egen yhog_anual = rowtotal(`yhog_anual')
+	// excluye h173_1 – seguramente por ser ingreso extraordinario
+
+gen yhog1 = h155_1 + h156_1 + h252_1 + (yhog_anual/12) + ///
+	yt_ss_militotr + YALIMENT_MEN + yt_ss_fonasa_nolab + yt_ss_emerotr + yt_ss_otrohog
+
+egen yhog_iecon = max(yhog1), by(bc_correlat)
+drop yhog_anual yhog1
+
+egen ht11_iecon = rowtotal(HPT1 ine_ht13 yhog_iecon)
