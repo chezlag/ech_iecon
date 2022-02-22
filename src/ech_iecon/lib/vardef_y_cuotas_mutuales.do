@@ -1,48 +1,15 @@
 // vardef_y_cuotas_mutuales.do
 // monetizamos transferencias por cuotas mutuales
 
-//  #1 -------------------------------------------------------------------------
-//  Variables auxiliares de atención de salud ----------------------------------
-
-* derecho de atención origina en un pago de alguien dentro del hogar
-gen ss_asse_o_hpago = inlist(ss_asse_o, 2, 3)
-gen ss_iamc_o_hpago = ss_iamc_o==2
-gen ss_priv_o_hpago = ss_priv_o==2
-
-* derecho de atención militar originado por alguien del hogar
-gen     ss_mili_o_h = ss_mili_o==1
-
-* cuota IAMC paga por empleador 
-*	excluyendo personas sin derecho a atenderse en ASSE o seguro privado
-*	o quienes acceden a través de un pago (o bajos recursos en ASSE)
-gen ss_iamcemp =  ss_iamc_o==5 & (!ss_asse | ss_asse_o_hpago) & (!ss_priv | ss_priv_o_hpago)
-gen ss_asseemp =  ss_asse_o==5 & (!ss_iamc | ss_iamc_o_hpago) & (!ss_priv | ss_priv_o_hpago)
-gen ss_privemp =  ss_priv_o==5 & (!ss_asse | ss_asse_o_hpago) & (!ss_iamc | ss_iamc_o_hpago)
-gen ss_emeremp =  ss_emer_o==4
-
-* cuotas para este hogar generadas desde otro hogar 
-gen ss_otrohog = (ss_asse_o==6 & (!ss_iamc | ss_iamc_o_hpago) & (!ss_priv | ss_priv_o_hpago)) ///
-		       | (ss_iamc_o==3 & (!ss_asse | ss_asse_o_hpago) & (!ss_priv | ss_priv_o_hpago)) ///
-		       | (ss_priv_o==3 & (!ss_asse | ss_asse_o_hpago) & (!ss_iamc | ss_iamc_o_hpago))
-* emergencia móvil paga de otro hogar
-gen ss_emerotr = ss_emer_o==3
-
-* para definir la rama militar en ocupación ppal o secundaria
-local ciiu_militar "5222, 5223, 8030, 8411, 8421, 8422, 8423, 8430, 8521, 8530, 8610"
-
-* accede a salud sin pago – fonasa o por otras personas dentro o fuera del hogar
-gen ss_sinpago   = inlist(ss_asse_o, 1, 4, 5, 6) | /// 
-			  	   inlist(ss_iamc_o, 1, 6, 3, 5) | /// 
-			  	   inlist(ss_priv_o, 1, 6, 3, 5)   // 
-
-
-//  #2 -------------------------------------------------------------------------
-//  Cuotas militares -----------------------------------------------------------
+//  Cuotas militares -------------------------------------------------
 
 * Se calcula cuotas militares, adjudicadas a militar que las genera.
 * 	Se toma a quienes tienen derecho en sanidad militar a través de un miembro 
 *	de este hogar y a su vez no generan derecho por FONASA, ya sea por miembro 
 *	del hogar o por otro hogar.
+
+* para definir la rama militar en ocupación ppal o secundaria
+local ciiu_militar "5222, 5223, 8030, 8411, 8421, 8422, 8423, 8430, 8521, 8530, 8610"
 
 gen at_milit  = ss_mili_o_h & !ss_sinpago
 gen at_milit2 = ss_mili & !ss_sinpago
