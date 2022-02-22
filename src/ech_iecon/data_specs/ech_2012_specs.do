@@ -1,6 +1,6 @@
 /*
-	ech_2014_specs.do
-	Parámetros específicos de la ECH 2014.
+	ech_2012_specs.do
+	Parámetros específicos de la ECH 2012.
 */
 
 //  #1 -------------------------------------------------------------------------
@@ -9,6 +9,8 @@
 * ¿cómo identificamos al jefx de hogar?
 gen esjefe = e30==1
 
+* ccz está nombrado ccz10
+rename ccz10 ccz
 
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
@@ -60,7 +62,7 @@ loc ss_mili_o "e45_4_1"
 loc ss_emer_o "e47"
 
 * nper de personas que generan derechos de salud a otros integrantes del hogar
-loc nper_d_asseemp "e45_1_1_1"
+loc nper_d_asseemp "0"
 loc nper_d_iamcemp "e45_2_1_1"
 loc nper_d_privemp "e45_3_1_1"
 loc nper_d_mili    "e45_4_2"
@@ -124,26 +126,25 @@ loc y_tusmides "0"
 loc y_tusinda  "0"
 
 * otras transferencias de alimentación
-loc y_ticketsinda  "e254 * 4.3"
+loc y_ticketsinda  "0"
 loc y_lecheenpolvo "0"
 
 // AFAM
 
-* monto afam declarado
-loc mto_afam_declarado "g257"
+* monto de afam declarado
+loc mto_afam_declarado "0"
+
 * condiciones de recepción afam
-loc afampe_cond1  "(g256==2 & g152==1)"
-loc afampe_cond2  "(g150==1 & (inlist(bc_pobp, 1, 3, 4, 6, 7, 8, 11) | (bc_pobp==2 & !formal_op & !formal_os)))"
-loc afampe_cond3  "(g255==1)"
-loc afamcont_cond "g150==1 & afam_pe==0"
+loc afampe_cond1  "g152==1 & (bc_pf41!=2 & f92!=2)"
+loc afampe_cond2  "inlist(g150, 1,2) & (inlist(bc_pobp, 1,3,4,6,7,8,11) | (bc_pobp==2 & !formal))"
+loc afampe_cond3  "0"
+loc afamcont_cond "inlist(g150, 1,2) & afam_pe==0"
 * afam no incluída en el sueldo
-assert g256==0 if g150!=1
-assert (g150==1 & g256!=1) == (g256==2)
-loc afam_nosueldo "g256==2"
+loc afam_nosueldo "g150==1"
 
 * numero de beneficiarios de afam por tipo
-loc hh_n_afam_men18       "g151_1 g151_2 g151_3 g151_5"
-loc hh_n_afam_comp_liceo  "g151_3_1"
+loc hh_n_afam_men18       "g151_1 g151_2 g151_3"
+loc hh_n_afam_comp_liceo  "g151_3"
 loc hh_n_afam_disca       "g151_4"
 
 //  #6 -------------------------------------------------------------------------
@@ -152,26 +153,26 @@ loc hh_n_afam_disca       "g151_4"
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h269_1"
+loc y_pg121     "h160_1 h163_1 h252_1"
 loc y_pg122     "h160_2 h163_2"
 * ingreso por intereses (del pais/del extranjero)
-loc y_pg131     "h167_1_1 h167_2_1 h167_3_1 h167_4_1"
-loc y_pg132     "h167_1_2 h167_2_2 h167_3_2 h167_4_2"
+loc y_pg131     "h168_1"
+loc y_pg132     "h168_2"
 * utilidades
 loc y_util_per  "g143"
-loc y_util_hog  "h170_1 h170_2 h271_1"
+loc y_util_hog  "h170_1 h170_2"
 * otras fuentes de capital
 loc y_otrok_hog "h164 h165 h166"
 
 // Otros ingresos
 
 loc pagos_atrasados   "g126_7 g134_7"
-loc devolucion_fonasa "g258_1"
+loc devolucion_fonasa "0"
 
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
-* variables que ya no están disponibles este año
+* variables que no están disponibles este año
 loc bc_yalimpan "0"
 loc bc_cuotabps "-13"
 loc bc_disse_p  "-13"

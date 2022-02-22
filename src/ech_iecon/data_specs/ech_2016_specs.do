@@ -129,8 +129,20 @@ loc y_lecheenpolvo "e561_1 * lecheenpol"
 
 // AFAM
 
+* monto afam declarado
+loc mto_afam_declarado "g257"
+* condiciones de recepción afam
+loc afampe_cond1  "(g256==2 & g152==1)"
+loc afampe_cond2  "(g150==1 & (inlist(bc_pobp, 1, 3, 4, 6, 7, 8, 11) | (bc_pobp==2 & !formal_op & !formal_os)))"
+loc afampe_cond3  "(g255==1)"
+loc afamcont_cond "g150==1 & afam_pe==0"
+* afam no incluída en el sueldo
+assert g256==0 if g150!=1
+assert (g150==1 & g256!=1) == (g256==2)
+loc afam_nosueldo "g256==2"
+
 * numero de beneficiarios de afam por tipo
-loc hh_n_afam_men18       "g151_1 g151_2 g151_3"
+loc hh_n_afam_men18       "g151_1 g151_2 g151_3 g151_5"
 loc hh_n_afam_comp_liceo  "g151_3_1"
 loc hh_n_afam_disca       "g151_4"
 
@@ -150,6 +162,11 @@ loc y_util_per  "g143"
 loc y_util_hog  "h170_1 h170_2 h271_1"
 * otras fuentes de capital
 loc y_otrok_hog "h164 h165 h166"
+
+// Otros ingresos
+
+loc pagos_atrasados   "g126_7 g134_7"
+loc devolucion_fonasa "g258_1"
 
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------

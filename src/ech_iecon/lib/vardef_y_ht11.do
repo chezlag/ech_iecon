@@ -227,8 +227,19 @@ egen YTRANSF_1 = rowtotal(`ytransf_jyp')
 
 // Asignaciones Familiares (no incluídas en el sueldo)
 
-gen    YTRANSF_2 = g257 if g256!=1
-recode YTRANSF_2 (. = 0)
+/* 
+	Asi lo hace el INE, pero nosotros imputamos los ingresos por transferencias
+	en base a lo declarado de ingresos (ver más abajo). 
+
+	El monto cobrado se empezó a preguntar recién en 2013. 
+*/
+
+* señalizo afam cobradas por fuera del sueldo
+gen afam_nosueldo = `afam_nosueldo'
+
+* agergo afam cobradas por fuera del sueldo
+gen    YTRANSF_2 = `mto_afam_declarado' * (afam_nosueldo==1)
+recode YTRANSF_2 (. = 0) 
 
 // Hogar Constituido
 
@@ -309,14 +320,18 @@ replace YALIMENT_MEN = 0 if !esjefe
 //  total de transferencias ------------------------------------------
 * 	–– asumo que para mayores de 14 dado el tratamiento de YTRANSF_4 / gsl 2021-08-31
 
-egen YTRANSF = rowtotal(YTRANSF_1 YTRANSF_2 YTRANSF_3 YTRANSF_4)
+/* 
+	Se define más abajo nuevamente con las correcciones del IECON.
+	Creo que habría que borrar toda esta sección para no confundir / gsl 2022-02-23
+*/
 
+egen YTRANSF = rowtotal(YTRANSF_1 YTRANSF_2 YTRANSF_3 YTRANSF_4)
 
 //  #4 -------------------------------------------------------------------------
 //  Ingreso personal total e ingresos del hogar –– replicación INE -------------
 
 * otros ingresos 
-gen OTROSY = (g258_1/12) + g154_1 // devolución de fonasa + otros ingresos
+gen OTROSY = (`devolucion_fonasa'/12) + g154_1 // devolución de fonasa + otros ingresos
 
 // PT1 – ingresos personales
 
@@ -377,11 +392,9 @@ egen ht11_iecon = rowtotal(HPT1 ine_ht13 yhog_iecon)
 	- Declara recibir AFAM-PE
 */
 
-gen afam_pe = (g256==2 & g152==1) ///
-	| (g150==1 & (inlist(bc_pobp, 1, 3, 4, 6, 7, 8, 11) | (bc_pobp==2 & !formal_op & !formal_os))) ///
-	| (g255==1)
+gen afam_pe = `afampe_cond1' | `afampe_cond2' | `afampe_cond3'
 
-gen afam_cont      = g150==1 & afam_pe==0
+gen afam_cont      = `afamcont_cond'
 gen afam_cont_pub  = afam_cont==1 &  (deppub_op | deppub_os)
 gen afam_cont_priv = afam_cont==1 & !(deppub_op | deppub_os)
 gen afam_total     = afam_pe==1 | afam_cont==1
@@ -401,16 +414,16 @@ egen hh_n_afam_men18      = rowtotal(`hh_n_afam_men18')
 egen hh_n_afam_comp_liceo = rowtotal(`hh_n_afam_comp_liceo')
 egen hh_n_afam_disca      = rowtotal(`hh_n_afam_disca')
 
-gen monto_afam_pe = bc_afampe_base                     * (hh_n_afam_men18^0.6)      ///
-				  + bc_afampe_comp                * (hh_n_afam_comp_liceo^0.6) ///
-				  + (bc_afampe_base + bc_afampe_comp) *  hh_n_afam_disca            ///
+gen monto_afam_pe = bc_afampe_base                    * (hh_n_afam_men18^0.6)      ///
+				  + bc_afampe_comp                    * (hh_n_afam_comp_liceo^0.6) ///
+				  + (bc_afampe_base + bc_afampe_comp) *  hh_n_afam_disca           ///
 				  if afam_pe==1
 recode monto_afam_pe (. = 0)
 
 // AFAM CONTRIBUTIVA –– Sintaxis Iecon
 
 gen nucleo = bc_nper
-*replace nucleo = min(bc_nper,e34) if e34!=0 / no está el modulo de pareja en ECH 2020 \ gsl 2021-09-30
+cap replace nucleo = min(bc_nper,e34) if e34!=0 // no está el modulo de pareja en ECH 2020 \ gsl 2021-09-30
 * suma de ingresos trabajadores formales por concepto de sueldo, comisiones, o viáticos
 * ocupacion ppal
 gen  suma1 = (g126_1 + g126_2 + g126_3) * 1.22 if asal_op & formal_op 

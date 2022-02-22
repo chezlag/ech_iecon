@@ -18,10 +18,19 @@ drop ytransf_1_iecon
 
 // Asignaciones familiares
 
+/* 
+	Queremos evitar sumar las transferencias dos veces.
+
+	Se incluyen las asignaciones contributivas solo si son cobradas por fuera del sueldo
+	Todas las AFAM-PE son cobradas por fuera del sueldo, asi que se suman todas.
+*/
+
+* señalizo afam cobradas por fuera del sueldo
+gen afam_nosueldo = `afam_nosueldo'
+
 replace YTRANSF_2 = 0
-replace YTRANSF_2 = monto_afam_cont if g256==2 			// Se incluyen las asignaciones contributivas solo si son cobradas por fuera del sueldo
-replace YTRANSF_2 = YTRANSF_2 + monto_afam_pe 			// Todas las asignaciones familiares - plan de equidad son cobradas por fuera del sueldo
-														// por esa razón, no se utiliza la restricción dada por g256==1
+replace YTRANSF_2 = monto_afam_cont if afam_nosueldo==1
+replace YTRANSF_2 = YTRANSF_2 + monto_afam_pe 															
 
 // Políticas sociales: ingresos por alimentación
 
@@ -112,10 +121,10 @@ cap drop bc_pg13p bc_pg23p bc_pg13o bc_pg23o
 mvencode YTRANSF_2 g148_4 mto_hogc YTRANSF_4 , mv(0) override 
 
 gen bc_pg13p=g148_4+mto_hogc if bc_pf41==1 
-replace bc_pg13p=YTRANSF_2+g148_4+mto_hogc   if bc_pf41==1&(g150==1&g256!=1)&afam_pe==0
+replace bc_pg13p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==1 & afam_nosueldo==1 & afam_pe==0
 
 gen bc_pg23p=g148_4+mto_hogc if bc_pf41==2 
-replace bc_pg23p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==2&(g150==1&g256!=1)&afam_pe==0
+replace bc_pg23p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==2 & afam_nosueldo==1 & afam_pe==0
 
 // 	Ingresos monetarios por rubro para dependientes en ocupación secundaria 
 
@@ -155,11 +164,11 @@ gen bc_pg27o = g134_8 + g135_3 + g136_1 + g137_2 + g138_1 ///
 * dependientes privados en ocupacion secundaria
 gen     bc_pg13o = g148_4 + mto_hogc             if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
 replace bc_pg13o = g148_4 + mto_hogc + YTRANSF_2 if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
-												  & g150==1 & g256!=1 & afam_pe==0
+												  & afam_nosueldo==1 & afam_pe==0
 * dependientes públicos en ocupación secundaria
 gen     bc_pg23o = g148_4 + mto_hogc             if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
 replace bc_pg23o = g148_4 + mto_hogc & YTRANSF_2 if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
-												  & g150==1 & g256!=1 & afam_pe==0
+												  & afam_nosueldo==1 & afam_pe==0
 
 // Ingreso total trabajadores dependientes
 
@@ -186,13 +195,13 @@ capture drop  bc_pg42p
 capture drop  bc_pg72p
 gen bc_pg32p=0
 replace bc_pg32p=g148_4+mto_hogc  if bc_pf41==5  // Cuenta propia sin local
-replace bc_pg32p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==5 & (g150==1&g256!=1)&afam_pe==0 // Cuenta propia sin local
+replace bc_pg32p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==5 & afam_nosueldo==1 & afam_pe==0 // Cuenta propia sin local
 gen bc_pg42p=0
 replace bc_pg42p=g148_4+mto_hogc if bc_pf41==6   // Cuenta propia con local
-replace bc_pg42p=YTRANSF_2+g148_4+mto_hogc  if bc_pf41==6 & (g150==1&g256!=1)&afam_pe==0 // Cuenta propia con local
+replace bc_pg42p=YTRANSF_2+g148_4+mto_hogc  if bc_pf41==6 & afam_nosueldo==1 & afam_pe==0 // Cuenta propia con local
 gen bc_pg72p=0
 replace bc_pg72p=g148_4+mto_hogc if bc_pf41==3 // Cooperativista
-replace bc_pg72p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==3 & (g150==1&g256!=1)&afam_pe==0 // Cooperativista
+replace bc_pg72p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==3 & afam_nosueldo==1 & afam_pe==0 // Cooperativista
 
 * ingresos por transferencias ocupaciones secundarias
 capture drop  bc_pg32o
@@ -200,13 +209,13 @@ capture drop  bc_pg42o
 capture drop  bc_pg72o
 gen bc_pg32o=0
 replace bc_pg32o=g148_4+mto_hogc if f92==5 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1) 
-replace bc_pg32o=YTRANSF_2+g148_4+mto_hogc if f92==5 & (g150==1&g256!=1)&(bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg32o=YTRANSF_2+g148_4+mto_hogc if f92==5 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 gen bc_pg42o=0
 replace bc_pg42o=g148_4+mto_hogc if f92==6  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg42o=YTRANSF_2+g148_4+mto_hogc  if f92==6 & (g150==1&g256!=1)&(bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg42o=YTRANSF_2+g148_4+mto_hogc  if f92==6 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 gen bc_pg72o=0
 replace bc_pg72o=g148_4+mto_hogc if f92==3  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if f92==3 &(g150==1&g256!=1)&(bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if f92==3 &afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 
 // trabajador no dependiente - ingresos por negocios propios
 
@@ -288,7 +297,7 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6)
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 ///
-	if (g150==1 | g257>0) & (afam_pe>0) // 08/04/19 cambio
+	if /* (g150==1 | g257>0) & */ (afam_pe>0) // 08/04/19 cambio
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 +             g148_4 + mto_hogc ///
 	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6) & esjefe
@@ -297,10 +306,6 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6) & esjefe
 
 /* las últimas dos lineas son contradictorias / gsl 2021-09-20 */
-
-* pagos atrasados
-cap drop bc_pag_at
-gen bc_pag_at=g126_7+g134_7
 
 //  #5 -------------------------------------------------------------------------
 // 	Jubilaciones ---------------------------------------------------------------
@@ -370,8 +375,27 @@ recode  bc_otras_utilidades (. = 0)
 * Medianería, pastoreo y ganado a capitalizar a nivel de hogar
 gen    bc_otras_capital = y_otrok_hog               if esjefe
 recode bc_otras_capital (. = 0)
-gen     otros = bc_pag_at + g154_1 + g258_1/12 
-replace otros = bc_pag_at + g154_1 + g258_1/12 + h171_1/12  if esjefe
+
+// Ingresos por otro concepto --------------------------------------------------
+
+/* 
+	Dependiendo del año incluye pagos atrasados -bc_pag_at-, otro ingreso
+	corriente -g154_1- y devoluciones de fonasa -g258_1/12- 
+
+	Indemnización por despido -h171_1/12- se pregunta a nivel de hogar y se
+	imputa al jefe/a.
+*/
+
+
+* pagos atrasados
+egen bc_pag_at = rowtotal(`pagos_atrasados')
+
+* devolución fonasa
+gen bc_devol_fonasa = `devolucion_fonasa'
+
+* otros ingresos
+gen     otros = bc_pag_at + g154_1 + bc_devol_fonasa/12
+replace otros = otros + h171_1/12  if esjefe
 
 //  #6 -------------------------------------------------------------------------
 // 	Dropeo auxiliares ----------------------------------------------------------

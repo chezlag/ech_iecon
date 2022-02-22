@@ -14,6 +14,7 @@
 - `bc_pf41_os`: Crear dos variables: catocup en op y catocup en os
 - TRANSFERENCIAS ALIMENTICIAS. ¿Por qué cuento TUS en yalim_tot cuando se releva individualmente (2015 en adelante) pero no cuando se releva a nivel de hogar?
 - Fix: En 2018 estaban mal los montos de AFAM-PE
+- CCZ: Revisar que se mantenga constante el diagramado!! En 2012 aparecen dos marcos: ccz10 (2010) y ccz04 (2004). ¿Cuál se usa en la compatibilización?? Asumo que el de 2010...
 
 ## In process
 

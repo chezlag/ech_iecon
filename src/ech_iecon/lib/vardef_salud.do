@@ -28,11 +28,11 @@ clonevar ss_mili_o = `ss_mili_o'
 clonevar ss_emer_o = `ss_emer_o'
 
 * nper de personas que generan derechos de salud a otros integrantes del hogar
-clonevar nper_d_asseemp = `nper_d_asseemp'
-clonevar nper_d_iamcemp = `nper_d_iamcemp'
-clonevar nper_d_privemp = `nper_d_privemp'
-clonevar nper_d_mili    = `nper_d_mili'
-clonevar nper_d_emeremp = `nper_d_emeremp'
+gen nper_d_asseemp = `nper_d_asseemp'
+gen nper_d_iamcemp = `nper_d_iamcemp'
+gen nper_d_privemp = `nper_d_privemp'
+gen nper_d_mili    = `nper_d_mili'
+gen nper_d_emeremp = `nper_d_emeremp'
 
 * chequeo: solo se repregunta a quienes declaran tener derecho de atención
 /* foreach inst in asse iamc priv mili emer {
