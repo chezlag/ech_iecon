@@ -127,7 +127,6 @@ drop if bc_pe4==7
 // creamos variables de ingreso compatibilizadas según criterio INE
 
 include "$SRC_LIB/vardef_y_ht11.do"
-include "$SRC_LIB/vardef_y_transferencias.do"
 include "$SRC_LIB/vardef_ypt_yhog.do"
 include "$SRC_LIB/vardef_y_extra_iecon.do"
 
