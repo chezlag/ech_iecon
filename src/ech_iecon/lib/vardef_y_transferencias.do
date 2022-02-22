@@ -4,16 +4,7 @@
 //  #1 -------------------------------------------------------------------------
 //  Transferencias jubilaciones y pensiones ------------------------------------
 
-#del ;
-local ytransf_jyp "g148_1_1 g148_1_2  g148_1_3  g148_1_4  g148_1_5  g148_1_6
-	g148_1_7      g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1
-	g148_2_2      g148_2_3  g148_2_4  g148_2_5  g148_2_6  g148_2_7  g148_2_8
-	g148_2_9      g148_2_12 g148_2_10 g148_2_11 g148_3    g148_4    g148_5_1
-	g148_5_2      g153_1    g153_2";
-#del cr
-
 egen YTRANSF_1 = rowtotal(`ytransf_jyp')
-
 
 //  #2 -------------------------------------------------------------------------
 //  Políticas sociales: transferencias monetarias ------------------------------
@@ -34,8 +25,6 @@ recode YTRANSF_3 (. = 0)
 // Transferencias en especie: Alimentos
 
 * recodifico 99s a missing
-local desaymer "e559_1 e196_1 e196_3 e200_1 e200_3 e211_1 e211_3"
-local almycen  "e559_2 e196_2 e200_2 e211_2"
 recode `desaymer' `almycen' (99 = .q)
 
 * numero de desayunos/meriendas y número de almuerzos/cenas
@@ -51,17 +40,21 @@ gen     CANASTA = e247*indaceli if e246==7
 replace CANASTA = e247*indaemer if e246==14
 recode  CANASTA (. = 0)
 
-// Tarjetas TUS-MIDES y TUS-INDA
+// Otras transferencias de alimientación
 
-gen  tusmides  = e560_1_1
-gen  tusinda   = e560_2_1
-egen tus       = rowtotal(tusmides tusinda)
-gen     leche  = e561_1 * lecheenpol 
-replace leche  = 0 if inlist(e246, 1, 7) & e560==2 // Ver sintaxis 2018 (por qué hacemos replace?)
+* tarjetas tus-mides y tus-inda
+egen tus       = rowtotal(`y_tusmides' `y_tusinda')
+
+* tickets de alimentación del inda
+gen ticketsinda = `y_ticketsinda'
+
+* leche en polvo
+gen     leche  = `y_lecheenpolvo'
+*replace leche  = 0 if inlist(e246, 1, 7) & e560==2 // Ver sintaxis 2018 (por qué hacemos replace?)
 
 //  Se genera una variable de alimentos separando entre mayores y menores de 14
 
-egen yalim_tot     = rowtotal(DESAYMER ALMYCEN tus CANASTA leche)
+egen yalim_tot     = rowtotal(DESAYMER ALMYCEN CANASTA tus ticketsinda leche)
 gen  YALIMENT      = yalim_tot if bc_pe3>=14
 gen  YALIMENT_MEN1 = yalim_tot if bc_pe3< 14
 recode YALIMENT YALIMENT_MEN1 (. = 0)

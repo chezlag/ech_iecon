@@ -80,8 +80,9 @@ gen monto_afam_cont = monto_asig*cant_af
 // TUS
 
 * No hay forma de asignar TUS, por lo que se utiliza el monto declarado.
-egen    monto_tus_iecon = sum(tus), by(bc_correlat)
-replace monto_tus_iecon = 0 if !esjefe
+cap gen  monto_tus_iecon = h157_1 // para los años que se relevaba a nivel de hogar
+cap egen monto_tus_iecon = sum(tus), by(bc_correlat)
+replace  monto_tus_iecon = 0 if !esjefe
 
 
 // Vector salud. Código Iecon

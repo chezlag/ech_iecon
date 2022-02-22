@@ -30,7 +30,7 @@ replace CANASTA = g148_5_1+g148_5_2 if e246==11 // Otras canastas, cambió en EC
 
 *Se genera una variable de alimentos para todos sin importar si son mayores de 14 años o no
 *	saca TUS de YALIMENT
-egen    yalim_totV2   = rowtotal(DESAYMER ALMYCEN CANASTA leche)  //Monto tus del iecon va para bc_tarjeta
+egen    yalim_totV2   = rowtotal(DESAYMER ALMYCEN CANASTA ticketsinda leche)  //Monto tus del iecon va para bc_tarjeta
 replace YALIMENT      = yalim_totV2 if bc_pe3>=14
 replace YALIMENT_MEN1 = yalim_totV2 if bc_pe3< 14
 recode  YALIMENT YALIMENT_MEN1 (. = 0)
