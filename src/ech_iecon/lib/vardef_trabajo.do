@@ -3,6 +3,28 @@
 	Genera variables de mercado laboral 2011–2019
 */
 
+* trabajo dependiente
+gen dependiente_op = `dependiente_op'
+gen dependiente_os = `dependiente_os'
+
+* trabajo independiente (coop, patrón, cprop)
+gen independiente_op = `independiente_op'
+gen independiente_os = `independiente_os'
+
+* ciiu ocupacion principal y ocupacion secundaria
+clonevar ciiu_op = `ciiu_op'
+clonevar ciiu_os = `ciiu_os'
+
+* aslariados en ocupación principal o secundaria
+gen asal_op = `asal_op'
+gen asal_os = `asal_os'
+
+* dependiente público o privado en ocupación principal
+gen deppri_op = `deppri_op'
+gen deppri_os = `deppri_os'
+gen deppub_op = `deppub_op'
+gen deppub_os = `deppub_os'
+
 * categoría de ocupación
 recode f73 (8 = 7) (0 = .c) ///
 	, gen(bc_pf41)

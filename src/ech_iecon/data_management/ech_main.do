@@ -42,9 +42,7 @@ include "$SRC_LIB/vardef_demog.do"
 //  #3 -------------------------------------------------------------------------
 //  salud y trabajo ------------------------------------------------------------
 
-* van juntos porque se utilizan mutuamente para crear variables
-
-//  trabajo ----------------------------------------------------------
+//  variables de trabajo que se utilizan para armar salud
 
 * pea, empleados, desempleados
 gen pea    = inrange(bc_pobp, 2, 5) if bc_pe3>=14
@@ -55,28 +53,6 @@ gen desemp = inrange(bc_pobp, 3, 5) if pea==1
 gen formal_op = `formal_op'                 if emp==1
 gen formal_os = `formal_os'                 if emp==1
 gen formal    = formal_op==1 | formal_os==1 if emp==1
-
-* trabajo dependiente
-gen dependiente_op = `dependiente_op'
-gen dependiente_os = `dependiente_os'
-
-* trabajo independiente (coop, patrón, cprop)
-gen independiente_op = `independiente_op'
-gen independiente_os = `independiente_os'
-
-* ciiu ocupacion principal y ocupacion secundaria
-clonevar ciiu_op = `ciiu_op'
-clonevar ciiu_os = `ciiu_os'
-
-* aslariados en ocupación principal o secundaria
-gen asal_op = `asal_op'
-gen asal_os = `asal_os'
-
-* dependiente público o privado en ocupación principal
-gen deppri_op = `deppri_op'
-gen deppri_os = `deppri_os'
-gen deppub_op = `deppub_op'
-gen deppub_os = `deppub_os'
 
 // creamos variables de los módulos
 
@@ -124,19 +100,17 @@ preserve
 restore
 drop if bc_pe4==7
 
-// variables de ingreso compatibilizadas INE
+// variables de ingreso compatibilizadas INE -------------------------
 
 include "$SRC_LIB/vardef_y_ht11.do"
 
-
-//  #6 -------------------------------------------------------------------------
-//  Ingresos: retoques IECON ---------------------------------------------------
+//  Ingresos: retoques IECON -----------------------------------------
 
 include "$SRC_LIB/vardef_y_descomp_fuentes.do"
 include "$SRC_LIB/vardef_y_ht11_sss.do"
 
 
-//  #7 -------------------------------------------------------------------------
+//  #6 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
 * reordeno
@@ -182,18 +156,17 @@ foreach var in bc_pg14 bc_ht11_sss bc_ht11_css bc_percap_iecon bc_ht11_sss_corr 
 append using `servdom', nol
 sort bc_correlat bc_nper
 
-// rename and order
+// rename and order --------------------------------------------------
 
 include "$SRC_LIB/rename_order.do"
 
-//  #8 -------------------------------------------------------------------------
-//  labels ---------------------------------------------------------------------
+//  labels -----------------------------------------------------------
 
 include "$SRC_LIB/label_variables.do"
 include "$SRC_LIB/label_values.do"
 
 
-//  #9 -------------------------------------------------------------------------
+//  #7 -------------------------------------------------------------------------
 //  save -----------------------------------------------------------------------
 
 quietly compress		

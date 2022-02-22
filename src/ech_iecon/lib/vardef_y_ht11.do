@@ -16,12 +16,15 @@
 	siguiendo los criterios del INE. En este punto, termina la reconstrucción
 	y se pasa a las modificaciones del IECON.
 
-	Las últimas modificaciones en este do-file consisten en 
+	Por último se realizan imputaciones de varias transferencias: AFAM-PE con 
+	la sintaxis del MIDES, AFAM contributivas, TUS y vector salud con código
+	de IECON.
 
 */
 
 //  #1 -------------------------------------------------------------------------
 //  Salario en especie: Cuotas mutuales ----------------------------------------
+* 	–– !! muchas variables usadas en esta sub-sección se definen en lib/vardef_salud.do
 
 //  Cuotas militares -------------------------------------------------
 
