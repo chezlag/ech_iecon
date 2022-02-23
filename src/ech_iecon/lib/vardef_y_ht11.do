@@ -482,3 +482,52 @@ clonevar CUOT_OTROHOG2     = yt_ss_otrohog
 clonevar cuota_otrohog_h   = yt_ss_otrohog
 
 // ----------------------------------------------
+
+//  #6
+//  Correcciones a transferencias
+
+* sacamos becas, subsidios y donaciones –– pasa a canasta "otras"	
+egen ytransf_1_iecon = rowtotal(g148_1_1 g148_1_2  g148_1_3  g148_1_4  g148_1_5    ///
+	g148_1_6  g148_1_7  g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1 ///
+	g148_2_2  g148_2_3  g148_2_4  g148_2_5  g148_2_6  g148_2_7  g148_2_8           ///
+	g148_2_9  g148_2_12 g148_2_10 g148_2_11 g148_3    g148_4    g153_1    g153_2)
+
+replace YTRANSF_1 = ytransf_1_iecon if e246==11
+drop ytransf_1_iecon
+
+// Asignaciones familiares
+
+/* 
+	Queremos evitar sumar las transferencias dos veces.
+
+	Se incluyen las asignaciones contributivas solo si son cobradas por fuera del sueldo
+	Todas las AFAM-PE son cobradas por fuera del sueldo, asi que se suman todas.
+*/
+
+* sumo afam contributivas cobradas fuera del sueldo y afam-pe
+replace YTRANSF_2 = monto_afam_cont * (afam_nosueldo==1) + monto_afam_pe
+
+// Políticas sociales: ingresos por alimentación
+
+* único cambio real respecto al anterior
+replace CANASTA = g148_5_1+g148_5_2 if e246==11 // Otras canastas, cambió en ECH 2018
+
+*Se genera una variable de alimentos para todos sin importar si son mayores de 14 años o no
+*	saca TUS de YALIMENT
+egen    yalim_totV2   = rowtotal(DESAYMER ALMYCEN CANASTA ticketsinda leche)  //Monto tus del iecon va para bc_tarjeta
+replace YALIMENT      = yalim_totV2 if bc_pe3>=14
+replace YALIMENT_MEN1 = yalim_totV2 if bc_pe3< 14
+recode  YALIMENT YALIMENT_MEN1 (. = 0)
+
+* transferencia de alimentos para menores de 14
+drop    YALIMENT_MEN
+egen    YALIMENT_MEN = sum(YALIMENT_MEN1), by(bc_correlat)
+replace YALIMENT_MEN = 0 if !esjefe
+
+* transferencias de alimentos para mayores de 14
+replace YTRANSF_4 = YALIMENT
+
+// Nuevo ingreso total de transferencias
+	
+drop YTRANSF
+egen YTRANSF = rowtotal(YTRANSF_1 YTRANSF_2 YTRANSF_3 YTRANSF_4)
