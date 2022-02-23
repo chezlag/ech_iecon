@@ -9,9 +9,6 @@
 * ¿cómo identificamos al jefx de hogar?
 gen esjefe = e30==1
 
-* ccz está nombrado ccz10
-rename ccz10 ccz
-
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
 
@@ -55,11 +52,18 @@ loc ss_privV2 "inrange(e45_3_1, 1, 6)"
 loc ss_miliV2 "inrange(e45_4_1, 1, 2)" */
 
 * origen del derecho de atención
-loc ss_asse_o "e45_1_1"
-loc ss_iamc_o "e45_2_1"
-loc ss_priv_o "e45_3_1"
+loc ss_asse_o "e45_1_1" // no tiene 5 y 6 = ASSE sin FONASA
+loc ss_iamc_o "e45_2_1" // incluye 4 = caja de auxilio
+loc ss_priv_o "e45_3_1" // incluye 4 = caja de auxilio
 loc ss_mili_o "e45_4_1"
 loc ss_emer_o "e47"
+
+* chequeo: el origen del derecho de atención se comporta como espero
+assert inlist(`ss_asse_o', 0,1,2,3,4)
+assert inlist(`ss_iamc_o', 0,1,2,3,4,5,6)
+assert inlist(`ss_priv_o', 0,1,2,3,4,5,6)
+assert inlist(`ss_mili_o', 0,1,2)
+assert inlist(`ss_emer_o', 0,1,2,3,4)
 
 * nper de personas que generan derechos de salud a otros integrantes del hogar
 loc nper_d_asseemp "0"
@@ -113,11 +117,12 @@ loc deppub_os "f92==2"
 
 * jubilaciones y pensiones
 #del ;
-local ytransf_jyp "g148_1_1 g148_1_2  g148_1_3  g148_1_4  g148_1_5  g148_1_6
-	g148_1_7      g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1
-	g148_2_2      g148_2_3  g148_2_4  g148_2_5  g148_2_6  g148_2_7  g148_2_8
-	g148_2_9      g148_2_12 g148_2_10 g148_2_11 g148_3    g148_4    g148_5_1
-	g148_5_2      g153_1    g153_2";
+loc ytransf_jubpen "g148_1_1  g148_1_2  g148_1_3  g148_1_4  g148_1_5  g148_1_6
+	g148_1_7     g148_1_8  g148_1_9            g148_1_10 g148_1_11 g148_2_1
+	g148_2_2     g148_2_3  g148_2_4  g148_2_5  g148_2_6  g148_2_7  g148_2_8
+	g148_2_9               g148_2_10 g148_2_11";
+loc ytransf_otrpen "g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2";
+loc ytransf_jyp `ytransf_jubpen' `ytransf_otrpen';
 #del cr
 
 * numero de desayunos/meriendas y almuerzos/cenas

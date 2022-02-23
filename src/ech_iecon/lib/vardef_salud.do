@@ -27,13 +27,6 @@ clonevar ss_priv_o = `ss_priv_o'
 clonevar ss_mili_o = `ss_mili_o'
 clonevar ss_emer_o = `ss_emer_o'
 
-* chequeo: el origen del derecho de atención se comporta como espero
-assert inlist(ss_asse_o, 1,2,3,4,5,6)
-assert inlist(ss_iamc_o, 1,2,3,  5,6)
-assert inlist(ss_priv_o, 1,2,3,  5,6)
-assert inlist(ss_mili_o, 1,2)
-assert inlist(ss_emer_o, 1,2,3,4)
-
 * nper de personas que generan derechos de salud a otros integrantes del hogar
 gen nper_d_asseemp = `nper_d_asseemp'
 gen nper_d_iamcemp = `nper_d_iamcemp'
