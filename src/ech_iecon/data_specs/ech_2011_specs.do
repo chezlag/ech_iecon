@@ -1,6 +1,6 @@
 /*
-	ech_2012_specs.do
-	Parámetros específicos de la ECH 2012.
+	ech_2011_specs.do
+	Parámetros específicos de la ECH 2011.
 */
 
 //  #1 -------------------------------------------------------------------------
@@ -91,7 +91,7 @@ loc ciiu_op "f72_2"
 loc ciiu_os "f91_2"
 
 * revisión de la ciiu usada este año –– ver lib/local_ciiu_rama8.do
-loc ciiurev "4"
+loc ciiurev "3"
 
 * aslariados en ocupación principal o secundaria
 loc asal_op "inlist(f73, 1, 2, 8)"
@@ -129,7 +129,7 @@ loc y_tusmides "0"
 loc y_tusinda  "0"
 
 * otras transferencias de alimentación
-loc y_ticketsinda  "0"
+loc y_ticketsinda  "e254 * 4.3"
 loc y_lecheenpolvo "0"
 
 // AFAM

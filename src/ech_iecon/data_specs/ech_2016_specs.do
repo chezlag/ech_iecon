@@ -88,6 +88,9 @@ loc independiente_os "inrange(f92, 3, 6)"
 loc ciiu_op "f72_2"
 loc ciiu_os "f91_2"
 
+* revisión de la ciiu usada este año –– ver lib/local_ciiu_rama8.do
+loc ciiurev "4"
+
 * aslariados en ocupación principal o secundaria
 loc asal_op "inlist(f73, 1, 2, 8)"
 loc asal_os "inlist(f92, 1, 2)"

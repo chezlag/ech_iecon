@@ -40,18 +40,23 @@ recode f77 (0 4/7 = .c) ///
 	, gen(bc_pf082)
 
 * Rama del establecimiento
-destring f72_2, replace
-clonevar bc_pf40 = f72_2
+destring `ciiu_op', replace
+clonevar bc_pf40 = `ciiu_op'
 
+* locals con códigos ciiu correspondientes a cada rama,
+*	en distintas versiones del ciiu
+include "$SRC_LIB/local_ciiu_rama8.do"
+
+* Rama a 8 niveles
 g bc_rama=.c
-	replace bc_rama=1 if inrange(bc_pf40, 0000, 999)
-	replace bc_rama=2 if inrange(bc_pf40, 1000, 3499)
-	replace bc_rama=3 if inrange(bc_pf40, 3500, 3699)
-	replace bc_rama=4 if inrange(bc_pf40, 4000, 4499)
-	replace bc_rama=5 if inrange(bc_pf40, 4500, 4899) | inrange(bc_pf40, 5500, 5699)
-	replace bc_rama=6 if inrange(bc_pf40, 4900, 5499) | inrange(bc_pf40, 5800, 6399)
-	replace bc_rama=7 if inrange(bc_pf40, 6400, 8299)
-	replace bc_rama=8 if inrange(bc_pf40, 8300, 9909) | inrange(bc_pf40, 3700, 3900)
+	replace bc_rama=1 if `ciiu`ciiurev'_1'
+	replace bc_rama=2 if `ciiu`ciiurev'_2'
+	replace bc_rama=3 if `ciiu`ciiurev'_3'
+	replace bc_rama=4 if `ciiu`ciiurev'_4'
+	replace bc_rama=5 if `ciiu`ciiurev'_5'
+	replace bc_rama=6 if `ciiu`ciiurev'_6'
+	replace bc_rama=7 if `ciiu`ciiurev'_7'
+	replace bc_rama=8 if `ciiu`ciiurev'_8'
 
 * Tipo de ocupación 
 destring f71_2, replace
