@@ -151,8 +151,20 @@ loc hh_n_afam_men18       "g151_1 g151_2 g151_3"
 loc hh_n_afam_comp_liceo  "g151_3"
 loc hh_n_afam_disca       "g151_4"
 
+* ingresos considerados para la afam contributiva
+loc ing_nucleo_afamcont "suma1 suma2"
+
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------
+
+// Transferencias
+
+* jubilaciones y pensiones nacionales
+loc y_pg911 "g148_1_1 g148_1_2 g148_1_3 g148_1_4 g148_1_5 g148_1_6 g148_1_7 g148_1_8 g148_1_9 g148_1_10 g148_1_12"
+loc y_pg912 "g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_10 g148_2_12"
+* jubilaciones y pensiones de otro país
+loc y_pg921 "g148_1_11"
+loc y_pg922 "g148_2_11"
 
 // Ingresos de capital
 

@@ -6,6 +6,12 @@
 - Unificar criterios de clasificación de trabajadores en todos los do-files
 - `lib/vardef_y_ht11_sss.do`: Falta aprolijar y simplificar el proceso
 - `lib/vardef_extras_iecon.do`: Revisar hasta cuando para atrás no se puede asignar el monto TUS
+- Salud
+	- Confirmar a quién hay que agregarle las cuotas de ASSE –– ¿importa que se por dentro o por fuera de FONASA? Antes de 2012 no se puede ver si es por fuera de FONASA. 
+	- Antes de 2012 había otra modalidad para acceder a IAMC y Privado: 4 = caja de auxilio. ¿Cómo la contemplo?
+- CIIU rev 4 Militar: ¿qué hacer con 5222, 5223, 8030? Aparecen intermitentemente en los do-files anteriores
+- AFAM Contributivas
+	- Antes de 2011 no se consideraban para los ingresos del núcleo la remuneración de independientes ni jubilaciones y pensiones. –– ¿Esto es a propósito?
 
 ## Next
 

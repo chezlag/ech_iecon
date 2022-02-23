@@ -137,6 +137,14 @@ loc y_tusinda  "0"
 loc y_ticketsinda  "e254 * 4.3"
 loc y_lecheenpolvo "0"
 
+* canastas – se preguntaban distinto antes de 2012
+#del ;
+loc canasta_pre2012 "(e59_2_1*indabajo) +  (e59_3_1*indaplom) + (e59_4_1*indapens)  + 
+					 (e59_5_1*indadiab) +  (e59_6_1*indarena) + (e59_7_1*indarend)  + 
+					 (e59_8_1*indaceli) +  (e59_9_1*indatube) + (e59_10_1*indaonco) + 
+					 (e59_11_1*indasida) + (e59_12_1*contcrit)+ (e59_13_1*otrcanas)";
+#del cr
+
 // AFAM
 
 * monto de afam declarado
@@ -155,13 +163,25 @@ loc hh_n_afam_men18       "g151_1 g151_2 g151_3"
 loc hh_n_afam_comp_liceo  "g151_3"
 loc hh_n_afam_disca       "g151_4"
 
+* ingresos considerados para la afam contributiva
+loc ing_nucleo_afamcont "suma1 suma2"
+
 //  #6 -------------------------------------------------------------------------
 //  descomposición por fuentes -------------------------------------------------
+
+// Transferencias
+
+* jubilaciones y pensiones nacionales
+loc y_pg911 "g148_1_1 g148_1_2 g148_1_3 g148_1_4 g148_1_5 g148_1_6 g148_1_7 g148_1_8 g148_1_9 g148_1_10"
+loc y_pg912 "g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_10"
+* jubilaciones y pensiones de otro país
+loc y_pg921 "g148_1_11"
+loc y_pg922 "g148_2_11"
 
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h252_1"
+loc y_pg121     "h160_1 h163_1"
 loc y_pg122     "h160_2 h163_2"
 * ingreso por intereses (del pais/del extranjero)
 loc y_pg131     "h168_1"

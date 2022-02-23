@@ -255,14 +255,15 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 //  #5 -------------------------------------------------------------------------
 // 	Jubilaciones ---------------------------------------------------------------
 
-gen bc_pg911 = g148_1_1+ g148_1_2+g148_1_3+g148_1_4+g148_1_5+g148_1_6+g148_1_7+g148_1_8+g148_1_9+g148_1_10+g148_1_12 ///
-			 if f124_1==1
-gen bc_pg912 = g148_2_1+g148_2_2+g148_2_3+g148_2_4+g148_2_5+g148_2_6+g148_2_7+g148_2_8+g148_2_9+g148_2_10+g148_2_12 /// 
-			 if f124_2==1
+egen y_pg911 = rowtotal(`y_pg911')
+egen y_pg912 = rowtotal(`y_pg912')
+
+gen bc_pg911 = y_pg911 if f124_1==1
+gen bc_pg912 = y_pg912 if f124_2==1
 recode bc_pg911 bc_pg912 (. = 0)
 
-gen bc_pg921 = g148_1_11 
-gen bc_pg922 = g148_2_11
+gen bc_pg921 = `y_pg921' 
+gen bc_pg922 = `y_pg922'
 
 gen bc_pg91  = bc_pg911+bc_pg912
 gen bc_pg92  = bc_pg921+bc_pg922

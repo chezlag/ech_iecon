@@ -1,5 +1,6 @@
 logs/
 out/
+resources/diccionarios_ine/
 sandbox/
 *.log
 

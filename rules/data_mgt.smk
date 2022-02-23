@@ -44,7 +44,7 @@ rule ech_build:
         script = config["src_data_mgt"] + "ech_main.do",
         specs = config["src_data_specs"] + "ech_{iECHyear}_specs.do",
         paths = "out/lib/global_paths.do",
-        aux_data = expand(config["out_data"] + "{iAuxData}.dta", iAuxData = AUX_DATA)
+        aux_data = ["out/data/ipc_2006m12.dta", "out/data/afampe.dta", "out/data/bpc.dta"]
     output:
         data = config["out_data"] + "ech_{iECHyear}.dta"
     shell:
