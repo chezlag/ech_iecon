@@ -29,19 +29,26 @@ gen corr_sal_esp = 0
 
 replace deppub_op = bc_pf41==2
 
+loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg25p y_pg16p y_pg26p" 
+loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
+
+foreach varn in `yl_dep_mon_op' `yl_dep_mon_os' {
+	egen `varn' = rowtotal(``varn'')
+}
+
 // ingresos monetarios por rubro para dependientes en ocupación principal
 * Se distingue entre trabajadores públicos y privados
 
-gen bc_pg11p = g126_1           if bc_pf41==1 // sueldos o jornales líquidos trabajadores dependientes privados
-gen bc_pg21p = g126_1           if bc_pf41==2 // sueldos o jornales líquidos trabajadores dependientes públicos
-gen bc_pg12p = g126_2 + g126_3  if bc_pf41==1 // complementos salariales privados
-gen bc_pg22p = g126_2 + g126_3  if bc_pf41==2 // complementos salariales públicos
-gen bc_pg14p = g126_5           if bc_pf41==1 // aguinaldo privados
-gen bc_pg24p = g126_5           if bc_pf41==2 // aguinaldo públicos
-gen bc_pg15p = g126_6           if bc_pf41==1 // salario vacacional privados
-gen bc_pg25p = g126_6           if bc_pf41==2 // salario vacacional públicos
-gen bc_pg16p = g126_4           if bc_pf41==1 // propinas privados
-gen bc_pg26p = g126_4           if bc_pf41==2 // propinas públicos
+gen bc_pg11p = y_pg11p if bc_pf41==1 // sueldos o jornales líquidos privados
+gen bc_pg21p = y_pg21p if bc_pf41==2 // sueldos o jornales líquidos públicos
+gen bc_pg12p = y_pg12p if bc_pf41==1 // complementos salariales privados
+gen bc_pg22p = y_pg22p if bc_pf41==2 // complementos salariales públicos
+gen bc_pg14p = y_pg14p if bc_pf41==1 // aguinaldo privados
+gen bc_pg24p = y_pg24p if bc_pf41==2 // aguinaldo públicos
+gen bc_pg15p = y_pg15p if bc_pf41==1 // salario vacacional privados
+gen bc_pg25p = y_pg25p if bc_pf41==2 // salario vacacional públicos
+gen bc_pg16p = y_pg16p if bc_pf41==1 // propinas privados
+gen bc_pg26p = y_pg26p if bc_pf41==2 // propinas públicos
 
 // ingresos en especie para dependientes en ocupación principal
 
@@ -73,16 +80,16 @@ replace bc_pg23p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==2 & afam_nosueldo==1 & af
 
 // 	Ingresos monetarios por rubro para dependientes en ocupación secundaria 
 
-gen bc_pg11o = g134_1                   if deppri_os // sueldos o jornales líquidos privados
-gen bc_pg21o = g134_1                   if deppub_os // sueldos o jornales líquidos públicos
-gen bc_pg12o = g134_2 + g134_3 + g139_1 if deppri_os // complementos salariales privados
-gen bc_pg22o = g134_2 + g134_3 + g139_1 if deppub_os // complementos salariales públicos
-gen bc_pg14o = g134_5                   if deppri_os // aguinaldo privados
-gen bc_pg24o = g134_5                   if deppub_os // aguinaldo públicos
-gen bc_pg15o = g134_6                   if deppri_os // salario vacacional privados
-gen bc_pg25o = g134_6                   if deppub_os // salario vacacional públicos
-gen bc_pg16o = g134_4                   if deppri_os // propinas privados
-gen bc_pg26o = g134_4                   if deppub_os // propinas publicos
+gen bc_pg11o = y_pg11o if deppri_os // sueldos o jornales líquidos privados
+gen bc_pg21o = y_pg21o if deppub_os // sueldos o jornales líquidos públicos
+gen bc_pg12o = y_pg12o if deppri_os // complementos salariales privados
+gen bc_pg22o = y_pg22o if deppub_os // complementos salariales públicos
+gen bc_pg14o = y_pg14o if deppri_os // aguinaldo privados
+gen bc_pg24o = y_pg24o if deppub_os // aguinaldo públicos
+gen bc_pg15o = y_pg15o if deppri_os // salario vacacional privados
+gen bc_pg25o = y_pg25o if deppub_os // salario vacacional públicos
+gen bc_pg16o = y_pg16o if deppri_os // propinas privados
+gen bc_pg26o = y_pg26o if deppub_os // propinas publicos
 
 // ingreso en especie para dependientes en ocupación secundaria 
 

@@ -109,6 +109,30 @@ loc deppub_os "f92==2"
 //  #5 -------------------------------------------------------------------------
 //  reconstrucción de ingresos -------------------------------------------------
 
+// ingresos laborales
+
+loc y_pg11p "g126_1"
+loc y_pg21p "g126_1"
+loc y_pg12p "g126_2 g126_3"
+loc y_pg22p "g126_2 g126_3"
+loc y_pg14p "g126_5"
+loc y_pg24p "g126_5"
+loc y_pg15p "g126_6"
+loc y_pg25p "g126_6"
+loc y_pg16p "g126_4"
+loc y_pg26p "g126_4"
+
+loc y_pg11o "g134_1"
+loc y_pg21o "g134_1"
+loc y_pg12o "g134_2 g134_3 g139_1"
+loc y_pg22o "g134_2 g134_3 g139_1"
+loc y_pg14o "g134_5"
+loc y_pg24o "g134_5"
+loc y_pg15o "g134_6"
+loc y_pg25o "g134_6"
+loc y_pg16o "g134_4"
+loc y_pg26o "g134_4"
+
 // transferencias
 
 * jubilaciones y pensiones
