@@ -284,31 +284,31 @@ replace bc_pg102 = y_pg102 - `y_pg102_fix'
 // contribuciones – transferencias entre hogares
 
 foreach varn in y_pg111 y_pg112 {
-	egen `varn'_ind = rowtotal(``varn'_ind')
+	egen `varn'_per = rowtotal(``varn'_per')
 	egen `varn'_hog = rowtotal(``varn'_hog')
 }
 
 * del país
-gen     bc_pg111 = y_pg111_ind
-replace bc_pg111 = y_pg111_ind + y_pg111_hog + yt_ss_emerotr if esjefe
+gen     bc_pg111 = y_pg111_per
+replace bc_pg111 = y_pg111_per + y_pg111_hog + yt_ss_emerotr if esjefe
 * del exterior
-gen     bc_pg112 = y_pg112_ind
-replace bc_pg112 = y_pg112_ind + y_pg112_hog/12              if esjefe
+gen     bc_pg112 = y_pg112_per
+replace bc_pg112 = y_pg112_per + y_pg112_hog/12              if esjefe
 
 //  #6 -------------------------------------------------------------------------
 // 	Ingresos de capital --------------------------------------------------------
 
 * desarmo los locals en variables
 * 	divido entre 12 porque y capital se releva en términos anuales
-foreach varname in y_pg121 y_pg122 y_pg131 y_pg132 y_util_per y_util_hog ///
+foreach varname in y_pg121_ano y_pg122_ano y_pg131 y_pg132 y_util_per y_util_hog ///
 	y_otrok_hog {
 	egen `varname' = rowtotal(``varname'')
 	replace `varname' = `varname'/12
 }
 
 * ingreso por alquiler/arrendamiento de activos (del país/del extranjero)
-gen bc_pg121 = y_pg121 + h252_1
-gen bc_pg122 = y_pg122
+gen bc_pg121 = y_pg121_ano + `y_pg121_mes'
+gen bc_pg122 = y_pg122_ano + `y_pg122_mes'
 
 * ingreso por intereses (del país/del extranjero)
 gen bc_pg131 = y_pg131

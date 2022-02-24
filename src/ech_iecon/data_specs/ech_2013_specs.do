@@ -175,16 +175,18 @@ loc y_pg101_fix "0"
 loc y_pg102_fix "0"
 
 * contribuciones (del país/del exterior)
-loc y_pg111_ind "g153_1"
+loc y_pg111_per "g153_1"
 loc y_pg111_hog "h155_1 h156_1"
-loc y_pg112_ind "g153_2"
+loc y_pg112_per "g153_2"
 loc y_pg112_hog "h172_1"
 
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h252_1"
-loc y_pg122     "h160_2 h163_2"
+loc y_pg121_ano "h160_1 h163_1"
+loc y_pg121_mes "h252_1"
+loc y_pg122_ano "h160_2 h163_2"
+loc y_pg122_mes "0"
 * ingreso por intereses (del pais/del extranjero)
 loc y_pg131     "h168_1"
 loc y_pg132     "h168_2"
