@@ -30,7 +30,11 @@ gen corr_sal_esp = 0
 * paso varlists de rubros a variables
 loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg25p y_pg16p y_pg26p" 
 loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
-foreach varn in `yl_dep_mon_op' `yl_dep_mon_os' {
+loc yl_ind_mon_op "y_pg31p_mes y_pg41p_mes y_pg51p_mes y_pg71p_mes y_pg31p_ano y_pg41p_ano y_pg51p_ano y_pg71p_ano"
+loc yl_ind_mon_os "y_pg31o_mes y_pg41o_mes y_pg51o_mes y_pg71o_mes y_pg31o_ano y_pg41o_ano y_pg51o_ano y_pg71o_ano"
+loc yl_ind_esp_op "y_pg33p y_pg43p y_pg52p y_pg73p"
+loc yl_ind_esp_os "y_pg33o y_pg43o y_pg52o y_pg73o"
+foreach varn in `yl_dep_mon_op' `yl_dep_mon_os' `yl_ind_mon_op' `yl_ind_mon_os' `yl_ind_esp_op' `yl_ind_esp_os'{
 	egen `varn' = rowtotal(``varn'')
 }
 
@@ -158,31 +162,25 @@ replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if f92==3 &afam_nosueldo==1 & (bc_pf4
 
 // trabajador no dependiente - ingresos por negocios propios
 
-egen y_negocios_dinero       = rowtotal(g142)
-egen y_negocios_dinero_anual = rowtotal(g145 g146 g147)
-egen y_negocios_especie      = rowtotal(g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5)
-
-egen y_cuotasmutuales = rowtotal(yt_ss_emeremp yt_ss_privemp yt_ss_iamcemp yt_ss_asseemp)
-
 * ocupación principal
-gen bc_pg31p = y_negocios_dinero + y_negocios_dinero_anual/12 if bc_pf41==5 // Cp sin local - Dinero
-gen bc_pg41p = y_negocios_dinero + y_negocios_dinero_anual/12 if bc_pf41==6  // Cp con local - Dinero
-gen bc_pg51p = y_negocios_dinero + y_negocios_dinero_anual/12 if bc_pf41==4  // patrón - Dinero
-gen bc_pg71p = y_negocios_dinero + y_negocios_dinero_anual/12 if bc_pf41==3  // cooperativista
-gen bc_pg33p = y_negocios_especie + y_cuotasmutuales          if bc_pf41==5  // Cp sin local - Especie
-gen bc_pg43p = y_negocios_especie + y_cuotasmutuales          if bc_pf41==6  // Cp con local - Especie
-gen bc_pg52p = y_negocios_especie + y_cuotasmutuales          if bc_pf41==4 // patrón - Especie
-gen bc_pg73p = y_negocios_especie + y_cuotasmutuales          if bc_pf41==3 // cooperativista - Especie
+gen bc_pg31p = y_pg31p_mes + y_pg31p_ano/12 if bc_pf41==5 // Cp sin local - Dinero
+gen bc_pg41p = y_pg41p_mes + y_pg41p_ano/12 if bc_pf41==6 // Cp con local - Dinero
+gen bc_pg51p = y_pg51p_mes + y_pg51p_ano/12 if bc_pf41==4 // patrón - Dinero
+gen bc_pg71p = y_pg71p_mes + y_pg71p_ano/12 if bc_pf41==3 // cooperativista
+gen bc_pg33p = y_pg33p + yt_ss_totemp       if bc_pf41==5 // Cp sin local - Especie
+gen bc_pg43p = y_pg43p + yt_ss_totemp       if bc_pf41==6 // Cp con local - Especie
+gen bc_pg52p = y_pg52p + yt_ss_totemp       if bc_pf41==4 // patrón - Especie
+gen bc_pg73p = y_pg73p + yt_ss_totemp       if bc_pf41==3 // cooperativista - Especie
 
 * ocupación secundaria
-gen bc_pg31o = y_negocios_dinero + y_negocios_dinero_anual/12 if inlist(bc_pg31p,0, .) & f92==5 & !inrange(bc_pf41, 3, 6) 
-gen bc_pg41o = y_negocios_dinero + y_negocios_dinero_anual/12 if inlist(bc_pg41p,0, .) & f92==6 & !inrange(bc_pf41, 3, 6)
-gen bc_pg51o = y_negocios_dinero + y_negocios_dinero_anual/12 if inlist(bc_pg51p,0, .) & f92==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg71o = y_negocios_dinero + y_negocios_dinero_anual/12 if inlist(bc_pg71p,0, .) & f92==3 & !inrange(bc_pf41, 3, 6)
-gen bc_pg33o = y_negocios_especie                             if                         f92==5 & !inrange(bc_pf41, 3, 6)
-gen bc_pg43o = y_negocios_especie                             if                         f92==6 & !inrange(bc_pf41, 3, 6)
-gen bc_pg52o = y_negocios_especie                             if                         f92==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg73o = y_negocios_especie                             if                         f92==3 & !inrange(bc_pf41, 3, 6)
+gen bc_pg31o = y_pg31o_mes + y_pg31o_ano/12 if bc_pf41_os==5 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg31p, 0,.) 
+gen bc_pg41o = y_pg41o_mes + y_pg41o_ano/12 if bc_pf41_os==6 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg41p, 0,.) 
+gen bc_pg51o = y_pg51o_mes + y_pg51o_ano/12 if bc_pf41_os==4 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg51p, 0,.) 
+gen bc_pg71o = y_pg71o_mes + y_pg71o_ano/12 if bc_pf41_os==3 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg71p, 0,.) 
+gen bc_pg33o = y_pg33p                      if bc_pf41_os==5 & !inrange(bc_pf41, 3, 6)
+gen bc_pg43o = y_pg43p                      if bc_pf41_os==6 & !inrange(bc_pf41, 3, 6)
+gen bc_pg52o = y_pg52p                      if bc_pf41_os==4 & !inrange(bc_pf41, 3, 6)
+gen bc_pg73o = y_pg73p                      if bc_pf41_os==3 & !inrange(bc_pf41, 3, 6)
 
 
 // otros ingresos laborales
