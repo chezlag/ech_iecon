@@ -80,6 +80,10 @@ recode   bc_pobp (10=9)
 loc formal_op "f82==1" 
 loc formal_os "f96==1" 
 
+* categoría de ocupación principal y secundaria
+local catocup_op "f73 (8 = 7)"
+local catocup_os "f92 (0 = 0)"
+
 * trabajo dependiente
 loc dependiente_op "inlist(f73, 1, 2, 7, 8)"
 loc dependiente_os "inlist(f92, 1, 2, 7)"

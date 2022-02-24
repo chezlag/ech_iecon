@@ -25,12 +25,14 @@ gen deppri_os = `deppri_os'
 gen deppub_op = `deppub_op'
 gen deppub_os = `deppub_os'
 
-* categoría de ocupación
-recode f73 (8 = 7) (0 = .c) ///
-	, gen(bc_pf41)
+* categoría de ocupación principal
+recode `catocup_op', gen(bc_pf41)
 
 recode bc_pf41 (4 = 3) (5 6 = 4) (3 7 = 5) ///
 	, gen(bc_cat2)
+
+* categoría de ocupación secundaria
+recode `catocup_os', gen(bc_pf41_os)
 	
 * Tamaño del establecimiento
 recode f77 (1/3 = 1) (5/7 = 2) (0 = .c) ///
