@@ -8,7 +8,7 @@
 
 cap gen loc=substr(loc_agr, 3,3)
 destring loc, replace
-/* 
+ 
 cap drop bc_pg14
 gen     bc_pg14 = 0
 replace bc_pg14 = d8_3 if (d8_1!=6 & (d8_1!=5 & loc!=900))	// Código compatible
@@ -19,11 +19,11 @@ recode sal_esp_net   (. = 0)
 	
 gen     corr_sal_esp = -bc_pg14 if sal_esp_net>0  // Corrección para salario en especie, es el valor locativo (*-1) si esta diferencia es positiva
 replace corr_sal_esp = -g129_2  if sal_esp_net<=0 // Corrección para salario en especie, es todo el salario en especie si la dif entre valor loc y salario es negativa
- */	
+/* 
 gen bc_pg14      = ine_ht13 // en p19: compare ht13 bc_pg14 solo son != en 22 obs. good enough
 gen sal_esp_net  = 0
 gen corr_sal_esp = 0
-
+ */
 //  #3 -------------------------------------------------------------------------
 // 	Ingresos por rubro para dependientes ---------------------------------------
 
