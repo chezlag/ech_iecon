@@ -66,6 +66,8 @@ loc nper_d_iamcemp "e45_2_1_1"
 loc nper_d_privemp "e45_3_1_1"
 loc nper_d_mili    "e45_4_2"
 loc nper_d_emeremp "e47_1"
+* check: son variables numericas
+confirm numeric variable `nper_d_asseemp' `nper_d_iamcemp' `nper_d_privemp' `nper_d_mili' `nper_d_emeremp'
 
 //  trabajo ----------------------------------------------------------
 
@@ -80,7 +82,7 @@ loc formal_os "f96==1"
 
 * trabajo dependiente
 loc dependiente_op "inlist(f73, 1, 2, 7, 8)"
-loc dependiente_os "inlist(f92, 1, 2, 7)"    // excluye part. en prog. empleo social
+loc dependiente_os "inlist(f92, 1, 2, 7)"
 
 * trabajo independiente (coop, patrón, cprop)
 loc independiente_op "inrange(f73, 3, 6)"
@@ -111,27 +113,41 @@ loc deppub_os "f92==2"
 
 // ingresos laborales
 
-loc y_pg11p "g126_1"
-loc y_pg21p "g126_1"
-loc y_pg12p "g126_2 g126_3"
-loc y_pg22p "g126_2 g126_3"
-loc y_pg14p "g126_5"
-loc y_pg24p "g126_5"
-loc y_pg15p "g126_6"
-loc y_pg25p "g126_6"
-loc y_pg16p "g126_4"
-loc y_pg26p "g126_4"
+/* 
+	En las ECH de los '90 se preguntaba por separado los ingresos de dependientes
+	privados, dependientes públicos y trabajadores independientes. Si bien la 
+	forma de relevamiento cambió, reconstruímos los ingresos de esta forma para 
+	mantener la continuidad de la serie.
+*/
 
+* ingresos monetarios dependientes op
+loc y_pg11p "g126_1"
+loc y_pg12p "g126_2 g126_3"
+loc y_pg14p "g126_5"
+loc y_pg15p "g126_6"
+loc y_pg16p "g126_4"
+loc y_pg21p `y_pg11p'
+loc y_pg22p `y_pg12p'
+loc y_pg24p `y_pg14p'
+loc y_pg25p `y_pg15p'
+loc y_pg26p `y_pg16p'
+* ingresos monetarios dependientes os
 loc y_pg11o "g134_1"
-loc y_pg21o "g134_1"
 loc y_pg12o "g134_2 g134_3 g139_1"
-loc y_pg22o "g134_2 g134_3 g139_1"
 loc y_pg14o "g134_5"
-loc y_pg24o "g134_5"
 loc y_pg15o "g134_6"
-loc y_pg25o "g134_6"
 loc y_pg16o "g134_4"
-loc y_pg26o "g134_4"
+loc y_pg21o `y_pg11o'
+loc y_pg22o `y_pg12o'
+loc y_pg24o `y_pg14o'
+loc y_pg25o `y_pg15o'
+loc y_pg26o `y_pg16o'
+* ingreso en especie dependientes op
+loc y_pg17p "g126_8 + g127_3 + g128_1 + g129_2 + g130_1 + (g127_1*mto_desa) + (g127_2*mto_alm) + g131_1 + (g132_1*mto_vac) + (g132_2*mto_ovej) + (g132_3*mto_cab) + g133_1 + (g133_2/12)"
+loc y_pg27p `y_pg17p'
+* ingreso en especie dependientes os
+loc y_pg17o "g134_8 + g135_3 + g136_1 + g137_2 + g138_1 + (g135_1*mto_desa) + (g135_2*mto_alm) + (g140_1*mto_vac) + (g140_2*mto_ove) + (g140_3*mto_cab) + g141_1 + (g141_2/12)"
+loc y_pg27o `y_pg17o'
 
 // transferencias
 

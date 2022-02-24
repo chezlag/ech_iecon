@@ -27,14 +27,15 @@ gen corr_sal_esp = 0
 //  #3 -------------------------------------------------------------------------
 // 	Ingresos por rubro para dependientes ---------------------------------------
 
-replace deppub_op = bc_pf41==2
-
+* paso varlists de rubros a variables
 loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg25p y_pg16p y_pg26p" 
 loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
-
 foreach varn in `yl_dep_mon_op' `yl_dep_mon_os' {
 	egen `varn' = rowtotal(``varn'')
 }
+
+* suma de cuotas mutuales pagas por empleador
+egen yt_ss_totemp = rowtotal(yt_ss_iamcemp yt_ss_privemp yt_ss_asseemp yt_ss_emeremp)
 
 // ingresos monetarios por rubro para dependientes en ocupación principal
 * Se distingue entre trabajadores públicos y privados
@@ -52,17 +53,13 @@ gen bc_pg26p = y_pg26p if bc_pf41==2 // propinas públicos
 
 // ingresos en especie para dependientes en ocupación principal
 
-* en especie privados ocupación principal
-gen bc_pg17p = g126_8+g127_3+g128_1+g129_2+g130_1+(g127_1*mto_desa)+(g127_2*mto_alm) ///
-	+g131_1+(g132_1*mto_vac)+(g132_2*mto_ovej)+(g132_3*mto_cab)+g133_1+(g133_2/12) ///
-	+EMER_EMP_TOT +CUOT_EMP_PRIV_TOT + CUOT_EMP_IAMC_TOT+CUOT_EMP_ASSE_TOT +corr_sal_esp ///
-	if bc_pf41==1
+/* 
+	Además de los ingresos declarados imputo cuotas mutuales pagas
+	por empleador y la corrección por vivienda paga por empleador.
+*/
 
-* en especie públicos ocupación secundaria
-gen bc_pg27p = g126_8+g127_3+g128_1+g129_2+g130_1+(g127_1*mto_desa)+(g127_2*mto_alm) ///
-	+g131_1+(g132_1*mto_vac)+(g132_2*mto_ovej)+(g132_3*mto_cab)+g133_1+(g133_2/12) ///
-	+EMER_EMP_TOT+CUOT_EMP_PRIV_TOT+CUOT_EMP_IAMC_TOT+CUOT_EMP_ASSE_TOT +corr_sal_esp ///
-	if bc_pf41==2
+gen bc_pg17p = `y_pg17p' + yt_ss_totemp + corr_sal_esp if bc_pf41==1
+gen bc_pg27p = `y_pg27p' + yt_ss_totemp + corr_sal_esp if bc_pf41==2
 
 // ingresos por transferencia para dependientes en ocupación principal
 
@@ -94,22 +91,12 @@ gen bc_pg26o = y_pg26o if deppub_os // propinas publicos
 // ingreso en especie para dependientes en ocupación secundaria 
 
 * dependientes privados ocupación secundaria
-gen bc_pg17o = g134_8 + g135_3 + g136_1 + g137_2 + g138_1 ///
-	+ (g135_1*mto_des) + (g135_2*mto_alm) ///
-	+ (g140_1*mto_vac) + (g140_2*mto_ove) + (g140_3*mto_cab) ///
-	+ g141_1 + (g141_2/12) ///
-	if deppri_os
+gen bc_pg17o = `y_pg17o' if deppri_os
 * agrega cuotas mutuales si no son dependientes en ocupación principal
-replace bc_pg17o = bc_pg17o ///
-	+ yt_ss_emeremp + yt_ss_privemp + yt_ss_iamcemp + yt_ss_asseemp ///
-	if deppri_os & !inlist(bc_pf41, 1, 2)
+replace bc_pg17o = bc_pg17o + yt_ss_totemp if deppri_os & !inlist(bc_pf41, 1, 2)
 
 * dependientes públicos ocupación secundaria
-gen bc_pg27o = g134_8 + g135_3 + g136_1 + g137_2 + g138_1 ///
-	+ (g135_1*mto_des) + (g135_2*mto_alm) ///
-	+ (g140_1*mto_vac) + (g140_2*mto_ove) + (g140_3*mto_cab) ///
-	+ g141_1 + (g141_2/12) ///
-	if deppub_os
+gen bc_pg27o = `y_pg27o' if deppub_os // –– ¿por qué no imputa cuotas mutuales acá?
 
 // Transferencias de ocupación secundaria no declaradas en el sueldo
 

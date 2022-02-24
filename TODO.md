@@ -12,6 +12,8 @@
 - CIIU rev 4 Militar: ¿qué hacer con 5222, 5223, 8030? Aparecen intermitentemente en los do-files anteriores
 - AFAM Contributivas
 	- Antes de 2011 no se consideraban para los ingresos del núcleo la remuneración de independientes ni jubilaciones y pensiones. –– ¿Esto es a propósito?
+- Imputación de cuotas mutuales pagas por empleador
+	- ¿Por qué no imputarlas a dependientes públicos en ocupación secundaria?
 
 ## Next
 
