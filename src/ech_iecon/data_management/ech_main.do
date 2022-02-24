@@ -170,7 +170,7 @@ include "$SRC_LIB/label_values.do"
 //  save -----------------------------------------------------------------------
 
 quietly compress		
-notes: ech_`year'.dta \ compatibilización IECON v.2 \ `tag'
+notes: ech_`year'.dta \ compatibilización IECON v. $RELEASE \ `tag'
 label data "ECH IECON `year' \ `date'"
 datasignature set, reset
 save  "out/data/ech_`year'.dta", replace
