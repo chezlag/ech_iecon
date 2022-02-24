@@ -167,6 +167,19 @@ loc y_pg912 "g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148
 loc y_pg921 "g148_1_11"
 loc y_pg922 "g148_2_11"
 
+* becas y subsidios (del país/del exterior)
+loc y_pg101 "g148_3 g148_5_1"
+loc y_pg102 "g148_5_2"
+* canastas que se relevan en este rubro pero restamos porque ya están contadas
+loc y_pg101_fix "0"
+loc y_pg102_fix "0"
+
+* contribuciones (del país/del exterior)
+loc y_pg111_ind "g153_1"
+loc y_pg111_hog "h155_1 h156_1"
+loc y_pg112_ind "g153_2"
+loc y_pg112_hog "h172_1"
+
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)

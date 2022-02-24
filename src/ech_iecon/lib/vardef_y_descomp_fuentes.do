@@ -255,28 +255,45 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 //  #5 -------------------------------------------------------------------------
 // 	Jubilaciones ---------------------------------------------------------------
 
-egen y_pg911 = rowtotal(`y_pg911')
-egen y_pg912 = rowtotal(`y_pg912')
+foreach varlist in y_pg911 y_pg912 y_pg921 y_pg922 y_pg101 y_pg102 {
+	egen `varlist' = rowtotal(``varlist'')
+}
+
+// jubilaciones y pensiones
 
 gen bc_pg911 = y_pg911 if f124_1==1
 gen bc_pg912 = y_pg912 if f124_2==1
 recode bc_pg911 bc_pg912 (. = 0)
 
-gen bc_pg921 = `y_pg921' 
-gen bc_pg922 = `y_pg922'
+gen bc_pg921 = y_pg921 
+gen bc_pg922 = y_pg922
 
 gen bc_pg91  = bc_pg911+bc_pg912
 gen bc_pg92  = bc_pg921+bc_pg922
 
-gen     bc_pg101 = g148_3 + g148_5_1
-replace bc_pg101 = g148_3            if e246==11 // Monto g148_5_1 va a canasta
-gen     bc_pg102 = g148_5_2
-replace bc_pg102 = 0                 if e246==11 // Monto g148_5_2 va a canasta
+// becas y subsidios
 
-gen     bc_pg111 = g153_1
-replace bc_pg111 = bc_pg111 + emerg_otrohog_h + h155_1 + h156_1 if esjefe
-gen     bc_pg112 = g153_2
-replace bc_pg112 = bc_pg112 + h172_1/12                         if esjefe
+* sumo ingresos de becas y subsidios
+gen bc_pg101 = y_pg101
+gen bc_pg102 = y_pg102
+* fix: otras canastas se suman al mismo rubro y ya están contadas
+*	–– 2018 en adelante
+replace bc_pg101 = y_pg101 - `y_pg101_fix'
+replace bc_pg102 = y_pg102 - `y_pg102_fix'
+
+// contribuciones – transferencias entre hogares
+
+foreach varn in y_pg111 y_pg112 {
+	egen `varn'_ind = rowtotal(``varn'_ind')
+	egen `varn'_hog = rowtotal(``varn'_hog')
+}
+
+* del país
+gen     bc_pg111 = y_pg111_ind
+replace bc_pg111 = y_pg111_ind + y_pg111_hog + yt_ss_emerotr if esjefe
+* del exterior
+gen     bc_pg112 = y_pg112_ind
+replace bc_pg112 = y_pg112_ind + y_pg112_hog/12              if esjefe
 
 //  #6 -------------------------------------------------------------------------
 // 	Ingresos de capital --------------------------------------------------------
