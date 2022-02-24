@@ -6,10 +6,6 @@
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
-* ¿cómo identificamos al jefx de hogar?
-gen esjefe = e30==1
-
-
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
 
@@ -23,12 +19,17 @@ loc pe4_padresuegro "e30==7 | e30==8"
 loc pe4_otroparient "e30==6 | e30==9 | e30==10 | e30==11 | e30==12"
 loc pe4_nopariente  "e30==13"
 loc pe4_servdom     "(e30==14)"
+
 * estado civil
 loc pe5_unionlibre  "(e35==2 | e35==3)"
 loc pe5_casado      "(e35==1)"
 loc pe5_divsep      "(e35==0 & (e36==1 | e36==2 | e36==3))"
 loc pe5_viudo       "(e35==0 & (e36==4 | e36==6))"
 loc pe5_soltero     "(e35==0 & (e36==5))"
+
+* ¿cómo identificamos al jefx de hogar?
+loc esjefe "e30==1"
+
 
 //  #3 -------------------------------------------------------------------------
 //  salud y trabajo ------------------------------------------------------------
@@ -69,6 +70,7 @@ loc nper_d_emeremp "e47_1"
 //  trabajo ----------------------------------------------------------
 
 * condición de actividad
+cap drop bc_pobp
 clonevar bc_pobp = pobpcoac
 recode   bc_pobp (10=9)
 
@@ -165,11 +167,26 @@ loc y_pg912 "g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148
 loc y_pg921 "g148_1_11"
 loc y_pg922 "g148_2_11"
 
+* becas y subsidios (del país/del exterior)
+loc y_pg101 "g148_3 g148_5_1"
+loc y_pg102 "g148_5_2"
+* canastas que se relevan en este rubro pero restamos porque ya están contadas
+loc y_pg101_fix "0"
+loc y_pg102_fix "0"
+
+* contribuciones (del país/del exterior)
+loc y_pg111_per "g153_1"
+loc y_pg111_hog "h155_1 h156_1"
+loc y_pg112_per "g153_2"
+loc y_pg112_hog "h172_1"
+
 // Ingresos de capital
 
 * ingreso por alquileres (del país/del extranjero)
-loc y_pg121     "h160_1 h163_1 h252_1"
-loc y_pg122     "h160_2 h163_2"
+loc y_pg121_ano "h160_1 h163_1"
+loc y_pg121_mes "h252_1"
+loc y_pg122_ano "h160_2 h163_2"
+loc y_pg122_mes "0"
 * ingreso por intereses (del pais/del extranjero)
 loc y_pg131     "h168_1"
 loc y_pg132     "h168_2"

@@ -37,3 +37,6 @@ g bc_pe5=-9
 	replace bc_pe5=3 if `pe5_divsep'
 	replace bc_pe5=4 if `pe5_viudo'
 	replace bc_pe5=5 if `pe5_soltero'
+
+* es el/la jefe/a de hogar?
+gen esjefe = `esjefe'

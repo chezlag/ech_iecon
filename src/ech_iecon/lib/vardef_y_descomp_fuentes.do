@@ -8,7 +8,7 @@
 
 cap gen loc=substr(loc_agr, 3,3)
 destring loc, replace
-/* 
+ 
 cap drop bc_pg14
 gen     bc_pg14 = 0
 replace bc_pg14 = d8_3 if (d8_1!=6 & (d8_1!=5 & loc!=900))	// Código compatible
@@ -19,11 +19,11 @@ recode sal_esp_net   (. = 0)
 	
 gen     corr_sal_esp = -bc_pg14 if sal_esp_net>0  // Corrección para salario en especie, es el valor locativo (*-1) si esta diferencia es positiva
 replace corr_sal_esp = -g129_2  if sal_esp_net<=0 // Corrección para salario en especie, es todo el salario en especie si la dif entre valor loc y salario es negativa
- */	
+/* 
 gen bc_pg14      = ine_ht13 // en p19: compare ht13 bc_pg14 solo son != en 22 obs. good enough
 gen sal_esp_net  = 0
 gen corr_sal_esp = 0
-
+ */
 //  #3 -------------------------------------------------------------------------
 // 	Ingresos por rubro para dependientes ---------------------------------------
 
@@ -255,43 +255,60 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 //  #5 -------------------------------------------------------------------------
 // 	Jubilaciones ---------------------------------------------------------------
 
-egen y_pg911 = rowtotal(`y_pg911')
-egen y_pg912 = rowtotal(`y_pg912')
+foreach varlist in y_pg911 y_pg912 y_pg921 y_pg922 y_pg101 y_pg102 {
+	egen `varlist' = rowtotal(``varlist'')
+}
+
+// jubilaciones y pensiones
 
 gen bc_pg911 = y_pg911 if f124_1==1
 gen bc_pg912 = y_pg912 if f124_2==1
 recode bc_pg911 bc_pg912 (. = 0)
 
-gen bc_pg921 = `y_pg921' 
-gen bc_pg922 = `y_pg922'
+gen bc_pg921 = y_pg921 
+gen bc_pg922 = y_pg922
 
 gen bc_pg91  = bc_pg911+bc_pg912
 gen bc_pg92  = bc_pg921+bc_pg922
 
-gen     bc_pg101 = g148_3 + g148_5_1
-replace bc_pg101 = g148_3            if e246==11 // Monto g148_5_1 va a canasta
-gen     bc_pg102 = g148_5_2
-replace bc_pg102 = 0                 if e246==11 // Monto g148_5_2 va a canasta
+// becas y subsidios
 
-gen     bc_pg111 = g153_1
-replace bc_pg111 = bc_pg111 + emerg_otrohog_h + h155_1 + h156_1 if esjefe
-gen     bc_pg112 = g153_2
-replace bc_pg112 = bc_pg112 + h172_1/12                         if esjefe
+* sumo ingresos de becas y subsidios
+gen bc_pg101 = y_pg101
+gen bc_pg102 = y_pg102
+* fix: otras canastas se suman al mismo rubro y ya están contadas
+*	–– 2018 en adelante
+replace bc_pg101 = y_pg101 - `y_pg101_fix'
+replace bc_pg102 = y_pg102 - `y_pg102_fix'
+
+// contribuciones – transferencias entre hogares
+
+foreach varn in y_pg111 y_pg112 {
+	egen `varn'_per = rowtotal(``varn'_per')
+	egen `varn'_hog = rowtotal(``varn'_hog')
+}
+
+* del país
+gen     bc_pg111 = y_pg111_per
+replace bc_pg111 = y_pg111_per + y_pg111_hog + yt_ss_emerotr if esjefe
+* del exterior
+gen     bc_pg112 = y_pg112_per
+replace bc_pg112 = y_pg112_per + y_pg112_hog/12              if esjefe
 
 //  #6 -------------------------------------------------------------------------
 // 	Ingresos de capital --------------------------------------------------------
 
 * desarmo los locals en variables
 * 	divido entre 12 porque y capital se releva en términos anuales
-foreach varname in y_pg121 y_pg122 y_pg131 y_pg132 y_util_per y_util_hog ///
+foreach varname in y_pg121_ano y_pg122_ano y_pg131 y_pg132 y_util_per y_util_hog ///
 	y_otrok_hog {
 	egen `varname' = rowtotal(``varname'')
 	replace `varname' = `varname'/12
 }
 
 * ingreso por alquiler/arrendamiento de activos (del país/del extranjero)
-gen bc_pg121 = y_pg121 + h252_1
-gen bc_pg122 = y_pg122
+gen bc_pg121 = y_pg121_ano + `y_pg121_mes'
+gen bc_pg122 = y_pg122_ano + `y_pg122_mes'
 
 * ingreso por intereses (del país/del extranjero)
 gen bc_pg131 = y_pg131
