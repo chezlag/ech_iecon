@@ -1,21 +1,24 @@
 // setup
 
+clear all
+set more off
+
 * globals con rutas
 global SRC_LIB "src/ech_iecon/lib"
 global SRC_DATA "src/ech_iecon/data"
+global SRC_DATA_SPECS "src/ech_iecon/data_specs"
 
-* definimos año a procesar
-local year "2012"
+* año a procesar
+loc year "2013"
 
 * directorio de la base temporal
 local tempPath "out/data/tmp/ech_`year'_descomp_fuentes.dta"
 
-* chequeo existencia del directorio out/data/tmp
-cap confirm new file `tempPath'
-if _rc!=0 !mkdir "out/data/tmp"
-* proceso datos si aún no los procesé
+di "`tempPath'"
+
+* proceso datos base si aún no los procesé
 cap confirm file `tempPath'
-if _rc!=0 {
+if _rc != 0 {
 
 	* cargo base INE
 	use "$SRC_DATA/fusionado_`year'_terceros.dta", clear
@@ -75,8 +78,38 @@ if _rc!=0 {
 		save `servdom', replace
 	restore
 	drop if bc_pe4==7
+	
+	// ingresos v1.2
 
-	include "$SRC_LIB/vardef_y_descomp_fuentes.do"
+	include "$SRC_LIB/vardef_y_ht11.do"
 
+	include "resources/old_code/v1.2/`year'/5_descomp_fuentes.do"
+	
+	// renombro variables de descomposición por fuentes
+	
+	local varlist "bc_pg14 bc_pg11p bc_pg21p bc_pg12p bc_pg22p bc_pg14p bc_pg24p bc_pg15p bc_pg25p bc_pg16p bc_pg26p bc_pg17p bc_pg27p bc_pg13p bc_pg23p bc_pg13o bc_pg23o bc_pg11o bc_pg21o bc_pg12o bc_pg22o bc_pg14o bc_pg24o bc_pg15o bc_pg25o bc_pg16o bc_pg26o bc_pg17o bc_pg27o bc_pg11t bc_pg12t bc_pg13t bc_pg14t bc_pg15t bc_pg16t bc_pg17t bc_pg32p bc_pg42p bc_pg72p bc_pg32o bc_pg42o bc_pg72o bc_pg31p bc_pg41p bc_pg51p bc_pg71p bc_pg33p bc_pg43p bc_pg52p bc_pg73p bc_pg31o bc_pg41o bc_pg51o bc_pg71o bc_pg33o bc_pg43o bc_pg52o bc_pg73o bc_pg911 bc_pg912 bc_pg921 bc_pg922 bc_pg91 bc_pg92 bc_pg101 bc_pg102 bc_pg111 bc_pg112 bc_pg121 bc_pg122 bc_pg131 bc_pg132 bc_pg60p bc_pg80p bc_pg60p_cpsl bc_pg60p_cpcl bc_pg60o bc_pg80o bc_pg60o_cpsl bc_pg60o_cpcl"
+	local auxvarlist "sal_esp_net corr_sal_esp bc_otros_lab bc_otros_lab2 bc_otros_benef bc_pag_at bc_otras_utilidades bc_ot_utilidades bc_otras_capital otros"
+	foreach varname in `varlist' `auxvarlist' {
+		rename `varname' S`varname'
+	}
+	
+	// guardo
 	save `tempPath'
+} 
+else {
+	use `tempPath', clear
+	include "$SRC_DATA_SPECS/ech_`year'_specs.do"
+}
+
+include "$SRC_LIB/vardef_y_descomp_fuentes.do"
+
+local varlist "bc_pg14 bc_pg11p bc_pg21p bc_pg12p bc_pg22p bc_pg14p bc_pg24p bc_pg15p bc_pg25p bc_pg16p bc_pg26p bc_pg17p bc_pg27p bc_pg13p bc_pg23p bc_pg13o bc_pg23o bc_pg11o bc_pg21o bc_pg12o bc_pg22o bc_pg14o bc_pg24o bc_pg15o bc_pg25o bc_pg16o bc_pg26o bc_pg17o bc_pg27o bc_pg11t bc_pg12t bc_pg13t bc_pg14t bc_pg15t bc_pg16t bc_pg17t bc_pg32p bc_pg42p bc_pg72p bc_pg32o bc_pg42o bc_pg72o bc_pg31p bc_pg41p bc_pg51p bc_pg71p bc_pg33p bc_pg43p bc_pg52p bc_pg73p bc_pg31o bc_pg41o bc_pg51o bc_pg71o bc_pg33o bc_pg43o bc_pg52o bc_pg73o bc_pg911 bc_pg912 bc_pg921 bc_pg922 bc_pg91 bc_pg92 bc_pg101 bc_pg102 bc_pg111 bc_pg112 bc_pg121 bc_pg122 bc_pg131 bc_pg132 bc_pg60p bc_pg80p bc_pg60p_cpsl bc_pg60p_cpcl bc_pg60o bc_pg80o bc_pg60o_cpsl bc_pg60o_cpcl"
+foreach varname in `varlist' {
+	cap assert S`varname'==`varname'
+	if _rc!=0 loc diferentes "`diferentes'`varname' "
+}
+di "`diferentes'"
+foreach varname in `diferentes' {
+	di _newl "`varname'"
+	compare S`varname' `varname'
 }
