@@ -112,7 +112,7 @@ foreach varname in `varlist' {
 di "`diferentes_1'"
 * chequeo que las diferencias no surjan por valores faltantes
 foreach varname in `diferentes_1' {
-	recode S`varname' (. = 0)
+	recode S`varname' `varname' (. = 0)
 	cap assert (S`varname' == `varname') | (abs(S`varname' - `varname') < .001)
 	if _rc!=0 loc diferentes_2 "`diferentes_2'`varname' "
 }

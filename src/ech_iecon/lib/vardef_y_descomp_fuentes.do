@@ -8,8 +8,8 @@
 
 */
 
-//  #1
-//  ajustes previos
+//  #1 -------------------------------------------------------------------------
+//  ajustes previos ------------------------------------------------------------
 
 // convierto varlists a variables ------------------------------------
 
@@ -18,13 +18,14 @@ loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg2
 loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
 loc yl_dep_esp_op "y_pg17p_mes y_pg17p_ano y_pg27p_mes y_pg27p_ano"
 loc yl_dep_esp_os "y_pg17o_mes y_pg17o_ano y_pg27o_mes y_pg27o_ano"
-loc yl_dep_ben_op "y_pg13p y_pg23p"
-loc yl_dep_ben_os "y_pg13o y_pg23o"
+loc yl_dep_ben    "y_pg13p y_pg23p y_pg13o y_pg23o"
 loc yl_ind_mon_op "y_pg31p_mes y_pg41p_mes y_pg51p_mes y_pg71p_mes y_pg31p_ano y_pg41p_ano y_pg51p_ano y_pg71p_ano"
 loc yl_ind_mon_os "y_pg31o_mes y_pg41o_mes y_pg51o_mes y_pg71o_mes y_pg31o_ano y_pg41o_ano y_pg51o_ano y_pg71o_ano"
 loc yl_ind_esp_op "y_pg33p y_pg43p y_pg52p y_pg73p"
 loc yl_ind_esp_os "y_pg33o y_pg43o y_pg52o y_pg73o"
+loc yl_ind_ben    "y_pg32p y_pg42p y_pg72p y_pg32o y_pg42o y_pg72o"
 * ingresos por transferencias
+loc yt_jubpen  "y_pg911 y_pg912 y_pg921 y_pg922 y_pg101 y_pg102"
 loc yt_contrib "y_pg111_per y_pg111_hog y_pg112_per y_pg112_hog"
 * ingresos de capital
 loc yk_rentas "y_pg121_ano y_pg121_mes y_pg122_ano y_pg122_mes y_pg131 y_pg132"
@@ -32,9 +33,9 @@ loc yk_util   "y_util_per y_util_hog"
 loc yk_otro   "y_otrok_hog"
 
 * lista de varlists
-loc varlist_list `yl_dep_mon_op' `yl_dep_mon_os' `yl_dep_esp_op' `yl_dep_esp_os' `yl_dep_ben_op' `yl_dep_ben_os' ///
-				 `yl_ind_mon_op' `yl_ind_mon_os' `yl_ind_esp_op' `yl_ind_esp_os' ///
-			     `yt_contrib' ///
+loc varlist_list `yl_dep_mon_op' `yl_dep_mon_os' `yl_dep_esp_op' `yl_dep_esp_os' `yl_dep_ben' ///
+				 `yl_ind_mon_op' `yl_ind_mon_os' `yl_ind_esp_op' `yl_ind_esp_os' `yl_ind_ben' ///
+			     `yt_jubpen' `yt_contrib' ///
 				 `yk_rentas' `yk_util' `yk_otro'
 
 * genero variables agregadas de cada rubro
@@ -72,9 +73,9 @@ gen sal_esp_net  = 0
 gen corr_sal_esp = 0
  */
 //  #3 -------------------------------------------------------------------------
-// 	Ingresos por rubro para dependientes ---------------------------------------
+// 	Ingresos laborales por rubro -----------------------------------------------
 
-// dependientes en ocupación principal -------------------------------
+// YL dependientes en ocupación principal ----------------------------
 
 // ingresos monetarios por rubro para dependientes en ocupación principal
 * Se distingue entre trabajadores públicos y privados
@@ -110,7 +111,7 @@ replace bc_pg13p = y_pg13p + mto_hogc + YTRANSF_2 if bc_pf41==1 & afam_nosueldo=
 gen     bc_pg23p = y_pg23p + mto_hogc             if bc_pf41==2 
 replace bc_pg23p = y_pg23p + mto_hogc + YTRANSF_2 if bc_pf41==2 & afam_nosueldo==1 & afam_pe==0
 
-// dependientes en ocupación secundaria ------------------------------
+// YL dependientes en ocupación secundaria ---------------------------
 
 // 	Ingresos monetarios por rubro para dependientes en ocupación secundaria 
 
@@ -147,52 +148,46 @@ replace bc_pg23o = bc_pg23o + mto_hogc + YTRANSF_2 if deppub_os & !inlist(bc_pf4
 												     & afam_nosueldo==1 & afam_pe==0
 
 // Ingreso total trabajadores dependientes
-
-* recodifico para no se pierdan sumas por mv
-recode bc_pg??p bc_pg??o (. = 0)
+mvencode bc_pg??p bc_pg??o, mv(0) override
 
 * sumo ingreso por rubros en ocupación principal y secundaria
-gen bc_pg11t = bc_pg11o + bc_pg21o
-gen bc_pg12t = bc_pg12o + bc_pg22o
-gen bc_pg13t = bc_pg13o + bc_pg23o
-gen bc_pg14t = bc_pg14o + bc_pg24o
-gen bc_pg15t = bc_pg15o + bc_pg25o
-gen bc_pg16t = bc_pg16o + bc_pg26o
-gen bc_pg17t = bc_pg17o + bc_pg27o // Se introduce el cambio por no descomponer fonasa por fuentes
+egen bc_pg11t = rowtotal(bc_pg11o bc_pg21o)
+egen bc_pg12t = rowtotal(bc_pg12o bc_pg22o)
+egen bc_pg13t = rowtotal(bc_pg13o bc_pg23o)
+egen bc_pg14t = rowtotal(bc_pg14o bc_pg24o)
+egen bc_pg15t = rowtotal(bc_pg15o bc_pg25o)
+egen bc_pg16t = rowtotal(bc_pg16o bc_pg26o)
+egen bc_pg17t = rowtotal(bc_pg17o bc_pg27o) // Se introduce el cambio por no descomponer fonasa por fuentes
 
-//  #4 -------------------------------------------------------------------------
-// 	Ingresos por rubro para independientes -------------------------------------
+// YL trabajadores independientes ------------------------------------
 
-// Ingresos laborales en ocupaciones no dependientes
+// beneficios sociales para independientes
 
-* ingresos por transferencia para ocupación principal
-gen bc_pg32p=0
-replace bc_pg32p=g148_4+mto_hogc  if bc_pf41==5  // Cuenta propia sin local
-replace bc_pg32p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==5 & afam_nosueldo==1 & afam_pe==0 // Cuenta propia sin local
-gen bc_pg42p=0
-replace bc_pg42p=g148_4+mto_hogc if bc_pf41==6   // Cuenta propia con local
-replace bc_pg42p=YTRANSF_2+g148_4+mto_hogc  if bc_pf41==6 & afam_nosueldo==1 & afam_pe==0 // Cuenta propia con local
-gen bc_pg72p=0
-replace bc_pg72p=g148_4+mto_hogc if bc_pf41==3 // Cooperativista
-replace bc_pg72p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==3 & afam_nosueldo==1 & afam_pe==0 // Cooperativista
+* beneficios sociale op
+gen     bc_pg32p = y_pg32p + mto_hogc             if bc_pf41==5 
+replace bc_pg32p = y_pg32p + mto_hogc + YTRANSF_2 if bc_pf41==5 & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg42p = y_pg42p + mto_hogc             if bc_pf41==6   
+replace bc_pg42p = y_pg42p + mto_hogc + YTRANSF_2 if bc_pf41==6 & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg72p = y_pg72p + mto_hogc             if bc_pf41==3 
+replace bc_pg72p = y_pg72p + mto_hogc + YTRANSF_2 if bc_pf41==3 & afam_nosueldo==1 & afam_pe==0
 
-* ingresos por transferencias ocupaciones secundarias
-capture drop  bc_pg32o
-capture drop  bc_pg42o
-capture drop  bc_pg72o
-gen bc_pg32o=0
-replace bc_pg32o=g148_4+mto_hogc if bc_pf41o==5 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1) 
-replace bc_pg32o=YTRANSF_2+g148_4+mto_hogc if bc_pf41o==5 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
-gen bc_pg42o=0
-replace bc_pg42o=g148_4+mto_hogc if bc_pf41o==6  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg42o=YTRANSF_2+g148_4+mto_hogc  if bc_pf41o==6 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
-gen bc_pg72o=0
-replace bc_pg72o=g148_4+mto_hogc if bc_pf41o==3  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if bc_pf41o==3 &afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+* beneficios sociales os
+gen     bc_pg32o = y_pg32o + mto_hogc             if bc_pf41o==5 & !inlist(bc_pf41, 1,2,3,5,6)
+replace bc_pg32o = y_pg32o + mto_hogc + YTRANSF_2 if bc_pf41o==5 & !inlist(bc_pf41, 1,2,3,5,6) ///
+												     & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg42o = y_pg42o + mto_hogc             if bc_pf41o==6 & !inlist(bc_pf41, 1,2,3,5,6)
+replace bc_pg42o = y_pg42o + mto_hogc + YTRANSF_2 if bc_pf41o==6 & !inlist(bc_pf41, 1,2,3,5,6) ///
+												     & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg72o = y_pg72o + mto_hogc             if bc_pf41o==3 & !inlist(bc_pf41, 1,2,3,5,6) 
+replace bc_pg72o = y_pg72o + mto_hogc + YTRANSF_2 if bc_pf41o==3 & !inlist(bc_pf41, 1,2,3,5,6) ///
+												     & afam_nosueldo==1 & afam_pe==0
 
-// trabajador no dependiente - ingresos por negocios propios
+* recodifico mv
+recode bc_pg32? bc_pg42? bc_pg72? (. = 0)
 
-* ocupación principal
+// ingresos por negocios propios para independientes
+
+* negoricos propios ocupación principal
 gen bc_pg31p = y_pg31p_mes + y_pg31p_ano/12 if bc_pf41==5 // Cp sin local - Dinero
 gen bc_pg41p = y_pg41p_mes + y_pg41p_ano/12 if bc_pf41==6 // Cp con local - Dinero
 gen bc_pg51p = y_pg51p_mes + y_pg51p_ano/12 if bc_pf41==4 // patrón - Dinero
@@ -202,7 +197,7 @@ gen bc_pg43p = y_pg43p + yt_ss_totemp       if bc_pf41==6 // Cp con local - Espe
 gen bc_pg52p = y_pg52p + yt_ss_totemp       if bc_pf41==4 // patrón - Especie
 gen bc_pg73p = y_pg73p + yt_ss_totemp       if bc_pf41==3 // cooperativista - Especie
 
-* ocupación secundaria
+* negocios propios ocupación secundaria
 gen bc_pg31o = y_pg31o_mes + y_pg31o_ano/12 if bc_pf41o==5 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg31p, 0,.) 
 gen bc_pg41o = y_pg41o_mes + y_pg41o_ano/12 if bc_pf41o==6 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg41p, 0,.) 
 gen bc_pg51o = y_pg51o_mes + y_pg51o_ano/12 if bc_pf41o==4 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg51p, 0,.) 
@@ -213,7 +208,7 @@ gen bc_pg52o = y_pg52p                      if bc_pf41o==4 & !inrange(bc_pf41, 3
 gen bc_pg73o = y_pg73p                      if bc_pf41o==3 & !inrange(bc_pf41, 3, 6)
 
 
-// otros ingresos laborales
+// otros ingresos laborales ------------------------------------------
 
 capture drop bc_otros_lab
 
@@ -274,12 +269,8 @@ replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_ho
 
 /* las últimas dos lineas son contradictorias / gsl 2021-09-20 */
 
-//  #5 -------------------------------------------------------------------------
-// 	Jubilaciones ---------------------------------------------------------------
-
-foreach varlist in y_pg911 y_pg912 y_pg921 y_pg922 y_pg101 y_pg102 {
-	egen `varlist' = rowtotal(``varlist'')
-}
+//  #4 -------------------------------------------------------------------------
+// 	Transferencias -------------------------------------------------------------
 
 // jubilaciones y pensiones
 
@@ -303,7 +294,7 @@ gen bc_pg102 = y_pg102
 replace bc_pg101 = y_pg101 - `y_pg101_fix'
 replace bc_pg102 = y_pg102 - `y_pg102_fix'
 
-// contribuciones – transferencias entre hogares
+// transferencias entre hogares
 
 * del país
 gen     bc_pg111 = y_pg111_per
@@ -370,6 +361,10 @@ gen     otros = bc_pag_at + g154_1 + bc_devol_fonasa/12
 replace otros = otros + h171_1/12  if esjefe
 
 //  #8 -------------------------------------------------------------------------
-// 	Dropeo auxiliares ----------------------------------------------------------
+// 	Últimos retoques -----------------------------------------------------------
 
+* recodifico missing // para mi esto tendría que ir pero ta pa discutirlo
+*mvencode bc_pg??p bc_pg??o, mv(0) override
+
+* dropeo variables auxiliares
 drop `varlist_list'

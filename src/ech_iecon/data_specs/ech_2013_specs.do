@@ -199,18 +199,6 @@ loc y_pg22p `y_pg12p'
 loc y_pg24p `y_pg14p'
 loc y_pg25p `y_pg15p'
 loc y_pg26p `y_pg16p'
-* ingreso en especie dependientes op
-loc y_pg17p_mes "g126_8 g127_3 g128_1 g129_2 g130_1 y_g127_1 y_g127_2 g131_1 y_g132_1 y_g132_2 y_g132_3 g133_1"
-loc y_pg17p_ano "g133_2"
-loc y_pg27p_mes `y_pg17p_mes'
-loc y_pg27p_ano `y_pg17p_ano'
-* beneficios sociales dependientes op
-loc y_pg13p "g148_4"
-loc y_pg23p `y_pg13p'
-* beneficios sociales dependientes os
-loc y_pg13o `y_pg13p'
-loc y_pg23o `y_pg13p'
-
 * ingresos monetarios dependientes os
 loc y_pg11o "g134_1"
 loc y_pg12o "g134_2 g134_3 g139_1"
@@ -222,13 +210,34 @@ loc y_pg22o `y_pg12o'
 loc y_pg24o `y_pg14o'
 loc y_pg25o `y_pg15o'
 loc y_pg26o `y_pg16o'
+
+* ingreso en especie dependientes op
+loc y_pg17p_mes "g126_8 g127_3 g128_1 g129_2 g130_1 y_g127_1 y_g127_2 g131_1 y_g132_1 y_g132_2 y_g132_3 g133_1"
+loc y_pg17p_ano "g133_2"
+loc y_pg27p_mes `y_pg17p_mes'
+loc y_pg27p_ano `y_pg17p_ano'
 * ingreso en especie dependientes os
 loc y_pg17o_mes "g134_8 g135_3 g136_1 g137_2 g138_1 y_g135_1 y_g135_2 y_g140_1 y_g140_2 y_g140_3 g141_1"
 loc y_pg17o_ano "g141_2"
 loc y_pg27o_mes `y_pg17o_mes'
 loc y_pg27o_ano `y_pg17o_ano'
 
+* beneficios sociales dependientes op
+loc y_pg13p "g148_4"
+loc y_pg23p `y_pg13p'
+* beneficios sociales dependientes os
+loc y_pg13o `y_pg13p'
+loc y_pg23o `y_pg13p'
+
 // ingresos laborales independientes
+
+* beneficios sociales independientes
+loc y_pg32p `y_pg13p'
+loc y_pg42p `y_pg13p'
+loc y_pg72p `y_pg13p'
+loc y_pg32o `y_pg13p'
+loc y_pg42o `y_pg13p'
+loc y_pg72o `y_pg13p'
 
 * ingresos por negocios propios op – en dinero
 loc y_pg31p_mes "g142"
