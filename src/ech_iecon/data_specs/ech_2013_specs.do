@@ -6,6 +6,8 @@
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
+gen dummy0 = 0
+
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
 
@@ -72,9 +74,7 @@ confirm numeric variable `nper_d_asseemp' `nper_d_iamcemp' `nper_d_privemp' `npe
 //  trabajo ----------------------------------------------------------
 
 * condición de actividad
-cap drop bc_pobp
-clonevar bc_pobp = pobpcoac
-recode   bc_pobp (10=9)
+local bc_pobp "pobpcoac (10 = 9)"
 
 * formalidad
 loc formal_op "f82==1" 
@@ -114,6 +114,21 @@ loc deppub_os "f92==2"
 
 //  #5 -------------------------------------------------------------------------
 //  reconstrucción de ingresos -------------------------------------------------
+
+// ingresos laborales
+
+* monetizo los pagos en especie – dependientes op
+cap gen y_g127_1 = g127_1 * mto_desa
+cap gen y_g127_2 = g127_2 * mto_almu
+cap gen y_g132_1 = g132_1 * mto_vaca
+cap gen y_g132_2 = g132_2 * mto_ovej
+cap gen y_g132_3 = g132_3 * mto_caba
+* monetizo los pagos en especie – depedientes os
+cap gen y_g135_1 = g135_1 * mto_desa
+cap gen y_g135_2 = g135_2 * mto_almu
+cap gen y_g140_1 = g140_1 * mto_vaca
+cap gen y_g140_2 = g140_2 * mto_ovej
+cap gen y_g140_3 = g140_3 * mto_caba
 
 // transferencias
 
@@ -184,6 +199,18 @@ loc y_pg22p `y_pg12p'
 loc y_pg24p `y_pg14p'
 loc y_pg25p `y_pg15p'
 loc y_pg26p `y_pg16p'
+* ingreso en especie dependientes op
+loc y_pg17p_mes "g126_8 g127_3 g128_1 g129_2 g130_1 y_g127_1 y_g127_2 g131_1 y_g132_1 y_g132_2 y_g132_3 g133_1"
+loc y_pg17p_ano "g133_2"
+loc y_pg27p_mes `y_pg17p_mes'
+loc y_pg27p_ano `y_pg17p_ano'
+* beneficios sociales dependientes op
+loc y_pg13p "g148_4"
+loc y_pg23p `y_pg13p'
+* beneficios sociales dependientes os
+loc y_pg13o `y_pg13p'
+loc y_pg23o `y_pg13p'
+
 * ingresos monetarios dependientes os
 loc y_pg11o "g134_1"
 loc y_pg12o "g134_2 g134_3 g139_1"
@@ -195,12 +222,11 @@ loc y_pg22o `y_pg12o'
 loc y_pg24o `y_pg14o'
 loc y_pg25o `y_pg15o'
 loc y_pg26o `y_pg16o'
-* ingreso en especie dependientes op
-loc y_pg17p "g126_8 + g127_3 + g128_1 + g129_2 + g130_1 + (g127_1*mto_desa) + (g127_2*mto_alm) + g131_1 + (g132_1*mto_vac) + (g132_2*mto_ovej) + (g132_3*mto_cab) + g133_1 + (g133_2/12)"
-loc y_pg27p `y_pg17p'
 * ingreso en especie dependientes os
-loc y_pg17o "g134_8 + g135_3 + g136_1 + g137_2 + g138_1 + (g135_1*mto_desa) + (g135_2*mto_alm) + (g140_1*mto_vac) + (g140_2*mto_ove) + (g140_3*mto_cab) + g141_1 + (g141_2/12)"
-loc y_pg27o `y_pg17o'
+loc y_pg17o_mes "g134_8 g135_3 g136_1 g137_2 g138_1 y_g135_1 y_g135_2 y_g140_1 y_g140_2 y_g140_3 g141_1"
+loc y_pg17o_ano "g141_2"
+loc y_pg27o_mes `y_pg17o_mes'
+loc y_pg27o_ano `y_pg17o_ano'
 
 // ingresos laborales independientes
 
@@ -262,7 +288,7 @@ loc y_pg112_hog "h172_1"
 loc y_pg121_ano "h160_1 h163_1"
 loc y_pg121_mes "h252_1"
 loc y_pg122_ano "h160_2 h163_2"
-loc y_pg122_mes "0"
+loc y_pg122_mes "dummy0"
 * ingreso por intereses (del pais/del extranjero)
 loc y_pg131     "h168_1"
 loc y_pg132     "h168_2"

@@ -44,6 +44,9 @@ include "$SRC_LIB/vardef_demog.do"
 
 //  variables de trabajo que se utilizan para armar salud
 
+* condición de actividad
+recode `bc_pobp', gen(bc_pobp)
+
 * pea, empleados, desempleados
 gen pea    = inrange(bc_pobp, 2, 5) if bc_pe3>=14
 gen emp    = bc_pobp==2             if bc_pe3>=14

@@ -1,7 +1,54 @@
 /* 
 	vardef_y_descomposición_fuentes.do
 	Se descomponen los ingresos por fuentes
+
+	En las specs de cada año defino una listados de variables para cada
+	u
+
+
 */
+
+//  #1
+//  ajustes previos
+
+// convierto varlists a variables ------------------------------------
+
+* ingresos laborales
+loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg25p y_pg16p y_pg26p" 
+loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
+loc yl_dep_esp_op "y_pg17p_mes y_pg17p_ano y_pg27p_mes y_pg27p_ano"
+loc yl_dep_esp_os "y_pg17o_mes y_pg17o_ano y_pg27o_mes y_pg27o_ano"
+loc yl_dep_ben_op "y_pg13p y_pg23p"
+loc yl_dep_ben_os "y_pg13o y_pg23o"
+loc yl_ind_mon_op "y_pg31p_mes y_pg41p_mes y_pg51p_mes y_pg71p_mes y_pg31p_ano y_pg41p_ano y_pg51p_ano y_pg71p_ano"
+loc yl_ind_mon_os "y_pg31o_mes y_pg41o_mes y_pg51o_mes y_pg71o_mes y_pg31o_ano y_pg41o_ano y_pg51o_ano y_pg71o_ano"
+loc yl_ind_esp_op "y_pg33p y_pg43p y_pg52p y_pg73p"
+loc yl_ind_esp_os "y_pg33o y_pg43o y_pg52o y_pg73o"
+* ingresos por transferencias
+loc yt_contrib "y_pg111_per y_pg111_hog y_pg112_per y_pg112_hog"
+* ingresos de capital
+loc yk_rentas "y_pg121_ano y_pg121_mes y_pg122_ano y_pg122_mes y_pg131 y_pg132"
+loc yk_util   "y_util_per y_util_hog"
+loc yk_otro   "y_otrok_hog"
+
+* lista de varlists
+loc varlist_list `yl_dep_mon_op' `yl_dep_mon_os' `yl_dep_esp_op' `yl_dep_esp_os' `yl_dep_ben_op' `yl_dep_ben_os' ///
+				 `yl_ind_mon_op' `yl_ind_mon_os' `yl_ind_esp_op' `yl_ind_esp_os' ///
+			     `yt_contrib' ///
+				 `yk_rentas' `yk_util' `yk_otro'
+
+* genero variables agregadas de cada rubro
+foreach varn in `varlist_list' {
+	egen `varn' = rowtotal(``varn'')
+}
+
+// ajustes de variables ----------------------------------------------
+
+* fix: monto hog constituido=0 para los que no cobran o que declaran incluido en el sueldo
+replace mto_hogc = 0 if g149!=1 | g149_1==1
+
+* suma de cuotas mutuales pagas por empleador
+egen yt_ss_totemp = rowtotal(yt_ss_iamcemp yt_ss_privemp yt_ss_asseemp yt_ss_emeremp)
 
 //  #2 -------------------------------------------------------------------------
 // 	Valor locativo -------------------------------------------------------------
@@ -27,19 +74,7 @@ gen corr_sal_esp = 0
 //  #3 -------------------------------------------------------------------------
 // 	Ingresos por rubro para dependientes ---------------------------------------
 
-* paso varlists de rubros a variables
-loc yl_dep_mon_op "y_pg11p y_pg21p y_pg12p y_pg22p y_pg14p y_pg24p y_pg15p y_pg25p y_pg16p y_pg26p" 
-loc yl_dep_mon_os "y_pg11o y_pg21o y_pg12o y_pg22o y_pg14o y_pg24o y_pg15o y_pg25o y_pg16o y_pg26o"
-loc yl_ind_mon_op "y_pg31p_mes y_pg41p_mes y_pg51p_mes y_pg71p_mes y_pg31p_ano y_pg41p_ano y_pg51p_ano y_pg71p_ano"
-loc yl_ind_mon_os "y_pg31o_mes y_pg41o_mes y_pg51o_mes y_pg71o_mes y_pg31o_ano y_pg41o_ano y_pg51o_ano y_pg71o_ano"
-loc yl_ind_esp_op "y_pg33p y_pg43p y_pg52p y_pg73p"
-loc yl_ind_esp_os "y_pg33o y_pg43o y_pg52o y_pg73o"
-foreach varn in `yl_dep_mon_op' `yl_dep_mon_os' `yl_ind_mon_op' `yl_ind_mon_os' `yl_ind_esp_op' `yl_ind_esp_os'{
-	egen `varn' = rowtotal(``varn'')
-}
-
-* suma de cuotas mutuales pagas por empleador
-egen yt_ss_totemp = rowtotal(yt_ss_iamcemp yt_ss_privemp yt_ss_asseemp yt_ss_emeremp)
+// dependientes en ocupación principal -------------------------------
 
 // ingresos monetarios por rubro para dependientes en ocupación principal
 * Se distingue entre trabajadores públicos y privados
@@ -62,22 +97,20 @@ gen bc_pg26p = y_pg26p if bc_pf41==2 // propinas públicos
 	por empleador y la corrección por vivienda paga por empleador.
 */
 
-gen bc_pg17p = `y_pg17p' + yt_ss_totemp + corr_sal_esp if bc_pf41==1
-gen bc_pg27p = `y_pg27p' + yt_ss_totemp + corr_sal_esp if bc_pf41==2
+gen bc_pg17p = y_pg17p_mes + y_pg17p_ano/12 + yt_ss_totemp + corr_sal_esp if bc_pf41==1
+gen bc_pg27p = y_pg27p_mes + y_pg27p_ano/12 + yt_ss_totemp + corr_sal_esp if bc_pf41==2
 
-// ingresos por transferencia para dependientes en ocupación principal
+// beneficios sociales para dependientes en ocupación principal
 
-* fix: monto hog constituido=0 para los que no cobran o que declaran incluido en el sueldo
-replace mto_hogc = 0 if g149!=1 | g149_1==1
+* beneficios sociales privados
+gen     bc_pg13p = y_pg13p + mto_hogc             if bc_pf41==1 
+replace bc_pg13p = y_pg13p + mto_hogc + YTRANSF_2 if bc_pf41==1 & afam_nosueldo==1 & afam_pe==0
 
-cap drop bc_pg13p bc_pg23p bc_pg13o bc_pg23o
-mvencode YTRANSF_2 g148_4 mto_hogc YTRANSF_4 , mv(0) override 
+* beneficios sociales privados
+gen     bc_pg23p = y_pg23p + mto_hogc             if bc_pf41==2 
+replace bc_pg23p = y_pg23p + mto_hogc + YTRANSF_2 if bc_pf41==2 & afam_nosueldo==1 & afam_pe==0
 
-gen bc_pg13p=g148_4+mto_hogc if bc_pf41==1 
-replace bc_pg13p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==1 & afam_nosueldo==1 & afam_pe==0
-
-gen bc_pg23p=g148_4+mto_hogc if bc_pf41==2 
-replace bc_pg23p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==2 & afam_nosueldo==1 & afam_pe==0
+// dependientes en ocupación secundaria ------------------------------
 
 // 	Ingresos monetarios por rubro para dependientes en ocupación secundaria 
 
@@ -94,24 +127,24 @@ gen bc_pg26o = y_pg26o if deppub_os // propinas publicos
 
 // ingreso en especie para dependientes en ocupación secundaria 
 
-* dependientes privados ocupación secundaria
-gen bc_pg17o = `y_pg17o' if deppri_os
-* agrega cuotas mutuales si no son dependientes en ocupación principal
-replace bc_pg17o = bc_pg17o + yt_ss_totemp if deppri_os & !inlist(bc_pf41, 1, 2)
+* dependientes privados os
+* 	agrega cuotas mutuales si no son dependientes en ocupación principal
+gen     bc_pg17o = y_pg17o_mes + y_pg17o_ano/12 if deppri_os
+replace bc_pg17o = bc_pg17o + yt_ss_totemp      if deppri_os & !inlist(bc_pf41, 1, 2)
 
-* dependientes públicos ocupación secundaria
-gen bc_pg27o = `y_pg27o' if deppub_os // –– ¿por qué no imputa cuotas mutuales acá?
+* dependientes públicos os
+gen bc_pg27o = y_pg27o_mes + y_pg27o_ano/12 if deppub_os // –– ¿por qué no imputa cuotas mutuales acá?
 
 // Transferencias de ocupación secundaria no declaradas en el sueldo
 
 * dependientes privados en ocupacion secundaria
-gen     bc_pg13o = g148_4 + mto_hogc             if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
-replace bc_pg13o = g148_4 + mto_hogc + YTRANSF_2 if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
-												  & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg13o = y_pg13o  + mto_hogc             if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
+replace bc_pg13o = bc_pg13o + mto_hogc + YTRANSF_2 if deppri_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
+												     & afam_nosueldo==1 & afam_pe==0
 * dependientes públicos en ocupación secundaria
-gen     bc_pg23o = g148_4 + mto_hogc             if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
-replace bc_pg23o = g148_4 + mto_hogc & YTRANSF_2 if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
-												  & afam_nosueldo==1 & afam_pe==0
+gen     bc_pg23o = y_pg23o  + mto_hogc             if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6)
+replace bc_pg23o = bc_pg23o + mto_hogc + YTRANSF_2 if deppub_os & !inlist(bc_pf41, 1, 2, 3, 5, 6) ///
+												     & afam_nosueldo==1 & afam_pe==0
 
 // Ingreso total trabajadores dependientes
 
@@ -133,9 +166,6 @@ gen bc_pg17t = bc_pg17o + bc_pg27o // Se introduce el cambio por no descomponer 
 // Ingresos laborales en ocupaciones no dependientes
 
 * ingresos por transferencia para ocupación principal
-capture drop  bc_pg32p
-capture drop  bc_pg42p
-capture drop  bc_pg72p
 gen bc_pg32p=0
 replace bc_pg32p=g148_4+mto_hogc  if bc_pf41==5  // Cuenta propia sin local
 replace bc_pg32p=YTRANSF_2+g148_4+mto_hogc if bc_pf41==5 & afam_nosueldo==1 & afam_pe==0 // Cuenta propia sin local
@@ -151,14 +181,14 @@ capture drop  bc_pg32o
 capture drop  bc_pg42o
 capture drop  bc_pg72o
 gen bc_pg32o=0
-replace bc_pg32o=g148_4+mto_hogc if f92==5 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1) 
-replace bc_pg32o=YTRANSF_2+g148_4+mto_hogc if f92==5 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg32o=g148_4+mto_hogc if bc_pf41o==5 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1) 
+replace bc_pg32o=YTRANSF_2+g148_4+mto_hogc if bc_pf41o==5 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 gen bc_pg42o=0
-replace bc_pg42o=g148_4+mto_hogc if f92==6  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg42o=YTRANSF_2+g148_4+mto_hogc  if f92==6 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg42o=g148_4+mto_hogc if bc_pf41o==6  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
+replace bc_pg42o=YTRANSF_2+g148_4+mto_hogc  if bc_pf41o==6 & afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 gen bc_pg72o=0
-replace bc_pg72o=g148_4+mto_hogc if f92==3  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
-replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if f92==3 &afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
+replace bc_pg72o=g148_4+mto_hogc if bc_pf41o==3  & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)
+replace bc_pg72o=YTRANSF_2+g148_4+mto_hogc if bc_pf41o==3 &afam_nosueldo==1 & (bc_pf41!=5 & bc_pf41!=6 & bc_pf41!=3 & bc_pf41!=2 & bc_pf41!=1)&afam_pe==0
 
 // trabajador no dependiente - ingresos por negocios propios
 
@@ -173,14 +203,14 @@ gen bc_pg52p = y_pg52p + yt_ss_totemp       if bc_pf41==4 // patrón - Especie
 gen bc_pg73p = y_pg73p + yt_ss_totemp       if bc_pf41==3 // cooperativista - Especie
 
 * ocupación secundaria
-gen bc_pg31o = y_pg31o_mes + y_pg31o_ano/12 if bc_pf41_os==5 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg31p, 0,.) 
-gen bc_pg41o = y_pg41o_mes + y_pg41o_ano/12 if bc_pf41_os==6 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg41p, 0,.) 
-gen bc_pg51o = y_pg51o_mes + y_pg51o_ano/12 if bc_pf41_os==4 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg51p, 0,.) 
-gen bc_pg71o = y_pg71o_mes + y_pg71o_ano/12 if bc_pf41_os==3 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg71p, 0,.) 
-gen bc_pg33o = y_pg33p                      if bc_pf41_os==5 & !inrange(bc_pf41, 3, 6)
-gen bc_pg43o = y_pg43p                      if bc_pf41_os==6 & !inrange(bc_pf41, 3, 6)
-gen bc_pg52o = y_pg52p                      if bc_pf41_os==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg73o = y_pg73p                      if bc_pf41_os==3 & !inrange(bc_pf41, 3, 6)
+gen bc_pg31o = y_pg31o_mes + y_pg31o_ano/12 if bc_pf41o==5 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg31p, 0,.) 
+gen bc_pg41o = y_pg41o_mes + y_pg41o_ano/12 if bc_pf41o==6 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg41p, 0,.) 
+gen bc_pg51o = y_pg51o_mes + y_pg51o_ano/12 if bc_pf41o==4 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg51p, 0,.) 
+gen bc_pg71o = y_pg71o_mes + y_pg71o_ano/12 if bc_pf41o==3 & !inrange(bc_pf41, 3, 6) & inlist(bc_pg71p, 0,.) 
+gen bc_pg33o = y_pg33p                      if bc_pf41o==5 & !inrange(bc_pf41, 3, 6)
+gen bc_pg43o = y_pg43p                      if bc_pf41o==6 & !inrange(bc_pf41, 3, 6)
+gen bc_pg52o = y_pg52p                      if bc_pf41o==4 & !inrange(bc_pf41, 3, 6)
+gen bc_pg73o = y_pg73p                      if bc_pf41o==3 & !inrange(bc_pf41, 3, 6)
 
 
 // otros ingresos laborales
@@ -219,28 +249,28 @@ capture drop bc_otros_lab2
 gen bc_otros_lab2 = g134_1 + g134_2 + g134_3 + g134_4 + g134_5 + g134_6 + g134_8 ///
 	+ g135_3 + g136_1 + g137_2 + g138_1 + (g135_1*mto_des) + (g135_2*mto_alm) ///
 	+ (g140_1*mto_vac) + (g140_2*mto_ove) + (g140_3*mto_cab) + g141_1 + (g141_2/12) + g139_1 ///
-	if !inlist(f92, 1, 2)
+	if !inlist(bc_pf41o, 1, 2)
 recode  bc_otros_lab2 (. = 0)
 
 capture drop bc_otros_benef
 gen     bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 if afam_pe>0 // 2/6/20 cambio hay que ver si no está duplicando para bc_pf41 = 7 o 4????
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_hogc ///
-	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6)
+	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(bc_pf41o, 1, 2, 3, 5, 6)
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 // esta linea borra todo lo anterior
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_hogc ///
-	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6)
+	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(bc_pf41o, 1, 2, 3, 5, 6)
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 ///
 	if /* (g150==1 | g257>0) & */ (afam_pe>0) // 08/04/19 cambio
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 +             g148_4 + mto_hogc ///
-	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6) & esjefe
+	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(bc_pf41o, 1, 2, 3, 5, 6) & esjefe
 
 replace bc_otros_benef = YTRANSF_4 + YALIMENT_MEN1 + YTRANSF_2 + g148_4 + mto_hogc ///
-	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(f92, 1, 2, 3, 5, 6) & esjefe
+	if !inlist(bc_pf41, 1, 2, 3, 5, 6) & !inlist(bc_pf41o, 1, 2, 3, 5, 6) & esjefe
 
 /* las últimas dos lineas son contradictorias / gsl 2021-09-20 */
 
@@ -275,11 +305,6 @@ replace bc_pg102 = y_pg102 - `y_pg102_fix'
 
 // contribuciones – transferencias entre hogares
 
-foreach varn in y_pg111 y_pg112 {
-	egen `varn'_per = rowtotal(``varn'_per')
-	egen `varn'_hog = rowtotal(``varn'_hog')
-}
-
 * del país
 gen     bc_pg111 = y_pg111_per
 replace bc_pg111 = y_pg111_per + y_pg111_hog + yt_ss_emerotr if esjefe
@@ -290,48 +315,41 @@ replace bc_pg112 = y_pg112_per + y_pg112_hog/12              if esjefe
 //  #6 -------------------------------------------------------------------------
 // 	Ingresos de capital --------------------------------------------------------
 
-* desarmo los locals en variables
-* 	divido entre 12 porque y capital se releva en términos anuales
-foreach varname in y_pg121_ano y_pg122_ano y_pg131 y_pg132 y_util_per y_util_hog ///
-	y_otrok_hog {
-	egen `varname' = rowtotal(``varname'')
-	replace `varname' = `varname'/12
-}
-
 * ingreso por alquiler/arrendamiento de activos (del país/del extranjero)
-gen bc_pg121 = y_pg121_ano + `y_pg121_mes'
-gen bc_pg122 = y_pg122_ano + `y_pg122_mes'
+gen bc_pg121 = y_pg121_ano/12 + y_pg121_mes
+gen bc_pg122 = y_pg122_ano/12 + y_pg122_mes
 
 * ingreso por intereses (del país/del extranjero)
-gen bc_pg131 = y_pg131
-gen bc_pg132 = y_pg132
+gen bc_pg131 = y_pg131/12
+gen bc_pg132 = y_pg132/12
 
 * utilidades de independientes por ocupación principal
-gen bc_pg60p      = y_util_per if bc_pf41==4
-gen bc_pg80p      = y_util_per if bc_pf41==3
-gen bc_pg60p_cpsl = y_util_per if bc_pf41==5
-gen bc_pg60p_cpcl = y_util_per if bc_pf41==6
+gen bc_pg60p      = y_util_per/12 if bc_pf41==4
+gen bc_pg80p      = y_util_per/12 if bc_pf41==3
+gen bc_pg60p_cpsl = y_util_per/12 if bc_pf41==5
+gen bc_pg60p_cpcl = y_util_per/12 if bc_pf41==6
 
 * utilidades de independientes por ocupación secundaria
-gen bc_pg60o      = y_util_per if inlist(bc_pg60p, 0, .)      & f92==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg80o      = y_util_per if inlist(bc_pg80p, 0, .)      & f92==3 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpsl = y_util_per if inlist(bc_pg60p_cpsl, 0, .) & f92==5 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpcl = y_util_per if inlist(bc_pg60p_cpcl, 0, .) & f92==6 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o      = y_util_per/12 if inlist(bc_pg60p, 0, .)      & bc_pf41o==4 & !inrange(bc_pf41, 3, 6)
+gen bc_pg80o      = y_util_per/12 if inlist(bc_pg80p, 0, .)      & bc_pf41o==3 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpsl = y_util_per/12 if inlist(bc_pg60p_cpsl, 0, .) & bc_pf41o==5 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpcl = y_util_per/12 if inlist(bc_pg60p_cpcl, 0, .) & bc_pf41o==6 & !inrange(bc_pf41, 3, 6)
 
 * Utilidades a nivel de hogar independientes
-gen    bc_ot_utilidades = y_util_hog if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(f92, 3, 4, 5, 6)) & esjefe
+gen    bc_ot_utilidades = y_util_hog/12 if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(bc_pf41o, 3, 4, 5, 6)) & esjefe
 recode bc_ot_utilidades (. = 0)
 
 * Utilidades de dependientes
-gen     bc_otras_utilidades = y_util_per            if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6)
-replace bc_otras_utilidades = y_util_per+y_util_hog if !inrange(bc_pf41, 3, 6) & !inrange(f92, 3, 6) & esjefe
+gen     bc_otras_utilidades = y_util_per/12                 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6)
+replace bc_otras_utilidades = y_util_per/12 + y_util_hog/12 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6) & esjefe
 recode  bc_otras_utilidades (. = 0)
 
 * Medianería, pastoreo y ganado a capitalizar a nivel de hogar
-gen    bc_otras_capital = y_otrok_hog               if esjefe
+gen    bc_otras_capital = y_otrok_hog/12  if esjefe
 recode bc_otras_capital (. = 0)
 
-// Ingresos por otro concepto --------------------------------------------------
+//  #7 -------------------------------------------------------------------------
+//  Ingresos por otro concepto -------------------------------------------------
 
 /* 
 	Dependiendo del año incluye pagos atrasados -bc_pag_at-, otro ingreso
@@ -340,7 +358,6 @@ recode bc_otras_capital (. = 0)
 	Indemnización por despido -h171_1/12- se pregunta a nivel de hogar y se
 	imputa al jefe/a.
 */
-
 
 * pagos atrasados
 egen bc_pag_at = rowtotal(`pagos_atrasados')
@@ -352,8 +369,7 @@ gen bc_devol_fonasa = `devolucion_fonasa'
 gen     otros = bc_pag_at + g154_1 + bc_devol_fonasa/12
 replace otros = otros + h171_1/12  if esjefe
 
-//  #6 -------------------------------------------------------------------------
+//  #8 -------------------------------------------------------------------------
 // 	Dropeo auxiliares ----------------------------------------------------------
 
-* ingresos de capital
-drop y_pg121 y_pg122 y_pg131 y_pg132 y_util_per y_util_hog y_otrok_hog
+drop `varlist_list'

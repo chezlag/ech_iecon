@@ -32,7 +32,7 @@ recode bc_pf41 (4 = 3) (5 6 = 4) (3 7 = 5) ///
 	, gen(bc_cat2)
 
 * categoría de ocupación secundaria
-recode `catocup_os', gen(bc_pf41_os)
+recode `catocup_os', gen(bc_pf41o)
 	
 * Tamaño del establecimiento
 recode f77 (1/3 = 1) (5/7 = 2) (0 = .c) ///
