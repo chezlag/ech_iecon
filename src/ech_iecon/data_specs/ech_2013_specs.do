@@ -6,7 +6,8 @@
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
-gen dummy0 = 0
+gen dummy0  = 0
+gen dummy13 = -13
 
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
@@ -84,13 +85,9 @@ loc formal_os "f96==1"
 local catocup_op "f73 (8 = 7)"
 local catocup_os "f92 (0 = 0)"
 
-* trabajo dependiente
-loc dependiente_op "inlist(f73, 1, 2, 7, 8)"
-loc dependiente_os "inlist(f92, 1, 2, 7)"
-
-* trabajo independiente (coop, patrón, cprop)
-loc independiente_op "inrange(f73, 3, 6)"
-loc independiente_os "inrange(f92, 3, 6)"
+* tamaño del establecimiento
+loc pf081 "f77 (1/3 = 1) (5/7 = 2) (0 = .c)"
+loc pf082 "f77 (0 4/7 = .c)"
 
 * ciiu ocupacion principal y ocupacion secundaria
 loc ciiu_op "f72_2"
@@ -99,15 +96,18 @@ loc ciiu_os "f91_2"
 * revisión de la ciiu usada este año –– ver lib/local_ciiu_rama8.do
 loc ciiurev "4"
 
-* aslariados en ocupación principal o secundaria
-loc asal_op "inlist(f73, 1, 2, 8)"
-loc asal_os "inlist(f92, 1, 2)"
+* cantidad de empleos
+loc pf07 "f70 (0 = .c)"
 
-* dependiente público o privado en ocupación principal
-loc deppri_op "f73==1"
-loc deppri_os "f92==1"
-loc deppub_op "inlist(f73, 2, 8)"
-loc deppub_os "f92==2"
+* horas trabajadas habitualmente (total/op)
+loc bc_horas_hab    "f85 f98"
+loc bc_horas_hab_op "f85"
+* horas trabajadas la semana pasada (total/op)
+loc bc_horas_sp    "dummy13"
+loc bc_horas_sp_op "dummy13"
+
+* motivo por el que no trabaja
+loc pf04 "f69 (3 5/6 = 4) (4 = 3) (0 = .c)"
 
 //  #4 -------------------------------------------------------------------------
 //  educación ------------------------------------------------------------------

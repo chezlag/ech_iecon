@@ -3,43 +3,48 @@
 	Genera variables de mercado laboral 2011–2019
 */
 
-* trabajo dependiente
-gen dependiente_op = `dependiente_op'
-gen dependiente_os = `dependiente_os'
+// Categoría ocupacional
+
+* categoría de ocupación principal
+recode `catocup_op', gen(bc_pf41)
+* categoría de ocupación secundaria
+recode `catocup_os', gen(bc_pf41o)
+
+* versión corta
+recode bc_pf41 (4 = 3) (5 6 = 4) (3 7 = 5) , gen(bc_cat2)
+
+* dummies de categorías
 
 * trabajo independiente (coop, patrón, cprop)
-gen independiente_op = `independiente_op'
-gen independiente_os = `independiente_os'
+loc independiente_op "inrange(f73, 3, 6)"
+loc independiente_os "inrange(f92, 3, 6)"
+
+
+* trabajo dependiente
+gen dependiente_op = inlist(bc_pf41,  1,2,7,8)
+gen dependiente_os = inlist(bc_pf41o, 1,2,7)
+* asalariados
+gen asal_op = inlist(bc_pf41,  1,2,8)
+gen asal_os = inlist(bc_pf41o, 1,2)
+* dependiente público o privado en ocupación principal
+gen deppri_op = bc_pf41  == 1
+gen deppri_os = bc_pf41o == 1
+gen deppub_op = inlist(bc_pf41, 2, 8)
+gen deppub_os = bc_pf41o == 2
+
+* trabajo independiente (coop, patrón, cprop)
+gen independiente_op = inlist(bc_pf41,  3,4,5,6)
+gen independiente_os = inlist(bc_pf41o, 3,4,5,6)
+
+// características del establecimiento
+	
+* Tamaño del establecimiento
+recode `pf081', gen(bc_pf081)
+recode `pf082', gen(bc_pf082)
 
 * ciiu ocupacion principal y ocupacion secundaria
 clonevar ciiu_op = `ciiu_op'
 clonevar ciiu_os = `ciiu_os'
-
-* aslariados en ocupación principal o secundaria
-gen asal_op = `asal_op'
-gen asal_os = `asal_os'
-
-* dependiente público o privado en ocupación principal
-gen deppri_op = `deppri_op'
-gen deppri_os = `deppri_os'
-gen deppub_op = `deppub_op'
-gen deppub_os = `deppub_os'
-
-* categoría de ocupación principal
-recode `catocup_op', gen(bc_pf41)
-
-recode bc_pf41 (4 = 3) (5 6 = 4) (3 7 = 5) ///
-	, gen(bc_cat2)
-
-* categoría de ocupación secundaria
-recode `catocup_os', gen(bc_pf41o)
-	
-* Tamaño del establecimiento
-recode f77 (1/3 = 1) (5/7 = 2) (0 = .c) ///
-	, gen(bc_pf081)
-
-recode f77 (0 4/7 = .c) ///
-	, gen(bc_pf082)
 
 * Rama del establecimiento
 destring `ciiu_op', replace
@@ -60,6 +65,8 @@ g bc_rama=.c
 	replace bc_rama=7 if `ciiu`ciiurev'_7'
 	replace bc_rama=8 if `ciiu`ciiurev'_8'
 
+// características de la ocupación
+
 * Tipo de ocupación 
 destring f71_2, replace
 clonevar bc_pf39 = f71_2
@@ -73,23 +80,23 @@ gen     bc_tipo_ocup = trunc(X1/1000)
 replace bc_tipo_ocup = .c if bc_tipo_ocup==0&bc_pobp!=2
 drop X1
 
+// empleo
+
 * Cantidad de empleos
-recode f70 (0 = .c), gen(bc_pf07)
+recode `pf07', gen(bc_pf07)
 
-* Horas trabajadas
-g bc_horas_hab=f85+f98 // horas semanales trabajadas habitualmente en total
-recode bc_horas_hab (0=-9)
-g bc_horas_hab_1=f85   // horas semanales trabajadas habitualmente en trabajo principal
-recode bc_horas_hab_1 (0=-9)
-
-g bc_horas_sp=-13 // horas semanales trabajadas semana pasada en total
-g bc_horas_sp_1=-13 // horas semanales trabajadas semana pasada en trabajo principal
-
-* Motivo por el que no trabaja
-recode f69 (3 5/6 = 4) (4 = 3) (0 = .c) ///
-	, gen(bc_pf04)
+* Horas trabajadas habitualmente/semana pasada –– total/op
+egen bc_horas_hab    = rowtotal(`bc_horas_hab')
+egen bc_horas_hab_op = rowtotal(`bc_horas_hab_op')
+egen bc_horas_sp     = rowtotal(`bc_horas_sp')
+egen bc_horas_sp_op  = rowtotal(`bc_horas_sp_op')
+* fix: 0 = no corresponde, -13 = no disponible este año
+recode bc_horas_hab*     (0 = .c) (-13 = .y)
 
 // preguntas a desempleados
+
+* Motivo por el que no trabaja
+recode `pf04', gen(bc_pf04)
 
 * buscó la semana pasada?
 recode f107 (0 = .c), gen(bc_pf21)
