@@ -117,18 +117,21 @@ loc deppub_os "f92==2"
 
 // ingresos laborales
 
-* monetizo los pagos en especie – dependientes op
+* monetizo pagos en especie – dependientes op
 cap gen y_g127_1 = g127_1 * mto_desa
 cap gen y_g127_2 = g127_2 * mto_almu
 cap gen y_g132_1 = g132_1 * mto_vaca
 cap gen y_g132_2 = g132_2 * mto_ovej
 cap gen y_g132_3 = g132_3 * mto_caba
-* monetizo los pagos en especie – depedientes os
+* monetizo pagos en especie – depedientes os
 cap gen y_g135_1 = g135_1 * mto_desa
 cap gen y_g135_2 = g135_2 * mto_almu
 cap gen y_g140_1 = g140_1 * mto_vaca
 cap gen y_g140_2 = g140_2 * mto_ovej
 cap gen y_g140_3 = g140_3 * mto_caba
+* divido entre 12 pagos en especie anuales
+cap gen y_g133_2 = g133_2 / 12
+cap gen y_g141_2 = g141_2 / 12
 
 // transferencias
 
@@ -181,93 +184,30 @@ loc ing_nucleo_afamcont "suma1 suma2 suma3 suma4"
 
 // ingresos laborales
 
-/* 
-	En las ECH de los '90 se preguntaba por separado los ingresos de dependientes
-	privados, dependientes públicos y trabajadores independientes. Si bien la 
-	forma de relevamiento cambió, reconstruímos los ingresos de esta forma para 
-	mantener la continuidad de la serie.
-*/
+* ingreso monetario ocupación principal
+loc yl_rem_salario_op    "g126_1"
+loc yl_rem_comisiones_op "g126_2 g126_3"
+loc yl_rem_aguinaldo_op  "g126_5"
+loc yl_rem_vacacional_op "g126_6"
+loc yl_rem_propina_op    "g126_4"
+* ingreso monetario ocupación secundaria
+loc yl_rem_salario_os    "g134_1"
+loc yl_rem_comisiones_os "g134_2 g134_3 g139_1" // ??
+loc yl_rem_aguinaldo_os  "g134_5"
+loc yl_rem_vacacional_os "g134_6"
+loc yl_rem_propina_os    "g134_4"
 
-* ingresos monetarios dependientes op
-loc y_pg11p "g126_1"
-loc y_pg12p "g126_2 g126_3"
-loc y_pg14p "g126_5"
-loc y_pg15p "g126_6"
-loc y_pg16p "g126_4"
-loc y_pg21p `y_pg11p'
-loc y_pg22p `y_pg12p'
-loc y_pg24p `y_pg14p'
-loc y_pg25p `y_pg15p'
-loc y_pg26p `y_pg16p'
-* ingresos monetarios dependientes os
-loc y_pg11o "g134_1"
-loc y_pg12o "g134_2 g134_3 g139_1"
-loc y_pg14o "g134_5"
-loc y_pg15o "g134_6"
-loc y_pg16o "g134_4"
-loc y_pg21o `y_pg11o'
-loc y_pg22o `y_pg12o'
-loc y_pg24o `y_pg14o'
-loc y_pg25o `y_pg15o'
-loc y_pg26o `y_pg16o'
+* ingreso en especie
+loc yl_rem_esp_op "g126_8 g127_3 g128_1 g129_2 g130_1 y_g127_1 y_g127_2 g131_1 y_g132_1 y_g132_2 y_g132_3 g133_1 y_g133_2"
+loc yl_rem_esp_os "g134_8 g135_3 g136_1 g137_2 g138_1 y_g135_1 y_g135_2 y_g140_1 y_g140_2 y_g140_3 g141_1 y_g141_2"
 
-* ingreso en especie dependientes op
-loc y_pg17p_mes "g126_8 g127_3 g128_1 g129_2 g130_1 y_g127_1 y_g127_2 g131_1 y_g132_1 y_g132_2 y_g132_3 g133_1"
-loc y_pg17p_ano "g133_2"
-loc y_pg27p_mes `y_pg17p_mes'
-loc y_pg27p_ano `y_pg17p_ano'
-* ingreso en especie dependientes os
-loc y_pg17o_mes "g134_8 g135_3 g136_1 g137_2 g138_1 y_g135_1 y_g135_2 y_g140_1 y_g140_2 y_g140_3 g141_1"
-loc y_pg17o_ano "g141_2"
-loc y_pg27o_mes `y_pg17o_mes'
-loc y_pg27o_ano `y_pg17o_ano'
+* ingreso por beneficios sociales
+loc yl_ben_mon    "g148_4"
 
-* beneficios sociales dependientes op
-loc y_pg13p "g148_4"
-loc y_pg23p `y_pg13p'
-* beneficios sociales dependientes os
-loc y_pg13o `y_pg13p'
-loc y_pg23o `y_pg13p'
-
-// ingresos laborales independientes
-
-* beneficios sociales independientes
-loc y_pg32p `y_pg13p'
-loc y_pg42p `y_pg13p'
-loc y_pg72p `y_pg13p'
-loc y_pg32o `y_pg13p'
-loc y_pg42o `y_pg13p'
-loc y_pg72o `y_pg13p'
-
-* ingresos por negocios propios op – en dinero
-loc y_pg31p_mes "g142"
-loc y_pg31p_ano "g145 g146 g147"
-loc y_pg41p_mes `y_pg31p_mes'
-loc y_pg41p_ano `y_pg31p_ano'
-loc y_pg51p_mes `y_pg31p_mes'
-loc y_pg51p_ano `y_pg31p_ano'
-loc y_pg71p_mes `y_pg31p_mes'
-loc y_pg71p_ano `y_pg31p_ano'
-* ingresos por negocios propios op – en especie
-loc y_pg33p     "g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5"
-loc y_pg43p     `y_pg33p'
-loc y_pg52p     `y_pg33p'
-loc y_pg73p     `y_pg33p'
-
-* ingresos por negocios propios os – en dinero
-loc y_pg31o_mes `y_pg31p_mes'
-loc y_pg31o_ano `y_pg31p_ano'
-loc y_pg41o_mes `y_pg31p_mes'
-loc y_pg41o_ano `y_pg31p_ano'
-loc y_pg51o_mes `y_pg31p_mes'
-loc y_pg51o_ano `y_pg31p_ano'
-loc y_pg71o_mes `y_pg31p_mes'
-loc y_pg71o_ano `y_pg31p_ano'
-* ingresos por negocios propios os – en especie
-loc y_pg33o     `y_pg33p'
-loc y_pg43o     `y_pg33p'
-loc y_pg52o     `y_pg33p'
-loc y_pg73o     `y_pg33p'
+* ingreso por negocios propios
+loc yl_mix_mon_mes "g142"
+loc yl_mix_mon_ano "g145 g146 g147"
+loc yl_mix_esp     "g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5"
 
 // Transferencias
 
