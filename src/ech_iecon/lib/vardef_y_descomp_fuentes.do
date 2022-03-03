@@ -289,7 +289,7 @@ replace otros = otros + h171_1/12  if esjefe
 // 	Últimos retoques -----------------------------------------------------------
 
 * recodifico missing // para mi esto tendría que ir pero ta pa discutirlo
-*mvencode bc_pg??p bc_pg??o, mv(0) override
+mvencode bc_pg??p bc_pg??o, mv(0) override
 
 * dropeo variables auxiliares
 drop `varlist_list'
