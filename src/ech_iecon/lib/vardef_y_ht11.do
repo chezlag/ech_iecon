@@ -34,7 +34,17 @@
 *	del hogar o por otro hogar.
 
 * para definir la rama militar en ocupación ppal o secundaria
-local ciiu_militar "5222, 5223, 8030, 8411, 8421, 8422, 8423, 8430, 8521, 8530, 8610"
+* CIIU rev 3
+loc ciiu3_militar "7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519"
+loc ciiu3_militar "7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, `ciiu3_militar'"
+loc ciiu3_militar "7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, `ciiu3_militar'"
+loc ciiu3_militar "8020, 8021, 8022, 8023, 8024, 8025, 8026, 8027, 8028, 8029, `ciiu3_militar'"
+loc ciiu3_militar "8030, 8031, 8032, 8033, 8034, 8035, 8036, 8037, 8038, 8039, `ciiu3_militar'"
+loc ciiu3_militar "8511, `ciiu3_militar'"
+* CIIU rev 4
+loc ciiu4_militar "5222, 5223, 8030, 8411, 8421, 8422, 8423, 8430, 8521, 8530, 8610"
+
+
 
 gen at_milit  = ss_mili_o_h & !ss_sinpago
 gen at_milit2 = ss_mili & !ss_sinpago
@@ -47,7 +57,7 @@ egen n_milit = sum(ss_mili_o_h & !ss_sinpago) if nper_d_mili>0, by(bc_correlat n
 // cuota militar por ocupación principal
 
 * ocupada en rama militar en la ocupación principal
-gen  ramamilit_op = inlist(ciiu_op, `ciiu_militar')
+gen  ramamilit_op = inlist(ciiu_op, `ciiu`ciiurev'_militar')
 gen    n_milit_op = n_milit if ramamilit_op & nper_d_mili==bc_nper
 recode n_milit_op (. = 0)
 * valorizo con el monto de la cuota
@@ -55,7 +65,7 @@ gen    ytdop_2      = n_milit_op * mto_cuot
 
 // Cuota militar ocupación secundaria.
 
-gen    ramamilit_os  = inlist(ciiu_os, `ciiu_militar')
+gen    ramamilit_os  = inlist(ciiu_os, `ciiu`ciiurev'_militar')
 gen    n_milit_os  = n_milit if ramamilit_os & nper_d_mili==bc_nper & n_milit_op==0
 recode n_milit_os (. = 0)
 gen    ytdos_2       = n_milit_os * mto_cuot
@@ -289,6 +299,8 @@ cap replace CANASTA2 = e247*indaemer if e248 == 14
 gen    CANASTA = CANASTA1 + CANASTA2
 recode CANASTA (. = 0)
 
+cap replace CANASTA = `canasta_pre2012'
+
 drop CANASTA1 CANASTA2
 
 // Otras transferencias de alimientación
@@ -422,8 +434,10 @@ recode monto_afam_pe (. = 0)
 
 // AFAM CONTRIBUTIVA –– Sintaxis Iecon
 
+* identificamos núcleo y sus ingresos
 gen nucleo = bc_nper
 cap replace nucleo = min(bc_nper,e34) if e34!=0 // no está el modulo de pareja en ECH 2020 \ gsl 2021-09-30
+
 * suma de ingresos trabajadores formales por concepto de sueldo, comisiones, o viáticos
 * ocupacion ppal
 gen  suma1 = (g126_1 + g126_2 + g126_3) * 1.22 if asal_op & formal_op 
@@ -432,16 +446,17 @@ gen  suma2 = (g134_1 + g134_2 + g134_3) * 1.22 if asal_os & formal_os
 * trabajo independiente
 gen  suma3 = (g142 + g143/12)  if (independiente_op & formal_op) | (independiente_os & formal_os)
 * suma de ingresos de jubilados y pensionistas
-egen suma4 = rowtotal(g148_1_1  g148_1_2  g148_1_3  g148_1_4 g148_1_5  g148_1_6  g148_1_7  g148_1_8 ///
-	        g148_1_9  g148_1_10 g148_1_11 g148_1_12 g148_2_1 g148_2_2  g148_2_3  g148_2_4 ///
-	        g148_2_5  g148_2_6  g148_2_7  g148_2_8  g148_2_9 g148_2_10 g148_2_11 g148_2_12)
+egen suma4 = rowtotal(`ytransf_jubpen')
 
-egen suma = rowtotal(suma1 suma2 suma3 suma4)
+* suma de los ingresos del núcleo
+egen suma = rowtotal(`ing_nucleo_afamcont')
 drop suma1 suma2 suma3 suma4
 egen ing_nucleo = sum(suma)  , by(bc_correlat nucleo)
 
+* punto de corte para el cobro de afam contributivas
 gen corte_afam_contrib = 6*bc_bpc
 
+* imputamos asignación si el ingreso del núcleo es menor a 6 bpc
 gen     monto_asig = 0.16*bc_bpc if ing_nucleo<=corte_afam_contrib & afam_cont==1
 replace monto_asig = 0.08*bc_bpc if ing_nucleo> corte_afam_contrib & afam_cont==1
 recode  monto_asig   (. = 0)

@@ -44,6 +44,9 @@ include "$SRC_LIB/vardef_demog.do"
 
 //  variables de trabajo que se utilizan para armar salud
 
+* condición de actividad
+recode `bc_pobp', gen(bc_pobp)
+
 * pea, empleados, desempleados
 gen pea    = inrange(bc_pobp, 2, 5) if bc_pe3>=14
 gen emp    = bc_pobp==2             if bc_pe3>=14
@@ -170,7 +173,7 @@ include "$SRC_LIB/label_values.do"
 //  save -----------------------------------------------------------------------
 
 quietly compress		
-notes: ech_`year'.dta \ compatibilización IECON v.2 \ `tag'
+notes: ech_`year'.dta \ compatibilización IECON v. $RELEASE \ `tag'
 label data "ECH IECON `year' \ `date'"
 datasignature set, reset
 save  "out/data/ech_`year'.dta", replace
