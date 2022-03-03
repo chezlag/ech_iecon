@@ -105,6 +105,7 @@ drop if bc_pe4==7
 
 // variables de ingreso compatibilizadas INE -------------------------
 
+include "$SRC_LIB/vardef_y_aux_ht11.do"
 include "$SRC_LIB/vardef_y_ht11.do"
 
 //  Ingresos: retoques IECON -----------------------------------------

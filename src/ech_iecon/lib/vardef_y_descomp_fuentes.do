@@ -15,58 +15,17 @@
 //  #1 -------------------------------------------------------------------------
 //  ajustes previos ------------------------------------------------------------
 
-// convierto varlists a variables ------------------------------------
-
-* ingresos laborales
-#del ;
-loc yl_all     "yl_rem_salario_op yl_rem_comisiones_op yl_rem_aguinaldo_op yl_rem_vacacional_op yl_rem_propina_op 
-		        yl_rem_salario_os yl_rem_comisiones_os yl_rem_aguinaldo_os yl_rem_vacacional_os yl_rem_propina_os 
-		        yl_rem_esp_op yl_rem_esp_os yl_ben_mon yl_mix_mon_mes yl_mix_mon_ano yl_mix_esp";
-#del cr
-* ingresos por transferencias
-loc yt_jubpen  "y_pg911 y_pg912 y_pg921 y_pg922 y_pg101 y_pg102"
-loc yt_contrib "y_pg111_per y_pg111_hog y_pg112_per y_pg112_hog"
-* ingresos de capital
-loc yk_rentas  "y_pg121_ano y_pg121_mes y_pg122_ano y_pg122_mes y_pg131 y_pg132"
-loc yk_util    "y_util_per y_util_hog"
-loc yk_otro    "y_otrok_hog"
-
-* lista de varlists
-loc varlist_list `yl_all' ///
-				 `yt_jubpen' `yt_contrib' ///
-				 `yk_rentas' `yk_util' `yk_otro'
-
-* genero variables agregadas de cada rubro
-foreach varn in `varlist_list' {
-	di "`varn'"
-	egen `varn' = rowtotal(``varn'')
-}
-
-// ajustes de variables ----------------------------------------------
-
 * fix: monto hog constituido=0 para los que no cobran o que declaran incluido en el sueldo
 replace mto_hogc = 0 if g149!=1 | g149_1==1
-
-* suma de cuotas mutuales pagas por empleador
-egen yt_ss_totemp = rowtotal(yt_ss_iamcemp yt_ss_privemp yt_ss_asseemp yt_ss_emeremp)
-
-* suma de ingresos laborales por remuneraciones
-egen yl_rem_mon_op = rowtotal(yl_rem_salario_op yl_rem_comisiones_op yl_rem_aguinaldo_op yl_rem_vacacional_op yl_rem_propina_op)
-egen yl_rem_mon_os = rowtotal(yl_rem_salario_os yl_rem_comisiones_os yl_rem_aguinaldo_os yl_rem_vacacional_os yl_rem_propina_os)
-
-* suma de ingresos laborales op y os
-egen yl_rem_mon    = rowtotal(yl_rem_mon_op yl_rem_mon_os)
-egen yl_rem_esp    = rowtotal(yl_rem_esp_op yl_rem_esp_os)
-
-* suma de ingresos por negocios
-gen  yl_mix_mon    = yl_mix_mon_mes + yl_mix_mon_ano/12
 
 * suma de beneficios sociales no incluidos en el salario
 gen     yl_bentot  = yl_ben_mon + mto_hogc
 replace yl_bentot  = yl_ben_mon + mto_hogc + YTRANSF_2 if afam_nosueldo==1 & afam_pe==0
 
-//  #2 -------------------------------------------------------------------------
-// 	Valor locativo -------------------------------------------------------------
+* suma de cuotas mutuales pagas por empleador
+egen yt_ss_totemp = rowtotal(yt_ss_iamcemp yt_ss_privemp yt_ss_asseemp yt_ss_emeremp)
+
+// 	Valor locativo -----------------------------------------
 
 cap gen loc=substr(loc_agr, 3,3)
 destring loc, replace
@@ -281,28 +240,28 @@ gen bc_pg131 = y_pg131/12
 gen bc_pg132 = y_pg132/12
 
 * utilidades de independientes por ocupación principal
-gen bc_pg60p      = y_util_per/12 if bc_pf41==4
-gen bc_pg80p      = y_util_per/12 if bc_pf41==3
-gen bc_pg60p_cpsl = y_util_per/12 if bc_pf41==5
-gen bc_pg60p_cpcl = y_util_per/12 if bc_pf41==6
+gen bc_pg60p      = yk_util_per/12 if bc_pf41==4
+gen bc_pg80p      = yk_util_per/12 if bc_pf41==3
+gen bc_pg60p_cpsl = yk_util_per/12 if bc_pf41==5
+gen bc_pg60p_cpcl = yk_util_per/12 if bc_pf41==6
 
 * utilidades de independientes por ocupación secundaria
-gen bc_pg60o      = y_util_per/12 if inlist(bc_pg60p, 0, .)      & bc_pf41o==4 & !inrange(bc_pf41, 3, 6)
-gen bc_pg80o      = y_util_per/12 if inlist(bc_pg80p, 0, .)      & bc_pf41o==3 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpsl = y_util_per/12 if inlist(bc_pg60p_cpsl, 0, .) & bc_pf41o==5 & !inrange(bc_pf41, 3, 6)
-gen bc_pg60o_cpcl = y_util_per/12 if inlist(bc_pg60p_cpcl, 0, .) & bc_pf41o==6 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o      = yk_util_per/12 if inlist(bc_pg60p, 0, .)      & bc_pf41o==4 & !inrange(bc_pf41, 3, 6)
+gen bc_pg80o      = yk_util_per/12 if inlist(bc_pg80p, 0, .)      & bc_pf41o==3 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpsl = yk_util_per/12 if inlist(bc_pg60p_cpsl, 0, .) & bc_pf41o==5 & !inrange(bc_pf41, 3, 6)
+gen bc_pg60o_cpcl = yk_util_per/12 if inlist(bc_pg60p_cpcl, 0, .) & bc_pf41o==6 & !inrange(bc_pf41, 3, 6)
 
 * Utilidades a nivel de hogar independientes
-gen    bc_ot_utilidades = y_util_hog/12 if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(bc_pf41o, 3, 4, 5, 6)) & esjefe
+gen    bc_ot_utilidades = yk_util_hog/12 if (inlist(bc_pf41, 3, 4, 5, 6) | inlist(bc_pf41o, 3, 4, 5, 6)) & esjefe
 recode bc_ot_utilidades (. = 0)
 
 * Utilidades de dependientes
-gen     bc_otras_utilidades = y_util_per/12                 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6)
-replace bc_otras_utilidades = y_util_per/12 + y_util_hog/12 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6) & esjefe
+gen     bc_otras_utilidades = yk_util_per/12                 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6)
+replace bc_otras_utilidades = yk_util_per/12 + yk_util_hog/12 if !inrange(bc_pf41, 3, 6) & !inrange(bc_pf41o, 3, 6) & esjefe
 recode  bc_otras_utilidades (. = 0)
 
 * Medianería, pastoreo y ganado a capitalizar a nivel de hogar
-gen    bc_otras_capital = y_otrok_hog/12  if esjefe
+gen    bc_otras_capital = yk_otro_hog/12  if esjefe
 recode bc_otras_capital (. = 0)
 
 //  #7 -------------------------------------------------------------------------

@@ -243,10 +243,10 @@ loc y_pg122_mes "dummy0"
 loc y_pg131     "h168_1"
 loc y_pg132     "h168_2"
 * utilidades
-loc y_util_per  "g143"
-loc y_util_hog  "h170_1 h170_2"
+loc yk_util_per  "g143"
+loc yk_util_hog  "h170_1 h170_2"
 * otras fuentes de capital
-loc y_otrok_hog "h164 h165 h166"
+loc yk_otro_hog "h164 h165 h166"
 
 // Otros ingresos
 
