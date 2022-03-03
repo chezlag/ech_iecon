@@ -9,7 +9,7 @@ global SRC_DATA "src/ech_iecon/data"
 global SRC_DATA_SPECS "src/ech_iecon/data_specs"
 
 * año a procesar
-loc year "2013"
+loc year "2012"
 
 * directorio de la base temporal
 local tempPath "out/data/tmp/ech_`year'_descomp_fuentes.dta"
@@ -33,6 +33,11 @@ if _rc != 0 {
 	include "$SRC_LIB/vardef_demog.do"
 
 	// salud y trabajo 
+	
+	//  variables de trabajo que se utilizan para armar salud
+
+	* condición de actividad
+	recode `bc_pobp', gen(bc_pobp)
 
 	* pea, empleados, desempleados
 	gen pea    = inrange(bc_pobp, 2, 5) if bc_pe3>=14
@@ -44,7 +49,8 @@ if _rc != 0 {
 	gen formal_os = `formal_os'                 if emp==1
 	gen formal    = formal_op==1 | formal_os==1 if emp==1
 
-	* creamos variables de los módulos
+	// creamos variables de los módulos
+
 	include "$SRC_LIB/vardef_salud.do"
 	include "$SRC_LIB/vardef_trabajo.do"
 
