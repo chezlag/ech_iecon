@@ -164,15 +164,15 @@ egen val_loch=sum(val_loc) if bc_pe4!=7, by(bc_correlat)
 
 // otros ingresos
 
-capture gen bc_pg191=0
-capture gen bc_pg192=0
+cap gen bc_pg191=0
+cap gen bc_pg192=0
 
 mvencode bc_pg191 bc_pg192, mv(0) override
-capture gen otros=0
+cap gen otros=0
 cap gen otros_ing=0
 replace otros=(bc_pg191+bc_pg192)/1000 if bc_anio<1988
 replace otros=(bc_pg191+bc_pg192) if bc_anio>1987 & bc_anio<1991
-g otros_ing=otros
+replace otros_ing=otros
 egen otrh=sum(otros_ing) if bc_pe4!=7, by(bc_correlat)
 gen otrosh=otrh
 

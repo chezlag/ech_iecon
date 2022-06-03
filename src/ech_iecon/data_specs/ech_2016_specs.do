@@ -6,9 +6,6 @@
 //  #1 -------------------------------------------------------------------------
 //  correcciones de datos ------------------------------------------------------
 
-gen dummy0  = 0
-gen dummy13 = -13
-
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
 
@@ -248,13 +245,14 @@ loc yk_otro_hog "h164 h165 h166"
 
 // Otros ingresos
 
-loc pagos_atrasados   "g126_7 g134_7"
+loc yl_rem_atrasado_op "g126_7"
+loc yl_rem_atrasado_os "g134_7"
 loc devolucion_fonasa "g258_1"
 
 //  #7 -------------------------------------------------------------------------
 //  Últimos retoques -----------------------------------------------------------
 
-* variables que ya no están disponibles este año
+* variables que no están disponibles este año
 loc bc_yalimpan "0"
 loc bc_cuotabps "-13"
 loc bc_disse_p  "-13"

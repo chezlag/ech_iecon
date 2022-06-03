@@ -3,6 +3,7 @@ out/
 resources/diccionarios_ine/
 sandbox/
 *.log
+*.pdf
 
 **/bak.stunicode/
 

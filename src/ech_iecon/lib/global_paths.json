@@ -1,7 +1,5 @@
 {
-	// Release version
 	"RELEASE": "1.3.0-alpha",
-	// Paths
 	"SRC_LIB": "src/ech_iecon/lib",
 	"SRC_DATA": "src/ech_iecon/data",
 	"SRC_DATA_SPECS": "src/ech_iecon/data_specs"

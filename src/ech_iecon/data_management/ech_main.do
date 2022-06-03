@@ -32,6 +32,11 @@ include "$SRC_DATA_SPECS/ech_`year'_specs.do"
 
 include "$SRC_LIB/vardef_ajustes.do"
 
+* genero dummies con un solo valor para que sean compatibles con rowtotal
+gen dummy0  = 0
+gen dummy13 = -13
+gen dummy15 = -15
+
 
 //  #2 -------------------------------------------------------------------------
 //  demografía -----------------------------------------------------------------
@@ -141,6 +146,8 @@ gen bc_pf051 = `bc_pf051'
 gen bc_pf052 = `bc_pf052'
 gen bc_pf053 = `bc_pf053'
 gen bc_pf06  = `bc_pf06'
+gen bc_horas_sp_1 = -13 
+gen bc_horas_hab_1 = -13 
 
 * ht11 con y sin seguro de salud en términos reales
 gen bc_ht11_sss = bc_ht11_sss_corr/bc_deflactor

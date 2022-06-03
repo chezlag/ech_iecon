@@ -276,7 +276,7 @@ recode bc_otras_capital (. = 0)
 */
 
 * pagos atrasados
-egen bc_pag_at = rowtotal(`pagos_atrasados')
+egen bc_pag_at = rowtotal(`yl_rem_atrasado_op' `yl_rem_atrasado_os')
 
 * devolución fonasa
 gen bc_devol_fonasa = `devolucion_fonasa'
@@ -292,4 +292,4 @@ replace otros = otros + h171_1/12  if esjefe
 mvencode bc_pg??p bc_pg??o, mv(0) override
 
 * dropeo variables auxiliares
-drop `varlist_list'
+*drop `varlist_list'

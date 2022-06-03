@@ -34,8 +34,10 @@ infile = pathlib.Path(sys.argv[1])
 outfile = pathlib.Path(sys.argv[2])
 
 # load json file and set model name from input filename
-model_pars = json.load(open(infile))
+json_file = open(infile)
+model_pars = json.load(json_file)
 model_name = infile.stem
+json_file.close()
 
 # define target content to write in output file
 tgt_content = STATA_MODEL_COMMENT.format(model_name=model_name, infile_path=infile)
