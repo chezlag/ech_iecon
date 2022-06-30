@@ -227,29 +227,33 @@ gen DESAYMER = n_desaymer * 4.3 * mto_desa
 
 gen ALMYCEN  = n_almycen  * 4.3 * mto_almu
 
-gen         CANASTA1 = 0
-cap replace CANASTA1 = e247*indabajo if e246 == 1
-cap replace CANASTA1 = e247*indaplom if e246 == 2
-cap replace CANASTA1 = e247*indadiab if e246 == 4
-cap replace CANASTA1 = e247*indarena if e246 == 5
-cap replace CANASTA1 = e247*indarend if e246 == 6
-cap replace CANASTA1 = e247*indaceli if e246 == 7
-cap replace CANASTA1 = e247*indatube if e246 == 8
-cap replace CANASTA1 = e247*indaonco if e246 == 9
-cap replace CANASTA1 = e247*indasida if e246 == 10
-cap replace CANASTA1 = e247*indaemer if e246 == 14
-	
-gen         CANASTA2 = 0
-cap replace CANASTA2 = e249*indabajo if e248 == 1
-cap replace CANASTA2 = e249*indaplom if e248 == 2
-cap replace CANASTA2 = e249*indadiab if e248 == 4
-cap replace CANASTA2 = e249*indarena if e248 == 5
-cap replace CANASTA2 = e249*indarend if e248 == 6
-cap replace CANASTA2 = e249*indaceli if e248 == 7
-cap replace CANASTA2 = e249*indatube if e248 == 8
-cap replace CANASTA2 = e249*indaonco if e248 == 9
-cap replace CANASTA2 = e249*indasida if e248 == 10
-cap replace CANASTA2 = e247*indaemer if e248 == 14
+gen CANASTA1 = 0
+gen CANASTA2 = 0
+
+if bc_anio>=2012 {
+	cap replace CANASTA1 = e247*indabajo if e246 == 1
+	cap replace CANASTA1 = e247*indaplom if e246 == 2
+	cap replace CANASTA1 = e247*indadiab if e246 == 4
+	cap replace CANASTA1 = e247*indarena if e246 == 5
+	cap replace CANASTA1 = e247*indarend if e246 == 6
+	cap replace CANASTA1 = e247*indaceli if e246 == 7
+	cap replace CANASTA1 = e247*indatube if e246 == 8
+	cap replace CANASTA1 = e247*indaonco if e246 == 9
+	cap replace CANASTA1 = e247*indasida if e246 == 10
+	cap replace CANASTA1 = e247*indaucc  if e246 == 12
+	cap replace CANASTA1 = e247*indaemer if e246 == 14
+}
+if inrange(bc_anio, 2012, 2014) {
+	cap replace CANASTA2 = e249*indabajo if e248 == 1
+	cap replace CANASTA2 = e249*indaplom if e248 == 2
+	cap replace CANASTA2 = e249*indadiab if e248 == 4
+	cap replace CANASTA2 = e249*indarena if e248 == 5
+	cap replace CANASTA2 = e249*indarend if e248 == 6
+	cap replace CANASTA2 = e249*indaceli if e248 == 7
+	cap replace CANASTA2 = e249*indatube if e248 == 8
+	cap replace CANASTA2 = e249*indaonco if e248 == 9
+	cap replace CANASTA2 = e249*indasida if e248 == 10
+}
 
 gen    CANASTA = CANASTA1 + CANASTA2
 recode CANASTA (. = 0)
