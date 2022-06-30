@@ -1,5 +1,5 @@
 /*
-	ech_2013_specs.do
+	ech_2013.do
 	Parámetros específicos de la ECH 2013.
 */
 

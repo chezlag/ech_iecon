@@ -1,5 +1,5 @@
 /*
-	ech_2017_specs.do
+	ech_2017.do
 	Parámetros específicos de la ECH 2017.
 */
 
