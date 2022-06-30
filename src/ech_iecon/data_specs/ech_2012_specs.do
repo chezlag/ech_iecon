@@ -140,8 +140,9 @@ loc ytransf_jubpen "g148_1_1  g148_1_2  g148_1_3  g148_1_4  g148_1_5  g148_1_6
 	g148_1_7     g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1
 	g148_2_2     g148_2_3  g148_2_4  g148_2_5  g148_2_6  g148_2_7  g148_2_8
 	g148_2_9     g148_2_12 g148_2_10 g148_2_11";
-loc ytransf_otrpen "g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2";
-loc ytransf_jyp `ytransf_jubpen' `ytransf_otrpen';
+loc ytransf_otrpen "g148_3 g148_4 g153_1 g153_2";
+loc ytransf_subdon "g148_5_1 g148_5_2";
+loc ytransf_jyp `ytransf_jubpen' `ytransf_otrpen' `ytransf_subdon';
 #del cr
 
 * numero de desayunos/meriendas y almuerzos/cenas
