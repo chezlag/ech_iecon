@@ -5,29 +5,24 @@
 # --- Dictionaries --- #
 
 AUX_DATA = ["ipc_2006m12", "bpc"]
-ECH_YEARLIST = glob_wildcards(config["src_data_specs"] + "ech_{fyear}_specs.do").fyear
+YEARLIST = glob_wildcards(config["src_data_specs"] + "ech_{fyear}_specs.do").fyear
+SUBSCRIPTS = glob_wildcards(config["src_lib"] + "{fname}.do").fname
 
 # --- Target Rules --- #
-
-## auxdata_tgt:             arma la base de ipc y bpc
-rule auxdata_tgt:
-    input:
-        expand("out/data/{iAuxData}.dta", iAuxData = AUX_DATA),
-        "out/data/afampe.dta"
 
 ## ech_tgt:                 arma las ech compatibilizadas
 rule ech_tgt:
     input:
-        expand("out/data/ech_{iECHyear}.dta", iECHyear = ECH_YEARLIST)
+        expand("out/data/ech_{year}.dta", year = YEARLIST)
 
 # --- Build Rules --- #
 
 rule aux_data:
     input:
-        script = config["src_data_mgt"] + "{iAuxData}.do",
+        script = config["src_data_mgt"] + "{auxdataset}.do",
         paths = "out/lib/global_paths.do"
     output:
-        data_dta = "out/data/{iAuxData}.dta"
+        data_dta = "out/data/{auxdataset}.dta"
     shell:
         "{runStata} {input.script}"
 
@@ -42,11 +37,12 @@ rule afampe_data:
 rule ech_build:
     input:
         script = config["src_data_mgt"] + "ech_main.do",
-        specs = config["src_data_specs"] + "ech_{iECHyear}_specs.do",
+        subscripts = expand(config["src_lib"] + "{ss}.do", ss = SUBSCRIPTS),
+        specs = config["src_data_specs"] + "ech_{year}.do",
         paths = "out/lib/global_paths.do",
-        aux_data = ["out/data/ipc_2006m12.dta", "out/data/afampe.dta", "out/data/bpc.dta"]
+        aux_data = expand("out/data/{auxdataset}.dta", auxdataset = AUX_DATA)
     output:
-        data = config["out_data"] + "ech_{iECHyear}.dta"
+        data = config["out_data"] + "ech_{year}.dta"
     shell:
         # Script takes one parameter: year of survey to compatibilize
-        "{runStata} {input.script} {wildcards.iECHyear}"
+        "{runStata} {input.script} {wildcards.year}"

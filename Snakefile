@@ -11,13 +11,7 @@ PROJ_NAME = "ech_iecon"
 
 # --- Dictionaries --- #
 # Años de la ECH a estimar
-ECH_YEARLIST = glob_wildcards(config["src_data_specs"] + "ech_{fyear}_specs.do").fyear
-# # Models we want to estimate
-# MODELS = glob_wildcards(config["src_model_specs"] + "{fname}.json").fname
-# plots we want to build
-PLOTS = glob_wildcards(config["src_figures"] + "{fname}.R").fname
-# tables to generate
-TABLES = glob_wildcards(config["src_table_specs"] + "{fname}.json").fname
+YEARLIST = glob_wildcards(config["src_data_specs"] + "ech_{fyear}.do").fyear
 
 # --- Variable Declarations ---- #
 runR = "Rscript --no-save --no-restore --verbose"
@@ -28,7 +22,7 @@ logAll = "2>&1"
 ## all            : build paper and slides that are the core of the project
 rule all:
     input:
-        expand("out/data/ech_{iECHyear}.dta", iECHyear = ECH_YEARLIST)
+        expand("out/data/ech_{year}.dta", year = YEARLIST)
 
 # --- Cleaning Rules --- #
 ## clean_all      : delete all output and log files for this project
