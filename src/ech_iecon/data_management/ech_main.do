@@ -6,17 +6,8 @@
 args year
 di `year'
 
-//  preamble
-
-version 15
-set more off
-set linesize 100
-* macros
-local date:  di %tdCY-N-D daily("$S_DATE", "DMY")
-local tag    "`year'.do gsl `date'"
-
 * rutas globales
-include "out/lib/global_paths.do"
+cap include "out/lib/global_paths.do"
 
 // use
 
@@ -24,7 +15,7 @@ use "$SRC_DATA/fusionado_`year'_terceros.dta", clear
 
 // parámetros específicos de cada año
 
-include "$SRC_DATA_SPECS/ech_`year'_specs.do"
+include "$SRC_DATA_SPECS/ech_`year'.do"
 
 
 //  #1 -------------------------------------------------------------------------
