@@ -8,6 +8,6 @@ rule clean_output:
         "rm -rf out/ *.pdf *.html"
 
 ## clean_logs     : delete all log files for this project
-rule clean_log:
+rule clean:
     shell:
-        "rm -rf log/"
+        "rm -rf log/ *.log *.Rout"

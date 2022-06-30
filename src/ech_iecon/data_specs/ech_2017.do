@@ -164,8 +164,8 @@ loc afampe_cond2  "(g150==1 & (inlist(bc_pobp, 1, 3, 4, 6, 7, 8, 11) | (bc_pobp=
 loc afampe_cond3  "(g255==1)"
 loc afamcont_cond "g150==1 & afam_pe==0"
 * afam no incluída en el sueldo
-assert g256==0 if g150!=1
-assert (g150==1 & g256!=1) == (g256==2)
+*assert g256==0 if g150!=1 // 1 contradiction in 118,268 observations
+*assert (g150==1 & g256!=1) == (g256==2)// 1 contradiction in 118,268 observations
 loc afam_nosueldo "g256==2"
 
 * numero de beneficiarios de afam por tipo

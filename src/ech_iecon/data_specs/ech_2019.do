@@ -169,8 +169,8 @@ assert (g150==1 & g256!=1) == (g256==2)
 loc afam_nosueldo "g256==2"
 
 * numero de beneficiarios de afam por tipo
-loc hh_n_afam_men18       "g151_1 g151_2 g151_3 g151_5"
-loc hh_n_afam_comp_liceo  "g151_3_1"
+loc hh_n_afam_men18       "g151_6 g151_3"
+loc hh_n_afam_comp_liceo  "g151_3"
 loc hh_n_afam_disca       "g151_4"
 
 * ingresos considerados para la afam contributiva
