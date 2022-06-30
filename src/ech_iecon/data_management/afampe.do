@@ -54,6 +54,18 @@ gen x2 = 300 * defl if mes==1
 egen afampe_base = max(x1), by(year)
 egen afampe_comp = max(x2), by(year)
 
+* "duplicación" de AFAM por pandemia
+foreach v in 2020m4 2020m9 2020m11 2021m2 2021m7 2021m9 2021m10 2021m11 {
+	local `v' = monthly("`v'", "YM")
+}
+foreach v in afampe_base afampe_comp {
+	replace `v' = `v' * 1.5 if inrange(mdate, `2020m4' , `2020m9')
+	replace `v' = `v' * 1.5 if inrange(mdate, `2020m11', `2021m2')
+	replace `v' = `v' * 2   if inrange(mdate, `2021m7' , `2021m9')
+	replace `v' = `v' * 1.7 if mdate==`2021m10'
+	replace `v' = `v' * 1.5 if mdate==`2021m11'
+}
+
 * saco variables sin datos
 drop if defl == .
 
